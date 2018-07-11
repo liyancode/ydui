@@ -26,8 +26,15 @@ function getByCustomerId(customerId){
     return fetch(`/api/customers/`+customerId, requestOptions).then(handleResponse);
 }
 
-function addCustomer(customerId){
-
+// customer={company:{},contact:{}}
+function addCustomer(customerData){
+    console.log(customerData);
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify(customerData)
+    };
+    return fetch(`/api/customers/customer`, requestOptions).then(handleResponse);
 }
 function updateCustomer(customerId){
 
@@ -50,10 +57,14 @@ function handleResponse(response) {
                 message.error("资源不存在！");
             }else if(response.status === 403){
                 message.error("无权限！");
+            }else if(response.status === 409){
+                message.error("创建的记录已存在！");
             }
             //
             // const error = (data && data.message) || response.statusText;
             // return Promise.reject(error);
+        }else if(response.status === 201){
+            message.success("创建成功！");
         }else{
             message.success("刷新成功！");
         }
