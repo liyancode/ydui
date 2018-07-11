@@ -1,9 +1,10 @@
 import React from 'react';
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Radio, Select, Row, Col, Divider, Button, AutoComplete} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
+const RadioGroup = Radio.Group;
 
 class NewCustomerForm extends React.Component {
     constructor(props) {
@@ -93,6 +94,15 @@ class NewCustomerForm extends React.Component {
                 <Option value="86">+86</Option>
                 <Option value="87">+87</Option>
             </Select>
+        );
+
+        const contactGenderRadio = getFieldDecorator('companyContactGender', {
+            initialValue: 0,
+        })(
+            <RadioGroup>
+                <Radio value={0}>女士</Radio>
+                <Radio value={1}>先生</Radio>
+            </RadioGroup>
         );
 
         const websiteOptions = autoCompleteResult.map(website => (
@@ -221,6 +231,51 @@ class NewCustomerForm extends React.Component {
                         rules: [],
                     })(
                         <Input/>
+                    )}
+                </FormItem>
+                <Divider>公司联系人</Divider>
+                <FormItem
+                    {...formItemLayout}
+                    label="姓名"
+                >
+                    {getFieldDecorator('companyContactFullname', {
+                        rules: [{
+                            required: true, message: '请输入联系人姓名!',
+                        }],
+                    })(
+                        <Input addonAfter={contactGenderRadio}/>
+                    )}
+                </FormItem>
+                <FormItem
+                    {...formItemLayout}
+                    label="职务"
+                >
+                    {getFieldDecorator('companyContactTitle', {
+                        rules: [],
+                    })(
+                        <Input />
+                    )}
+                </FormItem>
+                <FormItem
+                    {...formItemLayout}
+                    label="电话"
+                >
+                    {getFieldDecorator('companyContactPhoneNumber', {
+                        rules: [],
+                    })(
+                        <Input />
+                    )}
+                </FormItem>
+                <FormItem
+                    {...formItemLayout}
+                    label="邮箱"
+                >
+                    {getFieldDecorator('companyContactEmail', {
+                        rules: [{
+                            required: true, message: '请输入联系人邮箱!',
+                        }],
+                    })(
+                        <Input />
                     )}
                 </FormItem>
                 <FormItem {...tailFormItemLayout}>
