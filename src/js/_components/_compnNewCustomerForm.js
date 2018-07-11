@@ -5,30 +5,6 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 
-const residences = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
-
 class NewCustomerForm extends React.Component {
     constructor(props) {
         super(props);
@@ -247,42 +223,6 @@ class NewCustomerForm extends React.Component {
                         <Input/>
                     )}
                 </FormItem>
-                {/*<FormItem*/}
-                    {/*{...formItemLayout}*/}
-                    {/*label="Phone Number"*/}
-                {/*>*/}
-                    {/*{getFieldDecorator('phone', {*/}
-                        {/*rules: [{required: true, message: 'Please input your phone number!'}],*/}
-                    {/*})(*/}
-                        {/*<Input addonBefore={prefixSelector} style={{width: '100%'}}/>*/}
-                    {/*)}*/}
-                {/*</FormItem>*/}
-
-                {/*<FormItem*/}
-                    {/*{...formItemLayout}*/}
-                    {/*label="Captcha"*/}
-                    {/*extra="We must make sure that your are a human."*/}
-                {/*>*/}
-                    {/*<Row gutter={8}>*/}
-                        {/*<Col span={12}>*/}
-                            {/*{getFieldDecorator('captcha', {*/}
-                                {/*rules: [{required: true, message: 'Please input the captcha you got!'}],*/}
-                            {/*})(*/}
-                                {/*<Input/>*/}
-                            {/*)}*/}
-                        {/*</Col>*/}
-                        {/*<Col span={12}>*/}
-                            {/*<Button>Get captcha</Button>*/}
-                        {/*</Col>*/}
-                    {/*</Row>*/}
-                {/*</FormItem>*/}
-                {/*<FormItem {...tailFormItemLayout}>*/}
-                    {/*{getFieldDecorator('agreement', {*/}
-                        {/*valuePropName: 'checked',*/}
-                    {/*})(*/}
-                        {/*<Checkbox>I have read the <a href="">agreement</a></Checkbox>*/}
-                    {/*)}*/}
-                {/*</FormItem>*/}
                 <FormItem {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">提交</Button>
                 </FormItem>
