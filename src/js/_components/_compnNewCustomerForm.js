@@ -1,15 +1,18 @@
 import React from 'react';
-import {Form, Input, Tooltip, Icon, Radio, Select, Row, Col, Divider, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Radio, Select, Row, Spin, Divider, Button, AutoComplete} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 const RadioGroup = Radio.Group;
 
+import {customerService} from '../_services/customer.service';
+
 class NewCustomerForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: false,
             confirmDirty: false,
             autoCompleteResult: [],
         };
@@ -54,6 +57,7 @@ class NewCustomerForm extends React.Component {
         // },
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                this.setState({loading: true});
                 let customer = {
                     "id": -1,
                     "added_by_user_name": "",
@@ -82,7 +86,9 @@ class NewCustomerForm extends React.Component {
                     "status": 1
                 };
                 let customerData = {"customer": customer, "contact": contact}
-                console.log('Received values of form: ', customerData);
+                customerService.addCustomer(customerData).then(data => {
+                    this.setState({loading:false});
+                });
             }
         });
     }
@@ -167,163 +173,165 @@ class NewCustomerForm extends React.Component {
             <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
         ));
         return (
-            <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司名称"
-                >
-                    {getFieldDecorator('company_name', {
-                        rules: [{
-                            required: true, message: '请输入公司名!',
-                        }],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司所在地"
-                >
-                    {getFieldDecorator('company_location', {
-                        rules: [{
-                            required: true, message: '请输入公司所在地!',
-                        }],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label={(
-                        <span>
+            <Spin spinning={this.state.loading}>
+                <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司名称"
+                    >
+                        {getFieldDecorator('company_name', {
+                            rules: [{
+                                required: true, message: '请输入公司名!',
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司所在地"
+                    >
+                        {getFieldDecorator('company_location', {
+                            rules: [{
+                                required: true, message: '请输入公司所在地!',
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label={(
+                            <span>
               公司税号&nbsp;
-                            <Tooltip title="中国的公司有统一税号">
+                                <Tooltip title="中国的公司有统一税号">
                 <Icon type="question-circle-o"/>
               </Tooltip>
             </span>
-                    )}
-                >
-                    {getFieldDecorator('company_tax_number', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司法人"
-                >
-                    {getFieldDecorator('company_legal_person', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司主营业务"
-                >
-                    {getFieldDecorator('company_main_business', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司网站"
-                >
-                    {getFieldDecorator('company_description', {
-                        rules: [],
-                    })(
-                        <AutoComplete
-                            dataSource={websiteOptions}
-                            onChange={this.handleWebsiteChange}
-                            placeholder="网址"
-                        >
+                        )}
+                    >
+                        {getFieldDecorator('company_tax_number', {
+                            rules: [],
+                        })(
                             <Input/>
-                        </AutoComplete>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司电话"
-                >
-                    {getFieldDecorator('company_tel_number', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司邮箱"
-                >
-                    {getFieldDecorator('company_email', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="公司备注"
-                >
-                    {getFieldDecorator('comment', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <Divider>公司联系人</Divider>
-                <FormItem
-                    {...formItemLayout}
-                    label="姓名"
-                >
-                    {getFieldDecorator('contact_fullname', {
-                        rules: [{
-                            required: true, message: '请输入联系人姓名!',
-                        }],
-                    })(
-                        <Input addonAfter={contactGenderRadio}/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="职务"
-                >
-                    {getFieldDecorator('contact_title', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="电话"
-                >
-                    {getFieldDecorator('contact_phone_number', {
-                        rules: [],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem
-                    {...formItemLayout}
-                    label="邮箱"
-                >
-                    {getFieldDecorator('contact_email', {
-                        rules: [{
-                            required: true, message: '请输入联系人邮箱!',
-                        }],
-                    })(
-                        <Input/>
-                    )}
-                </FormItem>
-                <FormItem {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">提交</Button>
-                </FormItem>
-            </Form>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司法人"
+                    >
+                        {getFieldDecorator('company_legal_person', {
+                            rules: [],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司主营业务"
+                    >
+                        {getFieldDecorator('company_main_business', {
+                            rules: [],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司网站"
+                    >
+                        {getFieldDecorator('company_description', {
+                            rules: [],
+                        })(
+                            <AutoComplete
+                                dataSource={websiteOptions}
+                                onChange={this.handleWebsiteChange}
+                                placeholder="网址"
+                            >
+                                <Input/>
+                            </AutoComplete>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司电话"
+                    >
+                        {getFieldDecorator('company_tel_number', {
+                            rules: [],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司邮箱"
+                    >
+                        {getFieldDecorator('company_email', {
+                            rules: [],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="公司备注"
+                    >
+                        {getFieldDecorator('comment', {
+                            rules: [],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <Divider>公司联系人</Divider>
+                    <FormItem
+                        {...formItemLayout}
+                        label="姓名"
+                    >
+                        {getFieldDecorator('contact_fullname', {
+                            rules: [{
+                                required: true, message: '请输入联系人姓名!',
+                            }],
+                        })(
+                            <Input addonAfter={contactGenderRadio}/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="职务"
+                    >
+                        {getFieldDecorator('contact_title', {
+                            rules: [],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="电话"
+                    >
+                        {getFieldDecorator('contact_phone_number', {
+                            rules: [],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="邮箱"
+                    >
+                        {getFieldDecorator('contact_email', {
+                            rules: [{
+                                required: true, message: '请输入联系人邮箱!',
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem {...tailFormItemLayout}>
+                        <Button type="primary" htmlType="submit">提交</Button>
+                    </FormItem>
+                </Form>
+            </Spin>
         );
     }
 }
