@@ -5,7 +5,7 @@ export const customerService = {
     getByCustomerId,
     addCustomer,
     updateCustomer,
-    deleteByCustomerId
+    updateContact
 };
 
 function getAllByUsername(username){
@@ -36,8 +36,22 @@ function addCustomer(customerData){
     };
     return fetch(`/api/customers/customer`, requestOptions).then(handleResponse);
 }
-function updateCustomer(customerId){
+function updateCustomer(customerData){
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader(),
+        body: JSON.stringify(customerData)
+    };
+    return fetch(`/api/customers/customer`, requestOptions).then(handleResponse);
+}
 
+function updateContact(contactData){
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader(),
+        body: JSON.stringify(contactData)
+    };
+    return fetch(`/api/customers/customer_contact`, requestOptions).then(handleResponse);
 }
 function deleteByCustomerId(customerId){
 
