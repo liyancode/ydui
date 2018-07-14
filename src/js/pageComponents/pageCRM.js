@@ -7,8 +7,11 @@ import CompnHeader from "../_components/compnHeader";
 import CompnFooter from "../_components/compnFooter";
 
 import WrappedNewCustomerForm from "../_components/_compnNewCustomerForm";
+import WrappedEditCustomerForm from "../_components/_compnEditCustomerForm";
+import WrappedEditContactForm from "../_components/_compnEditContactForm";
 
 import {customerService} from '../_services/customer.service';
+
 
 const PageContent = (props) => {
     const btnStyle = {
@@ -37,21 +40,24 @@ const PageContent = (props) => {
         } else if (page === 'view_one') {
             let customer = props.one_customer["customer"];
             let contacts = props.one_customer["contacts"];
-            let conatct_info_div=[];
-            for(let i=0;i< contacts.length;i++){
-                let contact_i=contacts[i];
+            let conatct_info_div = [];
+            for (let i = 0; i < contacts.length; i++) {
+                let contact_i = contacts[i];
                 conatct_info_div.push(
-                    <Card  key={i}>
-                    <dl className="dl-horizontal">
+                    <dl className="dl-horizontal" key={i}>
                         <dt>姓名</dt>
-                        <dd>{contact_i["fullname"]+" "+((contact_i["gender"]==1)?"先生":"女士")}</dd>
+                        <dd>{contact_i["fullname"] + " " + ((contact_i["gender"] == 1) ? "先生" : "女士")}</dd>
                         <dt>职务</dt>
                         <dd>{contact_i["title"]}</dd>
                         <dt>电话</dt>
                         <dd>{contact_i["phone_number"]}</dd>
                         <dt>邮箱</dt>
                         <dd>{contact_i["email"]}</dd>
-                    </dl></Card>);
+                        <dd><Button type="primary" icon="edit" style={btnStyle} contact_id={contact_i["id"]}
+                                    onClick={props.editContactBtnOnclick}>更新</Button>
+                            <Button type="danger" icon="delete" style={btnStyle}>删除</Button></dd>
+                    </dl>
+                );
             }
             return (<div>
                 <div>
@@ -61,7 +67,6 @@ const PageContent = (props) => {
                     </Button>
                     <Spin spinning={props.loading}>
                         <div className="col-sm-12 col-md-6">
-                            <Divider orientation={"left"}>详细信息</Divider>
                             <dl className="dl-horizontal">
                                 <dt>客户编号</dt>
                                 <dd>{customer["customer_id"]}</dd>
@@ -69,6 +74,7 @@ const PageContent = (props) => {
                                 <dd>{customer["added_by_user_name"]}</dd>
                                 <dt>创建时间</dt>
                                 <dd>{customer["created_at"]}</dd>
+                                <Divider orientation={"left"}>公司详情</Divider>
                                 <dt>公司名称</dt>
                                 <dd>{customer["company_name"]}</dd>
                                 <dt>公司所在地</dt>
@@ -87,9 +93,14 @@ const PageContent = (props) => {
                                 <dd>{customer["company_email"]}</dd>
                                 <dt>备注</dt>
                                 <dd>{customer["comment"]}</dd>
+                                <dd><Button type="primary" icon="edit" style={btnStyle}
+                                            onClick={props.editCustomerBtnOnclick}>更新</Button>
+                                </dd>
+
                             </dl>
                             <Divider orientation={"left"}>公司联系人</Divider>
                             {conatct_info_div}
+                            <Divider><Button type="primary" icon="plus" style={btnStyle}>添加新联系人</Button></Divider>
                         </div>
                         <div className="col-sm-12 col-md-6">
                             <Divider orientation={"left"}>客户当前跟进状态</Divider>
@@ -109,8 +120,26 @@ const PageContent = (props) => {
                 </div>
                 <WrappedNewCustomerForm/>
             </div>)
-        } else {
-
+        } else if (page === 'edit_customer') {
+            return (<div>
+                <div>
+                    <Button type="primary" style={btnStyle} onClick={props.backFromEditCustomerBtnOnclick}>
+                        <Icon type="left"/>
+                        <span>返回</span>
+                    </Button>
+                </div>
+                <WrappedEditCustomerForm customer={props.one_customer["customer"]}/>
+            </div>);
+        }else if(page==='edit_contact'){
+            return (<div>
+                <div>
+                    <Button type="primary" style={btnStyle} onClick={props.backFromEditCustomerBtnOnclick}>
+                        <Icon type="left"/>
+                        <span>返回</span>
+                    </Button>
+                </div>
+                <WrappedEditContactForm contact={props.one_contact} customer={props.one_customer["customer"]}/>
+            </div>);
         }
     } else {
 
@@ -136,9 +165,10 @@ export default class PageCRM extends React.Component {
         super(props);
         this.state = {
             loading: true,
-            page: 'view_all',//view_one/add_new
+            page: 'view_all',//view_one/add_new/view_all/edit_customer/edit_contact
             breadcrumb: '我的客户',
             one_customer: null,
+            one_contact:null,
             customers: [],
             customer_table_columns: [
                 {
@@ -196,6 +226,9 @@ export default class PageCRM extends React.Component {
         this.handleAddNewBtnOnclick = this.handleAddNewBtnOnclick.bind(this);
         this.handleBackFromAddNewBtnOnclick = this.handleBackFromAddNewBtnOnclick.bind(this);
         this.handleReloadBtnOnclick = this.handleReloadBtnOnclick.bind(this);
+        this.handleEditCustomerBtnOnclick = this.handleEditCustomerBtnOnclick.bind(this);
+        this.handleEditContactBtnOnclick = this.handleEditContactBtnOnclick.bind(this);
+        this.handleBackFromEditCustomerBtnOnclick = this.handleBackFromEditCustomerBtnOnclick.bind(this);
 
         customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
             this.setState({customers: data["customers"], loading: false});
@@ -225,6 +258,38 @@ export default class PageCRM extends React.Component {
         });
     };
 
+    handleEditCustomerBtnOnclick() {
+        this.setState({
+            page: "edit_customer",
+            breadcrumb: '更新客户信息: ' + this.state.one_customer["customer"]["customer_id"]
+        });
+    };
+
+    handleBackFromEditCustomerBtnOnclick() {
+        let customer_id = this.state.one_customer["customer"]["customer_id"];
+        customerService.getByCustomerId(customer_id).then(data => {
+            this.setState({page: "view_one", breadcrumb: '客户详情: ' + customer_id, one_customer: data, loading: false});
+        });
+    }
+
+    handleEditContactBtnOnclick(e){
+        let contact_id=e.target.attributes.contact_id.value;
+        let contacts=this.state.one_customer["contacts"];
+        let contact=null;
+        for(let i=0;i<contacts.length;i++){
+            if(contacts[i].id==contact_id){
+                contact=contacts[i];
+                break;
+            }
+        }
+
+        this.setState({
+            page: "edit_contact",
+            one_contact:contact,
+            breadcrumb: '更新客户联系人信息: ' + this.state.one_customer["customer"]["customer_id"]
+        });
+    }
+
     render() {
         return (
             <Layout style={{height: '100%'}}>
@@ -245,12 +310,16 @@ export default class PageCRM extends React.Component {
                             </div>
                             <PageContent page={this.state.page}
                                          one_customer={this.state.one_customer}
+                                         one_contact={this.state.one_contact}
                                          customer_table_columns={this.state.customer_table_columns}
                                          customers={this.state.customers}
                                          loading={this.state.loading}
                                          addNewBtnOnclick={this.handleAddNewBtnOnclick}
                                          backFromAddNewBtnOnclick={this.handleBackFromAddNewBtnOnclick}
+                                         editCustomerBtnOnclick={this.handleEditCustomerBtnOnclick}
+                                         editContactBtnOnclick={this.handleEditContactBtnOnclick}
                                          reloadBtnOnclick={this.handleReloadBtnOnclick}
+                                         backFromEditCustomerBtnOnclick={this.handleBackFromEditCustomerBtnOnclick}
                             />
                         </div>
                     </Content>
