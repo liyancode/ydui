@@ -23,7 +23,7 @@ function getByCustomerId(customerId){
         headers: authHeader()
     };
 
-    return fetch(`/api/customers/`+customerId, requestOptions).then(handleResponse);
+    return fetch(`/api/customers/customer/`+customerId, requestOptions).then(handleResponse);
 }
 
 // customer={company:{},contact:{}}
