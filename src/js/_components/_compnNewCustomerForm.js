@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Input, Tooltip, Icon, Radio, Select, Row, Spin, Divider, Button, AutoComplete} from 'antd';
+import {Form, Input, Tooltip, Icon, Radio, Select, Popconfirm, Spin, Divider, Button, AutoComplete} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -85,7 +85,7 @@ class NewCustomerForm extends React.Component {
                 };
                 let customerData = {"customer": customer, "contact": contact}
                 customerService.addCustomer(customerData).then(data => {
-                    this.setState({loading:false});
+                    this.setState({loading: false});
                 });
             }
         });
@@ -309,7 +309,10 @@ class NewCustomerForm extends React.Component {
                         )}
                     </FormItem>
                     <FormItem {...tailFormItemLayout}>
-                        <Button type="primary" htmlType="submit">提交</Button>
+                        <Popconfirm title="确认提交？" onConfirm={this.handleSubmit}
+                                    okText="是" cancelText="否">
+                            <Button type="primary" htmlType="submit">提交</Button>
+                        </Popconfirm>
                     </FormItem>
                 </Form>
             </Spin>
