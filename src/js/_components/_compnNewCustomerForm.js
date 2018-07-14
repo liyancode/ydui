@@ -18,8 +18,6 @@ class NewCustomerForm extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
-        this.compareToFirstPassword = this.compareToFirstPassword.bind(this);
-        this.validateToNextPassword = this.validateToNextPassword.bind(this);
         this.handleWebsiteChange = this.handleWebsiteChange.bind(this);
     }
 
@@ -96,23 +94,6 @@ class NewCustomerForm extends React.Component {
     handleConfirmBlur(e) {
         const value = e.target.value;
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
-    }
-
-    compareToFirstPassword(rule, value, callback) {
-        const form = this.props.form;
-        if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
-        } else {
-            callback();
-        }
-    }
-
-    validateToNextPassword(rule, value, callback) {
-        const form = this.props.form;
-        if (value && this.state.confirmDirty) {
-            form.validateFields(['confirm'], {force: true});
-        }
-        callback();
     }
 
     handleWebsiteChange(value) {
