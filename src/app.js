@@ -19,6 +19,7 @@ import PageWereHouse from "./js/pageComponents/pageWereHouse";
 import PageHR from "./js/pageComponents/pageHR";
 
 import './css/style.css';
+import PageProduct from "./js/pageComponents/pageProduct";
 
 class App extends React.Component {
     constructor(props) {
@@ -48,6 +49,7 @@ class App extends React.Component {
                     <PrivateRoute path="/hr" component={PageHR}/>
                     <PrivateRoute path="/crm" component={PageCRM}/>
                     <PrivateRoute path="/order" component={PageOrder}/>
+                    <PrivateRoute path="/product" component={PageProduct}/>
                     <PrivateRoute path="/fin" component={PageFin}/>
                     <PrivateRoute path="/werehouse" component={PageWereHouse}/>
                     <Route path="/login" component={Login}/>
