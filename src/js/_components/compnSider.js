@@ -45,6 +45,12 @@ const CompnSider=(props)=> {
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="5">
+                    <Link to='/product' replace>
+                        <Icon type="shop" />
+                        <span>产品管理</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="6">
                     <Link to='/werehouse' replace>
                         <Icon type="database"/>
                         <span>仓储管理</span>
