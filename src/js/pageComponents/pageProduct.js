@@ -1,28 +1,245 @@
 import React from 'react';
-import {Card, Icon, Tag,Layout, Menu, Badge, Avatar,Button} from 'antd';
+import {Card, Icon, Select,Layout, Menu, Breadcrumb, Spin,Table,Button} from 'antd';
 const {Content} = Layout;
 import CompnSider from "../_components/compnSider"
 import CompnHeader from "../_components/compnHeader"
 import CompnFooter from "../_components/compnFooter"
 
-const PageProduct=(props)=> {
-    return (
-        <Layout style={{height: '100%'}}>
-            <CompnSider defaultMenuKey={['5']}/>
-            <Layout>
-                <CompnHeader/>
-                <Content style={{margin: '12px 12px 0'}}>
-                    <div style={{padding: 24, background: '#fff', minHeight: 600}}>
-                        <h4 className="page-header">
-                            <Icon type="database"/>
-                            <span>产品管理</span>
-                        </h4>
-                    </div>
-                </Content>
-                <CompnFooter/>
-            </Layout>
-        </Layout>
-    )
-}
+import {productService} from "../_services/product.service"
+import WrappedNewProductForm from "../_components/_compnNewProductForm";
 
-export default PageProduct;
+const Option = Select.Option;
+
+const PageContent = (props) => {
+    const btnStyle = {
+        marginRight: '8px',
+        marginBottom: '12px'
+    }
+    if (props.page) {
+        let page = props.page;
+        if (page === 'view_all') {
+            let product_types=props.product_types;
+            let type_select_options=[];
+
+            for (let i=0;i<product_types.length;i++){
+                let type_i=product_types[i]
+                type_select_options.push(
+                    <Option value={type_i["product_type_id"]} key={type_i["id"]}>{type_i["name"]}</Option>
+                );
+            }
+            return(<div>
+                <div>
+                    <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
+                        <Icon type="plus"/>
+                        <span>新建产品信息</span>
+                    </Button>
+                    <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
+                        <Icon type="reload"/>
+                        <span>刷新</span>
+                    </Button>
+                </div>
+                <Select defaultValue={props.one_product_type} style={{ width: 120 }} onChange={props.productTypeSelectChange}>
+                    <Option value="all">所有</Option>
+                    {type_select_options}
+                </Select>
+                <Spin spinning={props.loading}>
+                    <Table rowKey="id" columns={props.product_table_columns}
+                           dataSource={props.products} size="middle"/>
+                </Spin>
+            </div>)
+        }else if(page === 'add_new'){
+            return (<div>
+                <div>
+                    <Button type="primary" style={btnStyle} onClick={props.backFromAddNewBtnOnclick}>
+                        <Icon type="left"/>
+                        <span>返回</span>
+                    </Button>
+                </div>
+                <WrappedNewProductForm/>
+            </div>)
+        }
+    }
+}
+// {
+//     "products": [
+//     {
+//         "id": 1,
+//         "product_id": "20001",
+//         "added_by_user_name": "testname05",
+//         "name": "芳纶ribstop 220G作训服面料",
+//         "product_type_id": "7001",
+//         "measurement_unit": "米",
+//         "specification": "ribstop 220G",
+//         "raw_material_ids": "1",
+//         "features": null,
+//         "use_for": "训练服服装",
+//         "description": null,
+//         "comment": null,
+//         "created_at": "2018-07-15 17:31:02 +0800",
+//         "last_update_at": "2018-07-15 17:31:02 +0800",
+//         "status": 1
+//     },
+//     {
+//         "id": 2,
+//         "product_id": "20002",
+//         "added_by_user_name": "testname05",
+//         "name": "暖通T型(YD-T-S1)",
+//         "product_type_id": "7002",
+//         "measurement_unit": "米",
+//         "specification": "YD-T-S1",
+//         "raw_material_ids": "3,4",
+//         "features": null,
+//         "use_for": "用于普通舒适空调的送风",
+//         "description": null,
+//         "comment": null,
+//         "created_at": "2018-07-15 17:38:27 +0800",
+//         "last_update_at": "2018-07-15 17:38:27 +0800",
+//         "status": 1
+//     }]
+// }
+export default class PageProduct extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true,
+            page: 'view_all',//view_one/add_new/view_all/edit_product
+            breadcrumb: '所有产品',
+            one_product:{},
+            one_product_type:'all',
+            product_types:[],
+            products:[],
+            product_table_columns:[
+                {
+                    title: '产品编号',
+                    dataIndex: 'product_id',
+                    key: 'product_id'
+                },
+                {
+                    title: '名称',
+                    dataIndex: 'name',
+                    key: 'name',
+                }, {
+                    title: '产品类型',
+                    dataIndex: 'product_type_id',
+                    key: 'product_type_id',
+                }, {
+                    title: '计量单位',
+                    dataIndex: 'measurement_unit',
+                    key: 'measurement_unit',
+                }, {
+                    title: '规格型号',
+                    dataIndex: 'specification',
+                    key: 'specification',
+                }, {
+                    title: '产品用途',
+                    dataIndex: 'use_for',
+                    key: 'use_for',
+                }, {
+                    title: '操作',
+                    key: 'action',
+                    render: (text, record) => {
+                        return (<span>
+                        <a href="javascript:;" onClick={this.handleCheckDetailOnclick}
+                           product_id={record.product_id}>查看详情</a>
+                        </span>)
+                    },
+                }
+            ]
+        }
+
+        this.handleReloadBtnOnclick = this.handleReloadBtnOnclick.bind(this);
+        this.handleProductTypeSelectChange = this.handleProductTypeSelectChange.bind(this);
+        this.typename = this.typename.bind(this);
+        this.handleAddNewBtnOnclick = this.handleAddNewBtnOnclick.bind(this);
+        this.handleBackFromAddNewBtnOnclick = this.handleBackFromAddNewBtnOnclick.bind(this);
+
+        productService.getAll().then(data => {
+            this.setState({products: data["products"], loading: false});
+        });
+
+        productService.getAllProductTypes().then(data => {
+            this.setState({product_types: data["product_types"], loading: false});
+        });
+    }
+
+    typename(type_id){
+        for(let i=0;i<this.state.product_types.length;i++){
+            let type_i=this.state.product_types[i];
+            console.log(type_i);
+            if(type_i["product_type_id"]===type_id){
+                return this.state.product_types[i]["name"];
+            }
+        }
+        return type_id;
+    }
+    handleReloadBtnOnclick(){
+        this.setState({loading: true});
+        if(this.state.one_product_type==='all'){
+            productService.getAll().then(data => {
+                this.setState({products: data["products"], loading: false});
+            });
+        }else{
+            productService.getByProductTypeId(this.state.one_product_type).then(data => {
+                this.setState({products: data["products"], loading: false});
+            });
+        }
+    }
+    handleProductTypeSelectChange(e){
+        if(e==='all'){
+            productService.getAll().then(data => {
+                this.setState({products: data["products"], loading: false,one_product_type:e,breadcrumb: '所有产品'});
+            });
+        }else{
+            productService.getByProductTypeId(e).then(data => {
+                this.setState({products: data["products"], loading: false,one_product_type:e,breadcrumb: '产品类别: '+this.typename(e)});
+            });
+        }
+    }
+
+    handleAddNewBtnOnclick(){
+        this.setState({page: "add_new", breadcrumb: '新建产品信息'});
+    }
+
+    handleBackFromAddNewBtnOnclick(){
+        this.setState({page: "view_all", breadcrumb: '所有产品'});
+    }
+
+    render(){
+        return (
+            <Layout style={{height: '100%'}}>
+                <CompnSider defaultMenuKey={['5']}/>
+                <Layout>
+                    <CompnHeader/>
+                    <Content style={{margin: '12px 12px 0'}}>
+                        <div style={{padding: 24, background: '#fff', minHeight: 600}}>
+                            <div className="page-header">
+                                <h4 style={{display: "inline"}}>
+                                    <Icon type="shop"/>
+                                    <span>产品管理</span>
+                                </h4>
+                                <Breadcrumb style={{display: "inline"}}>
+                                    <Breadcrumb.Item> </Breadcrumb.Item>
+                                    <Breadcrumb.Item>{this.state.breadcrumb}</Breadcrumb.Item>
+                                </Breadcrumb>
+                            </div>
+                            <PageContent page={this.state.page}
+                                         loading={this.state.loading}
+                                         one_product={this.state.one_product}
+                                         one_product_type={this.state.one_product_type}
+                                         products={this.state.products}
+                                         product_types={this.state.product_types}
+                                         product_table_columns={this.state.product_table_columns}
+                                         reloadBtnOnclick={this.handleReloadBtnOnclick}
+                                         productTypeSelectChange={this.handleProductTypeSelectChange}
+                                         addNewBtnOnclick={this.handleAddNewBtnOnclick}
+                                         backFromAddNewBtnOnclick={this.handleBackFromAddNewBtnOnclick}
+                            />
+                        </div>
+                    </Content>
+                    <CompnFooter/>
+                </Layout>
+            </Layout>
+        )
+    }
+
+}
