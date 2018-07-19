@@ -3,6 +3,7 @@ import {message} from 'antd'
 export const productService = {
     getAll,
     getByProductTypeId,
+    getByProductId,
     addProduct,
     updateProduct,
     getAllProductTypes
@@ -26,6 +27,14 @@ function getAllProductTypes(){
     return fetch(`/api/products/product_types/`, requestOptions).then(handleResponse);
 }
 
+function getByProductId(productId){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`/api/products/product/`+productId, requestOptions).then(handleResponse);
+}
 function getByProductTypeId(productTypeId){
     const requestOptions = {
         method: 'GET',
@@ -34,7 +43,6 @@ function getByProductTypeId(productTypeId){
 
     return fetch(`/api/products/`+productTypeId, requestOptions).then(handleResponse);
 }
-
 function addProduct(productData){
     const requestOptions = {
         method: 'POST',
