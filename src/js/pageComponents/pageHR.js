@@ -26,7 +26,7 @@ export default class PageHR extends React.Component {
                 <CompnSider defaultMenuKey={['1']}/>
                 <Layout>
                     <CompnHeader/>
-                    <Content style={{margin: '12px 12px 0'}}>
+                    <Content>
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <h4 className="page-header">
                                 <Icon type="user"/>

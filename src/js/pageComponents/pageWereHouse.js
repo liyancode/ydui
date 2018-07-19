@@ -8,10 +8,10 @@ import CompnFooter from "../_components/compnFooter"
 const PageWereHouse=(props)=> {
     return (
         <Layout style={{height: '100%'}}>
-            <CompnSider defaultMenuKey={['5']}/>
+            <CompnSider defaultMenuKey={['6']}/>
             <Layout>
                 <CompnHeader/>
-                <Content style={{margin: '12px 12px 0'}}>
+                <Content>
                     <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                         <h4 className="page-header">
                             <Icon type="database"/>
