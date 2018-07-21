@@ -124,12 +124,13 @@ body {
 }
 
 .login-layout{
-    /*background: -webkit-linear-gradient(#232526, #414345); !* Safari 5.1 - 6.0 *!*/
-    /*background: -o-linear-gradient(#232526, #414345); !* Opera 11.1 - 12.0 *!*/
-    /*background: -moz-linear-gradient(#232526, #414345); !* Firefox 3.6 - 15 *!*/
-    /*background: linear-gradient(#232526, #414345); !* 标准的语法（必须放在最后） *!*/
-    background: url('../img/dback-min.jpg') no-repeat;
-    background-size: 100%;
+    background:#2980b9;
+    background: -webkit-linear-gradient(to right,#2980b9, #2c3e50); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(to right,#2980b9, #2c3e50); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(to right,#2980b9, #2c3e50); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right,#2980b9, #2c3e50); /* 标准的语法（必须放在最后） */
+    /*background: url('../img/dback-min.jpg') no-repeat;*/
+    /*background-size: 100%;*/
 }
 .login-wrapper-container{
     min-width: 485px;
