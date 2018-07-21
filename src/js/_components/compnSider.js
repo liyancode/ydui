@@ -29,7 +29,7 @@ const CompnSider=(props)=> {
                 <Menu.Item key="2">
                     <Link to='/order' replace>
                         <Icon type="shopping-cart"/>
-                        <span>订单管理</span>
+                        <span>合同订单</span>
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="3">
