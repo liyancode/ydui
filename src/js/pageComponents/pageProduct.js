@@ -17,18 +17,20 @@ const PageContent = (props) => {
         marginRight: '8px',
         marginBottom: '12px'
     }
+    let product_types = props.product_types;
+    let type_select_options = [];
+
+    for (let i = 0; i < product_types.length; i++) {
+        let type_i = product_types[i]
+        type_select_options.push(
+            <Option value={type_i["product_type_id"]} key={type_i["id"]}>{type_i["name"]}</Option>
+        );
+    }
+
     if (props.page) {
         let page = props.page;
         if (page === 'view_all') {
-            let product_types = props.product_types;
-            let type_select_options = [];
 
-            for (let i = 0; i < product_types.length; i++) {
-                let type_i = product_types[i]
-                type_select_options.push(
-                    <Option value={type_i["product_type_id"]} key={type_i["id"]}>{type_i["name"]}</Option>
-                );
-            }
             return (<div>
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
@@ -40,9 +42,10 @@ const PageContent = (props) => {
                         <span>刷新</span>
                     </Button>
                 </div>
-                <Select defaultValue={props.one_product_type} style={{width: 120}}
+                产品分类
+                <Select defaultValue={props.one_product_type} style={btnStyle}
                         onChange={props.productTypeSelectChange}>
-                    <Option value="all">所有</Option>
+                    <Option value="all">所有类别</Option>
                     {type_select_options}
                 </Select>
                 <Spin spinning={props.loading}>
@@ -58,7 +61,12 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
-                <WrappedNewProductForm/>
+                要添加的产品类别
+                <Select defaultValue={props.addNewProductType} style={btnStyle}
+                        onChange={props.addNewProductTypeSelectChange}>
+                    {type_select_options}
+                </Select>
+                <WrappedNewProductForm product_type={props.addNewProductType}/>
             </div>)
         } else if (page === 'view_one') {
             let product = props.one_product['product'];
@@ -179,6 +187,7 @@ export default class PageProduct extends React.Component {
             one_product_type: 'all',
             product_types: [],
             products: [],
+            addNewProductType:'70001',
             product_table_columns: [
                 {
                     title: '产品编号',
@@ -224,9 +233,10 @@ export default class PageProduct extends React.Component {
         this.typename = this.typename.bind(this);
         this.handleAddNewBtnOnclick = this.handleAddNewBtnOnclick.bind(this);
         this.handleBackFromAddNewBtnOnclick = this.handleBackFromAddNewBtnOnclick.bind(this);
+        this.handleAddNewProductTypeSelectChange = this.handleAddNewProductTypeSelectChange.bind(this);
 
         productService.getAll().then(data => {
-            this.setState({products: data["products"], loading: false});
+            this.setState({products: data["products"], breadcrumb: '所有产品'+' 共 '+data["products"].length+' 条',loading: false});
         });
 
         productService.getAllProductTypes().then(data => {
@@ -269,7 +279,7 @@ export default class PageProduct extends React.Component {
     handleProductTypeSelectChange(e) {
         if (e === 'all') {
             productService.getAll().then(data => {
-                this.setState({products: data["products"], loading: false, one_product_type: e, breadcrumb: '所有产品'});
+                this.setState({products: data["products"], loading: false, one_product_type: e, breadcrumb: '所有产品'+' 共 '+data["products"].length+' 条'});
             });
         } else {
             productService.getByProductTypeId(e).then(data => {
@@ -277,7 +287,7 @@ export default class PageProduct extends React.Component {
                     products: data["products"],
                     loading: false,
                     one_product_type: e,
-                    breadcrumb: '产品类别: ' + this.typename(e)
+                    breadcrumb: '产品类别: ' + this.typename(e)+' 共 '+data["products"].length+' 条'
                 });
             });
         }
@@ -288,7 +298,11 @@ export default class PageProduct extends React.Component {
     }
 
     handleBackFromAddNewBtnOnclick() {
-        this.setState({page: "view_all", breadcrumb: '所有产品'});
+        this.setState({page: "view_all", breadcrumb: '所有产品'+' 共 '+this.state.products.length+' 条'});
+    }
+
+    handleAddNewProductTypeSelectChange(e){
+        this.setState({addNewProductType: e});
     }
 
     render() {
@@ -316,10 +330,12 @@ export default class PageProduct extends React.Component {
                                          products={this.state.products}
                                          product_types={this.state.product_types}
                                          product_table_columns={this.state.product_table_columns}
+                                         addNewProductType={this.state.addNewProductType}
                                          reloadBtnOnclick={this.handleReloadBtnOnclick}
                                          productTypeSelectChange={this.handleProductTypeSelectChange}
                                          addNewBtnOnclick={this.handleAddNewBtnOnclick}
                                          backFromAddNewBtnOnclick={this.handleBackFromAddNewBtnOnclick}
+                                         addNewProductTypeSelectChange={this.handleAddNewProductTypeSelectChange}
                             />
                         </div>
                     </Content>
