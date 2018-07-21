@@ -1,12 +1,28 @@
 import React from 'react';
-import {Table, Progress, Tag, Card, Icon, Layout, Menu, Badge, Avatar, Button} from 'antd';
+import {Table, Progress, Tag, Tabs, Icon, Layout, Menu, Badge, Avatar, Button} from 'antd';
 import {orderService} from "../_services/order.service";
 
 const {Header, Content, Footer, Sider} = Layout;
+const TabPane = Tabs.TabPane;
 import CompnSider from "../_components/compnSider"
 import CompnHeader from "../_components/compnHeader"
 import CompnFooter from "../_components/compnFooter"
 
+const TabContent_Order = (props) => {
+    return (<div>
+        <Table columns={props.columns} dataSource={props.orders} size="small"/>
+    </div>)
+};
+const TabContent_Contract = (props) => {
+    return (<div>
+        合同管理
+    </div>);
+};
+const TabContent_AskPrice = (props) => {
+    return (<div>
+
+    </div>);
+};
 export default class PageOrder extends React.Component{
     constructor(props) {
         super(props);
@@ -88,7 +104,7 @@ export default class PageOrder extends React.Component{
         // });
         return (
 
-            <Layout style={{height: '100%'}}>
+            <Layout style={{background: '#fff',height: '100%'}}>
                 <CompnSider defaultMenuKey={['2']}/>
                 <Layout>
                     <CompnHeader/>
@@ -96,9 +112,21 @@ export default class PageOrder extends React.Component{
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <h4 className="page-header">
                                 <Icon type="shopping-cart"/>
-                                <span>订单管理</span>
+                                <span>合同订单</span>
                             </h4>
-                            <Table columns={this.state.columns} dataSource={this.state.orders} size="middle"/>
+                            <Tabs defaultActiveKey="1">
+                                <TabPane tab="订单管理" key="1">
+                                    <TabContent_Order orderColumns={this.state.columns}
+                                                      orders={this.state.orders}
+                                    />
+                                </TabPane>
+                                <TabPane tab="合同管理" key="2">
+                                    <TabContent_Contract/>
+                                </TabPane>
+                                <TabPane tab="询价" key="3">
+                                    <TabContent_AskPrice />
+                                </TabPane>
+                            </Tabs>
                         </div>
                     </Content>
                     <CompnFooter/>
