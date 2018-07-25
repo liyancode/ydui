@@ -3,6 +3,8 @@ import {Icon,Layout, Menu} from 'antd';
 const {Sider} = Layout;
 import {Link} from 'react-router-dom'
 
+const { SubMenu } = Menu;
+
 const CompnSider=(props)=> {
     return (
         <Sider
@@ -13,7 +15,10 @@ const CompnSider=(props)=> {
             }}
         >
             <div className="logo"/>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={props.defaultMenuKey}>
+            <Menu theme="dark" mode="inline"
+                  defaultSelectedKeys={props.defaultMenuKey}
+                  defaultOpenKeys={props.defaultOpenKeys}
+            >
                 <Menu.Item key="0">
                     <Link to='/' replace>
                         <Icon type="home"/>
@@ -26,12 +31,31 @@ const CompnSider=(props)=> {
                         <span>员工档案</span>
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="2">
-                    <Link to='/order' replace>
+                <SubMenu
+                    key="order_m"
+                    title={<span><Icon type="shopping-cart" /><span>订单管理</span></span>}
+                >
+
+                    <Menu.Item key="2">
+                        <Link to='/order' replace>
+                            <Icon type="shopping-cart"/>
+                            <span>订单</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="contract_page" onClick={props.menuItemOnclick}>
+                        {/*<Link to='/contract' replace>*/}
+                            {/*<Icon type="shopping-cart"/>*/}
+                            {/*<span>合同</span>*/}
+                        {/*</Link>*/}
                         <Icon type="shopping-cart"/>
-                        <span>合同订单</span>
-                    </Link>
-                </Menu.Item>
+                        <span>合同</span>
+                    </Menu.Item>
+                    <Menu.Item key="ask_price_page" onClick={props.menuItemOnclick}>
+                        <Icon type="shopping-cart"/>
+                        <span>询价</span>
+                    </Menu.Item>
+
+                </SubMenu>
                 <Menu.Item key="3">
                     <Link to='/crm' replace>
                         <Icon type="contacts"/>
