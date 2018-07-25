@@ -247,6 +247,7 @@ export default class PageOrder extends React.Component{
         this.handleBackToViewAllAskPricesBtnOnclick=this.handleBackToViewAllAskPricesBtnOnclick.bind(this);
         this.handleCheckAskPriceDetailOnclick=this.handleCheckAskPriceDetailOnclick.bind(this);
         this.handleEditAskPriceBtnOnclick=this.handleEditAskPriceBtnOnclick.bind(this);
+        this.handleMenuItemOnclick=this.handleMenuItemOnclick.bind(this);
 
         orderService.getOrders().then(data=>{
             this.setState({ orders: data });
@@ -284,6 +285,10 @@ export default class PageOrder extends React.Component{
         this.setState({ page_ask_price: 'edit_ask_price'});
     }
 
+    handleMenuItemOnclick(e){
+        console.log(e.key)
+    }
+
 
 
     render() {
@@ -293,7 +298,7 @@ export default class PageOrder extends React.Component{
         return (
 
             <Layout style={{background: '#fff',height: '100%'}}>
-                <CompnSider defaultMenuKey={['2']}/>
+                <CompnSider defaultMenuKey={['2']} defaultOpenKeys={['order_m']} menuItemOnclick={this.handleMenuItemOnclick}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
