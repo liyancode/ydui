@@ -2,15 +2,34 @@
 * Base structure
 */
 
+body,html{
+    height: 100%;
+}
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
     /*padding-top: 50px;*/
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    font-weight: 400;
-    /*font-size: 1rem;*/
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
+    /*font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";*/
+    font-family: PingFangSC-Light,'helvetica neue','hiragino sans gb',tahoma,'microsoft yahei ui','microsoft yahei',simsun,sans-serif;
+    font-size: 14px;
+    /*font-weight: 400;*/
+    /*!*font-size: 1rem;*!*/
+    /*line-height: 1.5;*/
+    /*color: #212529;*/
+}
+.background-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: url( '../img/boeing-everett.jpg' );
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    z-index: -1;
 }
 
 
@@ -124,16 +143,16 @@ body {
 }
 
 .login-layout{
-    background:#2980b9;
-    background: -webkit-linear-gradient(to right,#2980b9, #2c3e50); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(to right,#2980b9, #2c3e50); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(to right,#2980b9, #2c3e50); /* Firefox 3.6 - 15 */
-    background: linear-gradient(to right,#2980b9, #2c3e50); /* 标准的语法（必须放在最后） */
-    /*background: url('../img/dback-min.jpg') no-repeat;*/
+    /*background:#2980b9;*/
+    /*background: -webkit-linear-gradient(to right,#2980b9, #2c3e50); !* Safari 5.1 - 6.0 *!*/
+    /*background: -o-linear-gradient(to right,#2980b9, #2c3e50); !* Opera 11.1 - 12.0 *!*/
+    /*background: -moz-linear-gradient(to right,#2980b9, #2c3e50); !* Firefox 3.6 - 15 *!*/
+    /*background: linear-gradient(to right,#2980b9, #2c3e50); !* 标准的语法（必须放在最后） *!*/
+    /*background: url('../img/skybg.jpg') no-repeat;*/
     /*background-size: 100%;*/
 }
 .login-wrapper-container{
-    min-width: 485px;
+    /*min-width: 485px;*/
     margin: 25vh auto auto;
     transition: margin .2s;
     -ms-flex-item-align: center;
