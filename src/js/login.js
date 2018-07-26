@@ -18,7 +18,7 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <Layout className="layout login-layout" style={{height: '100%'}}>
+            <Layout className="layout login-layout" style={{height: '100%',background:'transparent'}}>
                 <Content style={{padding: '0 50px'}} className='login-wrapper-container'>
                     <h3 style={{color: '#fff'}}>React Demo project ></h3>
                     <WrappedHorizontalLoginForm />
