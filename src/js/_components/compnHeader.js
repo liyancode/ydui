@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Divider, Badge, Icon} from 'antd';
+import {Layout, Divider, Avatar, Icon,Badge} from 'antd';
 
 const {Header} = Layout;
 import {userService} from "../_services/user.service";
@@ -9,12 +9,13 @@ const CompnHeader = (props) => {
         <Header style={{background: '#fff',padding: 0,borderBottom: '1px solid #eee'}}>
                     <span>
                         <Divider type="vertical"/>
-                        <Icon type="user" />
-                        <span>{localStorage.getItem('user_name')}</span>
+                        <a href={'#/hr'}><Avatar shape="square" size="small" src={require("../../img/avt_ym.jpeg")}/></a>
+                        {/*<Icon type="user" />*/}
+                        <span>{" "+localStorage.getItem('user_name')}</span>
                         <Divider type="vertical"/>
                         <Icon type="bell" />
                         <a href={'#'}>
-                            <Badge count={25} />
+                            <Badge count={1} />
                         </a>
                         <Divider type="vertical"/>
                         <a type="danger" title={"退出"}

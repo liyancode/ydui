@@ -4,8 +4,8 @@ const {Footer} = Layout;
 
 const CompnFooter = (props) => {
     return (
-        <Footer style={{textAlign: 'center'}}>
-            Ant Design ©2016 Created by Ant UED
+        <Footer style={{textAlign: 'center',background:'transparent'}}>
+            ©2018 江苏耀迪新材料有限公司
         </Footer>
     );
 };

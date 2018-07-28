@@ -14,7 +14,11 @@ const CompnSider=(props)=> {
                 console.log(collapsed, type);
             }}
         >
-            <div className="logo"/>
+            <div className="logo">
+                <span>
+                    耀迪·管理助手v0.1
+                </span>
+            </div>
             <Menu theme="dark" mode="inline"
                   defaultSelectedKeys={props.defaultMenuKey}
                   defaultOpenKeys={props.defaultOpenKeys}
@@ -36,36 +40,36 @@ const CompnSider=(props)=> {
                     title={<span><Icon type="shopping-cart" /><span>订单管理</span></span>}
                 >
 
-                    <Menu.Item key="2">
+                    <Menu.Item key="order_page">
                         <Link to='/order' replace>
                             <Icon type="shopping-cart"/>
                             <span>订单</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="contract_page" onClick={props.menuItemOnclick}>
-                        {/*<Link to='/contract' replace>*/}
-                            {/*<Icon type="shopping-cart"/>*/}
-                            {/*<span>合同</span>*/}
-                        {/*</Link>*/}
-                        <Icon type="shopping-cart"/>
-                        <span>合同</span>
+                    <Menu.Item key="contract_page">
+                        <Link to='/contract' replace>
+                            <Icon type="book" />
+                            <span>合同</span>
+                        </Link>
                     </Menu.Item>
-                    <Menu.Item key="ask_price_page" onClick={props.menuItemOnclick}>
-                        <Icon type="shopping-cart"/>
-                        <span>询价</span>
+                    <Menu.Item key="ask_price_page">
+                        <Link to='/ask_price' replace>
+                            <Icon type="calculator" />
+                            <span>询价</span>
+                        </Link>
                     </Menu.Item>
 
                 </SubMenu>
                 <Menu.Item key="3">
                     <Link to='/crm' replace>
                         <Icon type="contacts"/>
-                        <span>客户关系</span>
+                        <span>客户管理</span>
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="4">
                     <Link to='/fin' replace>
                         <Icon type="pay-circle-o"/>
-                        <span>财务审理</span>
+                        <span>财务审批</span>
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="5">
@@ -77,7 +81,7 @@ const CompnSider=(props)=> {
                 <Menu.Item key="6">
                     <Link to='/werehouse' replace>
                         <Icon type="database"/>
-                        <span>仓储管理</span>
+                        <span>库存管理</span>
                     </Link>
                 </Menu.Item>
             </Menu>
