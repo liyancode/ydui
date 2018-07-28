@@ -9,7 +9,7 @@ body,html{
 body {
     /*padding-top: 50px;*/
     /*font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";*/
-    font-family: PingFangSC-Light,'helvetica neue','hiragino sans gb',tahoma,'microsoft yahei ui','microsoft yahei',simsun,sans-serif;
+    /*font-family: PingFangSC-Light,'helvetica neue','hiragino sans gb',tahoma,'microsoft yahei ui','microsoft yahei',simsun,sans-serif;*/
     font-size: 14px;
     /*font-weight: 400;*/
     /*!*font-size: 1rem;*!*/
@@ -20,18 +20,20 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    background-image: url( '../img/boeing-everett.jpg' );
+    background-image: url( '../img/bgmt.jpg' );
     background-size: cover;
     width: 100%;
     height: 100%;
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
+    /*-webkit-filter: blur(2px);*/
+    /*-moz-filter: blur(2px);*/
+    /*-o-filter: blur(2px);*/
+    /*-ms-filter: blur(2px);*/
+    /*filter: blur(2px);*/
     z-index: -1;
 }
-
+div * {
+    font-family: PingFangSC-Light,'helvetica neue','hiragino sans gb',tahoma,'microsoft yahei ui','microsoft yahei',simsun,sans-serif;
+}
 
 /*
  * Global add-ons
@@ -51,12 +53,18 @@ body {
 }
 
 .logo {
-    width: 120px;
+    color: white;
+    font-size: 18px;
+    width: 180px;
     height: 31px;
-    background: rgba(255,255,255,.2);
+    /*background: rgba(255,255,255,.2);*/
+    padding: 5px 0px 5px 12px;
     margin: 16px 24px 16px 0;
     float: left;
 }
+/*.ant-layout{*/
+    /*background: transparent;*/
+/*}*/
 #app{
     height: 100%;
 }
@@ -142,14 +150,8 @@ body {
     border-radius: 50%;
 }
 
-.login-layout{
-    /*background:#2980b9;*/
-    /*background: -webkit-linear-gradient(to right,#2980b9, #2c3e50); !* Safari 5.1 - 6.0 *!*/
-    /*background: -o-linear-gradient(to right,#2980b9, #2c3e50); !* Opera 11.1 - 12.0 *!*/
-    /*background: -moz-linear-gradient(to right,#2980b9, #2c3e50); !* Firefox 3.6 - 15 *!*/
-    /*background: linear-gradient(to right,#2980b9, #2c3e50); !* 标准的语法（必须放在最后） *!*/
-    /*background: url('../img/skybg.jpg') no-repeat;*/
-    /*background-size: 100%;*/
+.login-layout .ant-layout-footer{
+    color:white;
 }
 .login-wrapper-container{
     /*min-width: 485px;*/
