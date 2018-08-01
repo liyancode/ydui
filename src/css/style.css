@@ -161,3 +161,7 @@ div * {
     -ms-grid-row-align: center;
     align-self: center;
 }
+
+.my-info-table td{
+    padding-left: 12px;
+}
