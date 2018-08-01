@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Icon, Tag, Layout, Dropdown, Menu, Badge, Avatar, Button} from 'antd';
+import {Card, Icon, Tag, Layout, Divider, Breadcrumb, Badge, Avatar, Button} from 'antd';
 const {Header, Content, Footer, Sider} = Layout;
 import {userService} from "../_services/user.service";
 
@@ -11,6 +11,7 @@ export default class PageHR extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            breadcrumb: '我的信息',
             user: {},
             user_employee_info: {}
         }
@@ -20,6 +21,7 @@ export default class PageHR extends React.Component {
         });
     }
 
+
     render() {
         return (
             <Layout style={{height: '100%'}}>
@@ -28,54 +30,85 @@ export default class PageHR extends React.Component {
                     <CompnHeader/>
                     <Content>
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
-                            <h4 className="page-header">
-                                <Icon type="user"/>
-                                <span>员工档案</span>
-                            </h4>
-                            <div className="col-sm-12 col-md-6">
-                                <Card title="工作信息">
-                                    <dl className="dl-horizontal">
-                                        <dt>姓名</dt>
-                                        <dd>{this.state.user_employee_info["full_name"]}</dd>
-                                        <dt>员工 ID</dt>
-                                        <dd>{this.state.user["user_id"]}</dd>
-                                        <dt>部门</dt>
-                                        <dd>{this.state.user_employee_info["department_id"]}</dd>
-                                        <dt>职位</dt>
-                                        <dd>{this.state.user_employee_info["title"]}</dd>
-                                        <dt>办公地点</dt>
-                                        <dd><Icon type="environment-o"/><span>{this.state.user_employee_info["office"]}</span>
-                                        </dd>
-                                        <dt>入职时间</dt>
-                                        <dd>{this.state.user_employee_info["onboard_at"]}</dd>
-                                        <dt>状态</dt>
-                                        <dd><Tag
-                                            color="#87d068">{this.state.user_employee_info["position_status"]}</Tag>
-                                        </dd>
-                                        <dt><Icon type="mobile" /></dt>
-                                        <dd><span> {this.state.user_employee_info["phone_number"]}</span>
-                                        </dd>
-                                        <dt><Icon type="mail"/></dt>
-                                        <dd><span> {this.state.user_employee_info["email"]}</span>
-                                        </dd>
-                                    </dl>
-                                </Card>
+                            <div className="page-header">
+                                <h4 style={{display: "inline"}}>
+                                    <Icon type="user"/>
+                                    <span>员工档案</span>
+                                </h4>
+                                <Breadcrumb style={{display: "inline"}}>
+                                    <Breadcrumb.Item> </Breadcrumb.Item>
+                                    <Breadcrumb.Item>{this.state.breadcrumb}</Breadcrumb.Item>
+                                </Breadcrumb>
                             </div>
-                            <div className="col-sm-12 col-md-6">
-                                <Card title="个人信息">
-                                    <dl className="dl-horizontal">
-                                        <dt>性别</dt>
-                                        <dd>{this.state.user_employee_info["gender"]}</dd>
-                                        <dt>生日</dt>
-                                        <dd><span
-                                            className="glyphicon glyphicon-gift"/> {this.state.user_employee_info["birthday"]}
-                                        </dd>
-                                        <dt>婚姻状况</dt>
-                                        <dd>{this.state.user_employee_info["marital_status"]}</dd>
-                                        <dt>籍贯</dt>
-                                        <dd>{this.state.user_employee_info["hometown"]}</dd>
-                                    </dl>
-                                </Card>
+                            <div className="col-sm-12 col-md-4">
+                                <Divider orientation={"left"}><span>个人信息</span><Icon type="solution" /></Divider>
+                                <table className="my-info-table">
+                                    <tr>
+                                        <td></td>
+                                        <td><img src={require("../../img/avt_ym.jpeg")} style={{ width: 100 ,border:'solid 2px white'}}/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>性别</td>
+                                        <td>{this.state.user_employee_info["gender"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>生日</td>
+                                        <td><span
+                                            className="glyphicon glyphicon-gift"/> {this.state.user_employee_info["birthday"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>婚姻状况</td>
+                                        <td>{this.state.user_employee_info["marital_status"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>籍贯</td>
+                                        <td>{this.state.user_employee_info["hometown"]}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div className="col-sm-12 col-md-4">
+                                <Divider orientation={"left"}><span>工作信息</span><Icon type="team" /></Divider>
+                                <table className="my-info-table">
+                                    <tbody>
+                                    <tr>
+                                        <td>姓名</td>
+                                        <td>{this.state.user_employee_info["full_name"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>员工 ID</td>
+                                        <td>{this.state.user["user_id"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>部门</td>
+                                        <td>{this.state.user_employee_info["department_id"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>职位</td>
+                                        <td>{this.state.user_employee_info["title"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>办公地点</td>
+                                        <td><Icon type="environment-o"/><span>{this.state.user_employee_info["office"]}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>入职时间</td>
+                                        <td>{this.state.user_employee_info["onboard_at"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>状态</td>
+                                        <td><Tag
+                                            color="#87d068">{this.state.user_employee_info["position_status"]}</Tag></td>
+                                    </tr>
+                                    <tr>
+                                        <td><Icon type="mobile" /></td>
+                                        <td><span> {this.state.user_employee_info["phone_number"]}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><Icon type="mail"/></td>
+                                        <td>{this.state.user_employee_info["email"]}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </Content>
