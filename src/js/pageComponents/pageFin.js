@@ -15,7 +15,7 @@ const PageFin=(props)=> {
                     <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                         <h4 className="page-header">
                             <Icon type="pay-circle-o"/>
-                            <span>财务管理</span>
+                            <span>财务审批</span>
                         </h4>
                     </div>
                 </Content>
