@@ -133,7 +133,8 @@ const PageContent = (props) => {
                                 <img src={require("../../img/products_img/pi02.gif")} style={{ width: 210 ,border:'solid 2px white'}}/>
                                 <img src={require("../../img/products_img/pi03.gif")} style={{ width: 210 ,border:'solid 2px white'}}/>
                             </div>
-                        </Spin></div>
+                        </Spin>
+                    </div>
                 </div>
             )
         }
