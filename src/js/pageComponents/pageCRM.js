@@ -346,7 +346,7 @@ export default class PageCRM extends React.Component {
                             <div className="page-header">
                                 <h4 style={{display: "inline"}}>
                                     <Icon type="contacts"/>
-                                    <span>客户关系</span>
+                                    <span>客户管理</span>
                                 </h4>
                                 <Breadcrumb style={{display: "inline"}}>
                                     <Breadcrumb.Item> </Breadcrumb.Item>
