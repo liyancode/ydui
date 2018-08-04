@@ -32,7 +32,7 @@ export default class Login extends React.Component {
                     {/*<WrappedHorizontalLoginForm />*/}
                     <WrappedNormalLoginForm />
                 </Content>
-                <CompnFooter/>
+                <CompnFooter color={'#f5f5f5'}/>
             </Layout>
         )
     }

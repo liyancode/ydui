@@ -30,19 +30,19 @@ class NormalLoginForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form" style={{maxWidth: 300}}>
+            <Form onSubmit={this.handleSubmit} className="login-form" style={{maxWidth: 320,padding:20,backgroundColor:'rgba(0, 0, 0, 0.25)'}}>
                 <FormItem>
                     {getFieldDecorator('userName', {
                         rules: [{required: true, message: '请输入你的用户名!'}],
                     })(
-                        <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="用户名"/>
+                        <Input prefix={<Icon type="user" style={{color: '#52c41a'}}/>} placeholder="用户名"/>
                     )}
                 </FormItem>
                 <FormItem>
                     {getFieldDecorator('password', {
                         rules: [{required: true, message: '请输入你的密码！'}],
                     })(
-                        <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
+                        <Input prefix={<Icon type="lock" style={{color: '#f5222d'}}/>} type="password"
                                placeholder="密码"/>
                     )}
                 </FormItem>
@@ -53,11 +53,11 @@ class NormalLoginForm extends React.Component {
                     })(
                         <Checkbox style={{color:'white'}}>记住我</Checkbox>
                     )}
-                    <a className="login-form-forgot" href="" style={{float: 'right',color:'white'}}>忘记密码</a>
+                    <a className="login-form-forgot" href="" style={{float: 'right',color:'white'}}>忘记密码？</a>
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{width: '100%'}}>
                         登录
                     </Button>
-                    <a href="" style={{color:'white'}}>马上注册!</a>
+                    <a href="" style={{color:'white'}}>还没有账号？</a>
                 </FormItem>
             </Form>
         );

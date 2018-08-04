@@ -19,7 +19,7 @@ const PageWereHouse=(props)=> {
                         </h4>
                     </div>
                 </Content>
-                <CompnFooter/>
+                <CompnFooter color={'#333'}/>
             </Layout>
         </Layout>
     )

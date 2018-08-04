@@ -226,7 +226,7 @@ export default class PageContract extends React.Component {
                                 backToViewAllBtnOnclick={this.handleBackToViewAllBtnOnclick}/>
                         </div>
                     </Content>
-                    <CompnFooter/>
+                    <CompnFooter color={'#333'}/>
                 </Layout>
             </Layout>
         )

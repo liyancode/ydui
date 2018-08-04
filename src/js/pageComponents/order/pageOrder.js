@@ -357,7 +357,7 @@ export default class PageOrder extends React.Component {
                             />
                         </div>
                     </Content>
-                    <CompnFooter/>
+                    <CompnFooter color={'#333'}/>
                 </Layout>
             </Layout>
         )

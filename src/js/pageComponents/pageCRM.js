@@ -45,19 +45,47 @@ const PageContent = (props) => {
             for (let i = 0; i < contacts.length; i++) {
                 let contact_i = contacts[i];
                 conatct_info_div.push(
-                    <dl className="dl-horizontal" key={i}>
-                        <dt>姓名</dt>
-                        <dd>{contact_i["fullname"] + " " + ((contact_i["gender"] == 1) ? "先生" : "女士")}</dd>
-                        <dt><span>职务</span><Icon type="tag-o" /></dt>
-                        <dd>{contact_i["title"]}</dd>
-                        <dt><span>电话</span><Icon type="mobile" /></dt>
-                        <dd>{contact_i["phone_number"]}</dd>
-                        <dt><span>邮箱</span><Icon type="mail" /></dt>
-                        <dd>{contact_i["email"]}</dd>
-                        <dd><Button type="primary" icon="edit" style={btnStyle} contact_id={contact_i["id"]}
-                                    onClick={props.editContactBtnOnclick}>更新</Button>
-                            <Button type="danger" icon="delete" style={btnStyle}>删除</Button></dd>
-                    </dl>
+                    <table className="table table-bordered" key={i}>
+                        <tbody>
+                        <tr>
+                            <td>姓名</td>
+                            <td>{contact_i["fullname"] + " " + ((contact_i["gender"] == 1) ? "先生" : "女士")}</td>
+                        </tr>
+                        <tr>
+                            <td><span>职务</span><Icon type="tag-o"/></td>
+                            <td>{contact_i["title"]}</td>
+                        </tr>
+                        <tr>
+                            <td><span>电话</span><Icon type="mobile"/></td>
+                            <td>{contact_i["phone_number"]}</td>
+                        </tr>
+                        <tr>
+                            <td><span>邮箱</span><Icon type="mail"/></td>
+                            <td>{contact_i["email"]}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <Button type="primary" icon="edit" style={btnStyle} contact_id={contact_i["id"]}
+                                        onClick={props.editContactBtnOnclick}>更新</Button>
+                                <Button type="danger" icon="delete" style={btnStyle}>删除</Button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    // <dl className="dl-horizontal" key={i}>
+                    //     <dt>姓名</dt>
+                    //     <dd>{contact_i["fullname"] + " " + ((contact_i["gender"] == 1) ? "先生" : "女士")}</dd>
+                    //     <dt><span>职务</span><Icon type="tag-o" /></dt>
+                    //     <dd>{contact_i["title"]}</dd>
+                    //     <dt><span>电话</span><Icon type="mobile" /></dt>
+                    //     <dd>{contact_i["phone_number"]}</dd>
+                    //     <dt><span>邮箱</span><Icon type="mail" /></dt>
+                    //     <dd>{contact_i["email"]}</dd>
+                    //     <dd><Button type="primary" icon="edit" style={btnStyle} contact_id={contact_i["id"]}
+                    //                 onClick={props.editContactBtnOnclick}>更新</Button>
+                    //         <Button type="danger" icon="delete" style={btnStyle}>删除</Button></dd>
+                    // </dl>
                 );
             }
             return (<div>
@@ -73,69 +101,132 @@ const PageContent = (props) => {
                                 <dd>{customer["customer_id"]}</dd>
                                 <dt>创建者</dt>
                                 <dd>{customer["added_by_user_name"]}</dd>
-                                <dt><span>创建时间</span><Icon type="calendar" /></dt>
+                                <dt><span>创建时间</span><Icon type="calendar"/></dt>
                                 <dd>{customer["created_at"]}</dd>
-                                <Divider orientation={"left"}>
-                                    <span>公司详情</span>
-                                    <Icon type="profile" />
-                                </Divider>
-                                <dt><span>公司名称</span><Icon type="copyright"/></dt>
-                                <dd><h4>{customer["company_name"]}</h4></dd>
-                                <dt>
-                                    <span>公司所在地</span>
-                                    <Icon type="environment-o"/>
-                                </dt>
-                                <dd>{customer["company_location"]}</dd>
-                                <dt>
-                                    <span>公司税号</span>
-                                    <Icon type="safety" style={{color: "#52c41a"}}/>
-                                </dt>
-                                <dd>{customer["company_tax_number"]}</dd>
-                                <dt>
-                                    <span>公司法人</span>
-                                    <Icon type="user"/>
-                                </dt>
-                                <dd>{customer["company_legal_person"]}</dd>
-                                <dt>
-                                    <span>公司主营业务</span><Icon type="global"/>
-                                </dt>
-                                <dd>{customer["company_main_business"]}</dd>
-                                <dt>
-                                    <span>公司网站</span><Icon type="link"/>
-                                </dt>
-                                <dd>
-                                    <a target={"_blank"} href={customer["company_description"]}>
-                                        {customer["company_description"]}
-                                    </a>
-                                </dd>
-                                <dt><span>公司电话</span><Icon type="phone"/></dt>
-                                <dd>{customer["company_tel_number"]}</dd>
-                                <dt><span>公司邮箱</span><Icon type="mail"/></dt>
-                                <dd>{customer["company_email"]}</dd>
-                                <dt>备注</dt>
-                                <dd>{customer["comment"]}</dd>
-                                <dd><Button type="primary" icon="edit" style={btnStyle}
-                                            onClick={props.editCustomerBtnOnclick}>更新</Button>
-                                </dd>
-
                             </dl>
-                            <Divider orientation={"left"}><span>公司联系人</span><Icon type="team" /></Divider>
+                            <Divider orientation={"left"}>
+                                <span>公司详情</span>
+                                <Icon type="profile"/>
+                            </Divider>
+                            <table className="table table-bordered table-condensed">
+                                <tbody>
+                                <tr>
+                                    <td><span>公司名称</span><Icon type="copyright"/></td>
+                                    <td><h4>{customer["company_name"]}</h4></td>
+                                </tr>
+                                <tr>
+                                    <td><span>公司所在地</span>
+                                    <Icon type="environment-o"/></td>
+                                    <td>{customer["company_location"]}</td>
+                                </tr>
+                                <tr>
+                                    <td><span>公司税号</span>
+                                        <Icon type="safety" style={{color: "#52c41a"}}/></td>
+                                    <td>{customer["company_tax_number"]}</td>
+                                </tr>
+                                <tr>
+                                    <td><span>公司法人</span>
+                                        <Icon type="user"/></td>
+                                    <td>{customer["company_legal_person"]}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{minWidth:120}}><span>公司主营业务</span><Icon type="global"/></td>
+                                    <td>{customer["company_main_business"]}</td>
+                                </tr>
+                                <tr>
+                                    <td><span>公司网站</span><Icon type="link"/></td>
+                                    <td><a target={"_blank"} href={customer["company_description"]}>
+                                        {customer["company_description"]}
+                                    </a></td>
+                                </tr>
+                                <tr>
+                                    <td><span>公司电话</span><Icon type="phone"/></td>
+                                    <td>{customer["company_tel_number"]}</td>
+                                </tr>
+                                <tr>
+                                    <td><span>公司邮箱</span><Icon type="mail"/></td>
+                                    <td>{customer["company_email"]}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{minWidth:120}}>备注</td>
+                                    <td>{customer["comment"]}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><Button type="primary" icon="edit" style={btnStyle}
+                                                onClick={props.editCustomerBtnOnclick}>更新</Button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            {/*<dl className="dl-horizontal">*/}
+                                {/*<dt>客户编号</dt>*/}
+                                {/*<dd>{customer["customer_id"]}</dd>*/}
+                                {/*<dt>创建者</dt>*/}
+                                {/*<dd>{customer["added_by_user_name"]}</dd>*/}
+                                {/*<dt><span>创建时间</span><Icon type="calendar"/></dt>*/}
+                                {/*<dd>{customer["created_at"]}</dd>*/}
+                                {/*<Divider orientation={"left"}>*/}
+                                    {/*<span>公司详情</span>*/}
+                                    {/*<Icon type="profile"/>*/}
+                                {/*</Divider>*/}
+                                {/*<dt><span>公司名称</span><Icon type="copyright"/></dt>*/}
+                                {/*<dd><h4>{customer["company_name"]}</h4></dd>*/}
+                                {/*<dt>*/}
+                                    {/*<span>公司所在地</span>*/}
+                                    {/*<Icon type="environment-o"/>*/}
+                                {/*</dt>*/}
+                                {/*<dd>{customer["company_location"]}</dd>*/}
+                                {/*<dt>*/}
+                                    {/*<span>公司税号</span>*/}
+                                    {/*<Icon type="safety" style={{color: "#52c41a"}}/>*/}
+                                {/*</dt>*/}
+                                {/*<dd>{customer["company_tax_number"]}</dd>*/}
+                                {/*<dt>*/}
+                                    {/*<span>公司法人</span>*/}
+                                    {/*<Icon type="user"/>*/}
+                                {/*</dt>*/}
+                                {/*<dd>{customer["company_legal_person"]}</dd>*/}
+                                {/*<dt>*/}
+                                    {/*<span>公司主营业务</span><Icon type="global"/>*/}
+                                {/*</dt>*/}
+                                {/*<dd>{customer["company_main_business"]}</dd>*/}
+                                {/*<dt>*/}
+                                    {/*<span>公司网站</span><Icon type="link"/>*/}
+                                {/*</dt>*/}
+                                {/*<dd>*/}
+                                    {/*<a target={"_blank"} href={customer["company_description"]}>*/}
+                                        {/*{customer["company_description"]}*/}
+                                    {/*</a>*/}
+                                {/*</dd>*/}
+                                {/*<dt><span>公司电话</span><Icon type="phone"/></dt>*/}
+                                {/*<dd>{customer["company_tel_number"]}</dd>*/}
+                                {/*<dt><span>公司邮箱</span><Icon type="mail"/></dt>*/}
+                                {/*<dd>{customer["company_email"]}</dd>*/}
+                                {/*<dt>备注</dt>*/}
+                                {/*<dd>{customer["comment"]}</dd>*/}
+                                {/*<dd><Button type="primary" icon="edit" style={btnStyle}*/}
+                                            {/*onClick={props.editCustomerBtnOnclick}>更新</Button>*/}
+                                {/*</dd>*/}
+
+                            {/*</dl>*/}
+                            <Divider orientation={"left"}><span>公司联系人</span><Icon type="team"/></Divider>
                             {conatct_info_div}
                             <Divider><Button type="primary" icon="user-add" style={btnStyle}>添加新联系人</Button></Divider>
                         </div>
                         <div className="col-sm-12 col-md-6">
-                            <div className={"text-center"}><Button type="primary" icon="edit" style={btnStyle}>添加跟进记录</Button></div>
-                            <Divider orientation={"left"}><span>客户当前跟进状态</span><Icon type="loading" /></Divider>
+                            <div className={"text-center"}><Button type="primary" icon="edit"
+                                                                   style={btnStyle}>添加跟进记录</Button></div>
+                            <Divider orientation={"left"}><span>客户当前跟进状态</span><Icon type="loading"/></Divider>
                             <Steps current={2} size={"small"}>
-                                <Step title="信息录入" description="前期沟通阶段" />
-                                <Step title="潜在客户" description="潜在合作可能" />
-                                <Step title="意向合作" description="已有合作意向" icon={<Icon type="loading" />}/>
-                                <Step title="意向订单" description="已达成意向订单" />
-                                <Step title="正式订单" description="已达成正式订单" />
+                                <Step title="信息录入" description="前期沟通阶段"/>
+                                <Step title="潜在客户" description="潜在合作可能"/>
+                                <Step title="意向合作" description="已有合作意向" icon={<Icon type="loading"/>}/>
+                                <Step title="意向订单" description="已达成意向订单"/>
+                                <Step title="正式订单" description="已达成正式订单"/>
                                 {/*<Step title="完成合作" description="已经成功合作" />*/}
                             </Steps>
                             <br/>
-                            <Divider orientation={"left"}><span>客户跟进历史记录</span><Icon type="area-chart" /></Divider>
+                            <Divider orientation={"left"}><span>客户跟进历史记录</span><Icon type="area-chart"/></Divider>
                             <Timeline>
                                 <Timeline.Item color="green">邮件沟通，有初步产品合作意向 2018-06-01</Timeline.Item>
                                 <Timeline.Item color="green">咨询相关产品信息 2018-03-01</Timeline.Item>
@@ -368,7 +459,7 @@ export default class PageCRM extends React.Component {
                             />
                         </div>
                     </Content>
-                    <CompnFooter/>
+                    <CompnFooter color={'#333'}/>
                 </Layout>
             </Layout>
         )

@@ -40,40 +40,47 @@ export default class PageHR extends React.Component {
                                     <Breadcrumb.Item>{this.state.breadcrumb}</Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
+                            <div>
                             <div className="col-sm-12 col-md-4">
                                 <Divider orientation={"left"}><span>个人信息</span><Icon type="solution" /></Divider>
-                                <table className="my-info-table">
+                                <table className="table table-bordered table-condensed">
+                                    <tbody>
                                     <tr>
-                                        <td></td>
+                                        <td>照片</td>
                                         <td><img src={require("../../img/avt_ym.jpeg")} style={{ width: 100 ,border:'solid 2px white'}}/></td>
                                     </tr>
                                     <tr>
+                                        <td>姓名</td>
+                                        <td>{this.state.user_employee_info["full_name"]}</td>
+                                    </tr>
+                                    <tr>
                                         <td>性别</td>
-                                        <td>{this.state.user_employee_info["gender"]}</td>
+                                        <td>{this.state.user_employee_info["gender"]===0?<div><Icon type="woman" style={{color:'pink'}}/><span>女</span></div>:<div><Icon type="man" style={{color:'blue'}} /><span>男</span></div>}</td>
                                     </tr>
                                     <tr>
                                         <td>生日</td>
                                         <td><span
                                             className="glyphicon glyphicon-gift"/> {this.state.user_employee_info["birthday"]}</td>
                                     </tr>
-                                    <tr>
-                                        <td>婚姻状况</td>
-                                        <td>{this.state.user_employee_info["marital_status"]}</td>
-                                    </tr>
+                                    {/*<tr>*/}
+                                        {/*<td>婚姻状况</td>*/}
+                                        {/*<td>{this.state.user_employee_info["marital_status"]}</td>*/}
+                                    {/*</tr>*/}
                                     <tr>
                                         <td>籍贯</td>
                                         <td>{this.state.user_employee_info["hometown"]}</td>
                                     </tr>
+                                    </tbody>
                                 </table>
                             </div>
                             <div className="col-sm-12 col-md-4">
                                 <Divider orientation={"left"}><span>工作信息</span><Icon type="team" /></Divider>
-                                <table className="my-info-table">
+                                <table className="table table-bordered table-condensed">
                                     <tbody>
-                                    <tr>
-                                        <td>姓名</td>
-                                        <td>{this.state.user_employee_info["full_name"]}</td>
-                                    </tr>
+                                    {/*<tr>*/}
+                                        {/*<td>姓名</td>*/}
+                                        {/*<td>{this.state.user_employee_info["full_name"]}</td>*/}
+                                    {/*</tr>*/}
                                     <tr>
                                         <td>员工 ID</td>
                                         <td>{this.state.user["user_id"]}</td>
@@ -100,19 +107,20 @@ export default class PageHR extends React.Component {
                                             color="#87d068">{this.state.user_employee_info["position_status"]}</Tag></td>
                                     </tr>
                                     <tr>
-                                        <td><Icon type="mobile" /></td>
+                                        <td>手机<Icon type="mobile" /></td>
                                         <td><span> {this.state.user_employee_info["phone_number"]}</span></td>
                                     </tr>
                                     <tr>
-                                        <td><Icon type="mail"/></td>
+                                        <td>邮箱<Icon type="mail"/></td>
                                         <td>{this.state.user_employee_info["email"]}</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            </div>
                         </div>
                     </Content>
-                    <CompnFooter/>
+                    <CompnFooter color={'#333'}/>
                 </Layout>
             </Layout>
         );
