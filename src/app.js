@@ -4,6 +4,7 @@ import {HashRouter, Router, Route,Switch} from 'react-router-dom';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 
+// import { browserHistory,Router, Route,Switch } from 'react-router'
 
 import './3rdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css'
 
