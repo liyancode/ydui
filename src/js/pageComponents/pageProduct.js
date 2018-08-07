@@ -9,7 +9,7 @@ import CompnFooter from "../_components/compnFooter"
 import {productService} from "../_services/product.service"
 import WrappedNewProductForm from "../_components/_compnNewProductForm";
 import {customerService} from "../_services/customer.service";
-
+//add calculate with input part
 const Option = Select.Option;
 
 const PageContent = (props) => {
