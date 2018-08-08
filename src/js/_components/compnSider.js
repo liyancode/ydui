@@ -58,7 +58,6 @@ const CompnSider=(props)=> {
                             <span>询价</span>
                         </Link>
                     </Menu.Item>
-
                 </SubMenu>
                 <Menu.Item key="3">
                     <Link to='/crm' replace>
@@ -72,12 +71,23 @@ const CompnSider=(props)=> {
                         <span>财务审批</span>
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="5">
-                    <Link to='/product' replace>
-                        <Icon type="shop" />
-                        <span>产品管理</span>
-                    </Link>
-                </Menu.Item>
+                <SubMenu
+                    key="product_m"
+                    title={<span><Icon type="shop" /><span>产品管理</span></span>}
+                >
+                    <Menu.Item key="product_mianliao_page">
+                        <Link to='/product_mianliao' replace>
+                            <Icon type="shopping-cart"/>
+                            <span>面料</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="product_fengguan_page">
+                        <Link to='/product_fengguan' replace>
+                            <Icon type="book" />
+                            <span>风管</span>
+                        </Link>
+                    </Menu.Item>
+                </SubMenu>
                 <Menu.Item key="6">
                     <Link to='/werehouse' replace>
                         <Icon type="database"/>
