@@ -1,5 +1,5 @@
 import React from 'react';
-import {Divider, Icon, Select, Layout, Card, Breadcrumb, Spin, Table, Button} from 'antd';
+import {Divider, Icon, Select, Layout, Upload, message, Button, Breadcrumb, Spin, Table} from 'antd';
 
 const {Content} = Layout;
 import CompnSider from "../../_components/compnSider"
@@ -9,6 +9,7 @@ import CompnFooter from "../../_components/compnFooter"
 import {productService} from "../../_services/product.service"
 import WrappedNewProductForm from "../../_components/_compnNewProductForm";
 import {customerService} from "../../_services/customer.service";
+import {authHeader} from "../../_helpers/auth-header";
 //add calculate with input part
 const Option = Select.Option;
 
@@ -26,6 +27,25 @@ const PageContent = (props) => {
             <Option value={type_i["product_type_id"]} key={type_i["id"]}>{type_i["name"]}</Option>
         );
     }
+
+    const fp_props = {
+        name: 'file',
+        accept:'.xlsx',
+        multiple: true,
+        action: '/api/orders/upload_file',
+        headers:authHeader(),
+        onChange(info) {
+            const status = info.file.status;
+            if (status !== 'uploading') {
+                console.log(info.file, info.fileList);
+            }
+            if (status === 'done') {
+                message.success(`${info.file.name} 文件上传成功.`);
+            } else if (status === 'error') {
+                message.error(`${info.file.name} 文件上传失败.`);
+            }
+        },
+    };
 
     if (props.page) {
         let page = props.page;
@@ -54,6 +74,7 @@ const PageContent = (props) => {
                 </Spin>
             </div>)
         } else if (page === 'add_new') {
+
             return (<div>
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.backFromAddNewBtnOnclick}>
@@ -61,6 +82,11 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
+                <Upload {...fp_props}>
+                    <Button>
+                        <Icon type="upload" /> 使用Excel批量导入
+                    </Button>
+                </Upload>
                 要添加的产品类别
                 <Select defaultValue={props.addNewProductType} style={btnStyle}
                         onChange={props.addNewProductTypeSelectChange}>
@@ -236,7 +262,7 @@ export default class PageProductMianliao extends React.Component {
         this.handleBackFromAddNewBtnOnclick = this.handleBackFromAddNewBtnOnclick.bind(this);
         this.handleAddNewProductTypeSelectChange = this.handleAddNewProductTypeSelectChange.bind(this);
 
-        productService.getAll().then(data => {
+        productService.getByProductTypeId('7001').then(data => {
             this.setState({products: data["products"], breadcrumb: '面料产品'+' 共 '+data["products"].length+' 条',loading: false});
         });
 
@@ -267,7 +293,7 @@ export default class PageProductMianliao extends React.Component {
     handleReloadBtnOnclick() {
         this.setState({loading: true});
         if (this.state.one_product_type === 'all') {
-            productService.getAll().then(data => {
+            productService.getByProductTypeId('7001').then(data => {
                 this.setState({products: data["products"], loading: false});
             });
         } else {

@@ -236,7 +236,7 @@ export default class PageProductFengguan extends React.Component {
         this.handleBackFromAddNewBtnOnclick = this.handleBackFromAddNewBtnOnclick.bind(this);
         this.handleAddNewProductTypeSelectChange = this.handleAddNewProductTypeSelectChange.bind(this);
 
-        productService.getAll().then(data => {
+        productService.getByProductTypeId('7002').then(data => {
             this.setState({products: data["products"], breadcrumb: '风管产品'+' 共 '+data["products"].length+' 条',loading: false});
         });
 
@@ -267,7 +267,7 @@ export default class PageProductFengguan extends React.Component {
     handleReloadBtnOnclick() {
         this.setState({loading: true});
         if (this.state.one_product_type === 'all') {
-            productService.getAll().then(data => {
+            productService.getByProductTypeId('7002').then(data => {
                 this.setState({products: data["products"], loading: false});
             });
         } else {
