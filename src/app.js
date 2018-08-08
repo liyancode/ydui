@@ -22,7 +22,6 @@ import PageWereHouse from "./js/pageComponents/pageWereHouse";
 import PageHR from "./js/pageComponents/pageHR";
 
 import './css/style.css';
-import PageProduct from "./js/pageComponents/pageProduct";
 import PageAskPrice from "./js/pageComponents/order/pageAskprice";
 import PageContract from "./js/pageComponents/order/pageContract";
 import PageOrder from "./js/pageComponents/order/pageOrder";
