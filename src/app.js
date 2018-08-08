@@ -26,6 +26,8 @@ import PageProduct from "./js/pageComponents/pageProduct";
 import PageAskPrice from "./js/pageComponents/order/pageAskprice";
 import PageContract from "./js/pageComponents/order/pageContract";
 import PageOrder from "./js/pageComponents/order/pageOrder";
+import PageProductFengguan from "./js/pageComponents/product/pageProductFengguan"
+import PageProductMianliao from "./js/pageComponents/product/pageProductMianliao"
 
 class App extends React.Component {
     constructor(props) {
@@ -57,7 +59,8 @@ class App extends React.Component {
                     <PrivateRoute path="/ask_price" component={PageAskPrice}/>
                     <PrivateRoute path="/contract" component={PageContract}/>
                     <PrivateRoute path="/order" component={PageOrder}/>
-                    <PrivateRoute path="/product" component={PageProduct}/>
+                    <PrivateRoute path="/product_fengguan" component={PageProductFengguan}/>
+                    <PrivateRoute path="/product_mianliao" component={PageProductMianliao}/>
                     <PrivateRoute path="/fin" component={PageFin}/>
                     <PrivateRoute path="/werehouse" component={PageWereHouse}/>
                     <Route path="/login" component={Login}/>
