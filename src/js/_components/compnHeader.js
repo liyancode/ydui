@@ -30,10 +30,10 @@ const CompnHeader = (props) => {
                         </a>
                         <Divider type="vertical"/>
 
-                        <a type="danger" title={"退出"} style={{float:'right',marginRight:40}}
+                        <a type="danger" title={"登出"} style={{color:'#f5222d',float:'right',marginRight:40}}
                            onClick={() => {
                                userService.logout();
-                           }}>退出</a>
+                           }}><span>退出 </span><Icon type="logout" /></a>
                     </span>
         </Header>
     );
