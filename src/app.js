@@ -61,7 +61,7 @@ class App extends React.Component {
                     <PrivateRoute path="/product_fengguan" component={PageProductFengguan}/>
                     <PrivateRoute path="/product_mianliao" component={PageProductMianliao}/>
                     <PrivateRoute path="/fin" component={PageFin}/>
-                    <PrivateRoute path="/werehouse" component={PageWereHouse}/>
+                    <PrivateRoute path="/warehouse" component={PageWereHouse}/>
                     <Route path="/login" component={Login}/>
                 </Switch>
             </HashRouter>
