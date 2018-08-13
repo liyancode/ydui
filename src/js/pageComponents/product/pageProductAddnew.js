@@ -80,11 +80,11 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
-                <Upload {...props}>
-                    <Button>
-                        <Icon type="upload" /> excel 批量导入
-                    </Button>
-                </Upload>
+                {/*<Upload {...props}>*/}
+                    {/*<Button>*/}
+                        {/*<Icon type="upload" /> excel 批量导入*/}
+                    {/*</Button>*/}
+                {/*</Upload>*/}
                 要添加的产品类别
                 <Select defaultValue={props.addNewProductType} style={btnStyle}
                         onChange={props.addNewProductTypeSelectChange}>
@@ -123,10 +123,10 @@ const PageContent = (props) => {
                                 <dl className="dl-horizontal">
                                     <dt>产品编号</dt>
                                     <dd>{product["product_id"]}</dd>
-                                    <dt>创建者</dt>
-                                    <dd>{product["added_by_user_name"]}</dd>
-                                    <dt><span>创建时间</span><Icon type="calendar"/></dt>
-                                    <dd>{product["created_at"]}</dd>
+                                    {/*<dt>创建者</dt>*/}
+                                    {/*<dd>{product["added_by_user_name"]}</dd>*/}
+                                    {/*<dt><span>创建时间</span><Icon type="calendar"/></dt>*/}
+                                    {/*<dd>{product["created_at"]}</dd>*/}
                                     <Divider orientation={"left"}>
                                         <span>产品详情</span>
                                         <Icon type="file-text" />

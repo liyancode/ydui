@@ -30,10 +30,10 @@ const PageContent = (props) => {
 
     const fp_props = {
         name: 'file',
-        accept:'.xlsx',
+        accept: '.xlsx',
         multiple: true,
         action: '/api/orders/upload_file',
-        headers:authHeader(),
+        headers: authHeader(),
         onChange(info) {
             const status = info.file.status;
             if (status !== 'uploading') {
@@ -84,7 +84,7 @@ const PageContent = (props) => {
                 </div>
                 <Upload {...fp_props}>
                     <Button>
-                        <Icon type="upload" /> 使用Excel批量导入
+                        <Icon type="upload"/> 使用Excel批量导入
                     </Button>
                 </Upload>
                 要添加的产品类别
@@ -122,39 +122,42 @@ const PageContent = (props) => {
                         </Button>
                         <Spin spinning={props.loading}>
                             <div className="col-sm-12 col-md-6">
-                                <dl className="dl-horizontal">
-                                    <dt>产品编号</dt>
-                                    <dd>{product["product_id"]}</dd>
-                                    <dt>创建者</dt>
-                                    <dd>{product["added_by_user_name"]}</dd>
-                                    <dt><span>创建时间</span><Icon type="calendar"/></dt>
-                                    <dd>{product["created_at"]}</dd>
-                                    <Divider orientation={"left"}>
-                                        <span>产品详情</span>
-                                        <Icon type="file-text" />
-                                    </Divider>
-                                    <dt><span>产品名称</span><Icon type="copyright"/></dt>
-                                    <dd><h4>{product["name"]}</h4></dd>
-                                    <dt>度量单位</dt>
-                                    <dd>{product["measurement_unit"]}</dd>
-                                    <dt>规格型号</dt>
-                                    <dd>{product["specification"]}</dd>
-                                    <dt>产品特性</dt>
-                                    <dd>{product["features"]}</dd>
-                                    <dt>产品用途</dt>
-                                    <dd>{product["use_for"]}</dd>
-                                    <dt>详细描述</dt>
-                                    <dd>{product["description"]}</dd>
-                                    <dt>备注</dt>
-                                    <dd>{product["comment"]}</dd>
-                                    <dd><Button type="primary" icon="edit" style={btnStyle}
-                                                onClick={props.editCustomerBtnOnclick}>更新</Button>
-                                    </dd>
+                                <Divider orientation={"left"}><span>基本信息</span><Icon type="list"/></Divider>
+                                <table className="table table-bordered table-condensed">
+                                    <tbody>
+                                    <tr>
+                                        <td style={{minWidth:80}}>产品编号</td>
+                                        <td>{product["product_id"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>产品名称</td>
+                                        <td><h4>{product["name"]}</h4></td>
+                                    </tr>
+                                    <tr>
+                                        <td>规格型号</td>
+                                        <td>{product["specification"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>英文名</td>
+                                        <td>{product["description"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>度量单位</td>
+                                        <td>{product["measurement_unit"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><Button type="primary" icon="edit" style={btnStyle}
+                                                    onClick={props.editCustomerBtnOnclick}>更新</Button></td>
+                                    </tr>
 
-                                </dl>
+                                    </tbody>
+                                </table>
                             </div>
                             <div className="col-sm-12 col-md-6">
-                                <Divider orientation={"left"}><span>产品样图</span><Icon type="picture" /></Divider>
+                                <Divider orientation={"left"}><span>详细信息</span><Icon type="picture"/></Divider>
+                                <img src={require("../../../img/products_img/" + product["product_id"] + "/detail.png")}
+                                     style={{width: '95%', border: 'solid 2px white'}}/>
                                 {/*<img src={require("../../img/products_img/pi01.jpg")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
                                 {/*<img src={require("../../img/products_img/pi02.gif")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
                                 {/*<img src={require("../../img/products_img/pi03.gif")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
@@ -214,7 +217,7 @@ export default class PageProductMianliao extends React.Component {
             one_product_type: 'all',
             product_types: [],
             products: [],
-            addNewProductType:'70001',
+            addNewProductType: '70001',
             product_table_columns: [
                 {
                     title: '产品编号',
@@ -263,7 +266,11 @@ export default class PageProductMianliao extends React.Component {
         this.handleAddNewProductTypeSelectChange = this.handleAddNewProductTypeSelectChange.bind(this);
 
         productService.getByProductTypeId('7001').then(data => {
-            this.setState({products: data["products"], breadcrumb: '面料产品'+' 共 '+data["products"].length+' 条',loading: false});
+            this.setState({
+                products: data["products"],
+                breadcrumb: '面料产品' + ' 共 ' + data["products"].length + ' 条',
+                loading: false
+            });
         });
 
         productService.getAllProductTypes().then(data => {
@@ -306,7 +313,12 @@ export default class PageProductMianliao extends React.Component {
     handleProductTypeSelectChange(e) {
         if (e === 'all') {
             productService.getAll().then(data => {
-                this.setState({products: data["products"], loading: false, one_product_type: e, breadcrumb: '面料产品'+' 共 '+data["products"].length+' 条'});
+                this.setState({
+                    products: data["products"],
+                    loading: false,
+                    one_product_type: e,
+                    breadcrumb: '面料产品' + ' 共 ' + data["products"].length + ' 条'
+                });
             });
         } else {
             productService.getByProductTypeId(e).then(data => {
@@ -314,7 +326,7 @@ export default class PageProductMianliao extends React.Component {
                     products: data["products"],
                     loading: false,
                     one_product_type: e,
-                    breadcrumb: '产品类别: ' + this.typename(e)+' 共 '+data["products"].length+' 条'
+                    breadcrumb: '产品类别: ' + this.typename(e) + ' 共 ' + data["products"].length + ' 条'
                 });
             });
         }
@@ -325,10 +337,10 @@ export default class PageProductMianliao extends React.Component {
     }
 
     handleBackFromAddNewBtnOnclick() {
-        this.setState({page: "view_all", breadcrumb: '面料产品'+' 共 '+this.state.products.length+' 条'});
+        this.setState({page: "view_all", breadcrumb: '面料产品' + ' 共 ' + this.state.products.length + ' 条'});
     }
 
-    handleAddNewProductTypeSelectChange(e){
+    handleAddNewProductTypeSelectChange(e) {
         this.setState({addNewProductType: e});
     }
 
