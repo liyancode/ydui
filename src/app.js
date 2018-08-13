@@ -12,6 +12,7 @@ import './3rdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css'
 // import 'jquery'
 // import './3rdparty/bootstrap-3.3.7-dist/js/bootstrap.min.js'
 // import './_global.less'
+import {authorityHash} from './js/_helpers/authorityConstants.js';
 import {PrivateRoute} from './js/PrivateRoute'
 
 import Login from './js/login'
@@ -49,19 +50,40 @@ class App extends React.Component {
     }
 
     render() {
+        let private_routes=[];
+        const user_authority = authorityHash();
+        //--- hr
+        if (user_authority['hr'] !== 'n') {
+            private_routes.push(<PrivateRoute path="/hr" component={PageHR} key='prt_hr'/>)
+        }
+        //--- crm
+        if (user_authority['crm'] !== 'n') {
+            private_routes.push(<PrivateRoute path="/crm" component={PageCRM} key='prt_crm'/>)
+        }
+        //--- order
+        if (user_authority['order'] !== 'n') {
+            private_routes.push(<PrivateRoute path="/ask_price" component={PageAskPrice} key='prt_ask_price'/>)
+            private_routes.push(<PrivateRoute path="/contract" component={PageContract} key='prt_contract'/>)
+            private_routes.push(<PrivateRoute path="/order" component={PageOrder} key='prt_order'/>)
+        }
+        //--- fin
+        if (user_authority['fin'] !== 'n') {
+            private_routes.push(<PrivateRoute path="/fin" component={PageFin} key='prt_fin'/>)
+        }
+        //--- product
+        if (user_authority['product'] !== 'n') {
+            private_routes.push(<PrivateRoute path="/product_fengguan" component={PageProductFengguan} key='prt_product_fengguan'/>)
+            private_routes.push(<PrivateRoute path="/product_mianliao" component={PageProductMianliao} key='prt_product_mianliao'/>)
+        }
+        //--- warehouse
+        if (user_authority['warehouse'] !== 'n') {
+            private_routes.push(<PrivateRoute path="/warehouse" component={PageWereHouse} key='prt_warehouse'/>)
+        }
         return (
             <HashRouter>
                 <Switch>
                     <PrivateRoute exact path="/" component={PageHome}/>
-                    <PrivateRoute path="/hr" component={PageHR}/>
-                    <PrivateRoute path="/crm" component={PageCRM}/>
-                    <PrivateRoute path="/ask_price" component={PageAskPrice}/>
-                    <PrivateRoute path="/contract" component={PageContract}/>
-                    <PrivateRoute path="/order" component={PageOrder}/>
-                    <PrivateRoute path="/product_fengguan" component={PageProductFengguan}/>
-                    <PrivateRoute path="/product_mianliao" component={PageProductMianliao}/>
-                    <PrivateRoute path="/fin" component={PageFin}/>
-                    <PrivateRoute path="/warehouse" component={PageWereHouse}/>
+                    {private_routes}
                     <Route path="/login" component={Login}/>
                 </Switch>
             </HashRouter>
