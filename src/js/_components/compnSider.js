@@ -119,13 +119,13 @@ const CompnSider = (props) => {
                 <Menu.Item key="product_mianliao_page">
                     <Link to='/product_mianliao' replace>
                         <Icon type="shopping-cart"/>
-                        <span>面料</span>
+                        <span>阻燃类</span>
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="product_fengguan_page">
                     <Link to='/product_fengguan' replace>
                         <Icon type="book"/>
-                        <span>风管</span>
+                        <span>风管类</span>
                     </Link>
                 </Menu.Item>
             </SubMenu>

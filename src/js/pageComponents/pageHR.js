@@ -47,7 +47,7 @@ export default class PageHR extends React.Component {
                                     <tbody>
                                     <tr>
                                         <td>照片</td>
-                                        <td><img src={require("../../img/avt_ym.jpeg")} style={{ width: 100 ,border:'solid 2px white'}}/></td>
+                                        <td><img src={require("../../assets/img/avt_ym.jpeg")} style={{ width: 100 ,border:'solid 2px white'}}/></td>
                                     </tr>
                                     <tr>
                                         <td>姓名</td>

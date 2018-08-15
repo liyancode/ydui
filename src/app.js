@@ -6,7 +6,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 // import { browserHistory,Router, Route,Switch } from 'react-router'
 
-import './3rdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css'
+import './assets/3rdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css'
 
 //
 // import 'jquery'
@@ -22,7 +22,7 @@ import PageCRM from "./js/pageComponents/pageCRM";
 import PageWereHouse from "./js/pageComponents/pageWereHouse";
 import PageHR from "./js/pageComponents/pageHR";
 
-import './css/style.css';
+import './assets/css/style.css';
 import PageAskPrice from "./js/pageComponents/order/pageAskprice";
 import PageContract from "./js/pageComponents/order/pageContract";
 import PageOrder from "./js/pageComponents/order/pageOrder";

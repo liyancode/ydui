@@ -1,0 +1,26 @@
+2018-07-10 00:47:00 ===============================================================================
+2018-07-10 00:47:00 ====  ORCA               || Splunk Orchestration and Automation
+2018-07-10 00:47:00 ===============================================================================
+2018-07-10 00:47:00 ====  User                          :: srv_perfharness
+2018-07-10 00:47:00 ====  Deployment id                 :: srv_perfharness180710073751qkji2
+2018-07-10 00:47:00 ====  Cluster Master (running)      :: Container Name         srv_perfharness180710073751qkji2_master1_1
+2018-07-10 00:47:00 ====                                :: Splunkweb              http://10.224.175.82:8000 (default: admin/Chang3d!)
+2018-07-10 00:47:00 ====                                :: Splunkd                https://10.224.175.82:8089
+2018-07-10 00:47:00 ====  SPAM Instance (running)       :: Container Name         srv_perfharness180710073751qkji2_spam1_1
+2018-07-10 00:47:00 ====                                :: Splunkweb              http://10.224.34.90:8000 (default: admin/Chang3d!)
+2018-07-10 00:47:00 ====                                :: Splunkd                https://10.224.34.90:8089
+2018-07-10 00:47:00 ====  Eventgen Instance (running)   :: Container Name         srv_perfharness180710073751qkji2_eg1_1
+2018-07-10 00:47:00 ====                                :: Eventgen Endpoint      http://10.224.137.30:9021
+2018-07-10 00:47:00 ====  Search Head (running)         :: Container Name         srv_perfharness180710073751qkji2_sh1_1
+2018-07-10 00:47:00 ====                                :: Splunkweb              httpss://10.224.167.94:8000 (default: admin/Chang3d!)
+2018-07-10 00:47:00 ====                                :: Splunkd                https://10.224.167.94:8089
+2018-07-10 00:47:00 ===============================================================================
+
+(pyviren) yanl-MBP-6A6A6:home yanl$ splunk_orca exec srv_perfharness180710073751qkji2_sh1_1 /bin/bash
+/opt/splunk/etc/apps/HelloMyAPP
+
+https://docs.splunk.com/Documentation/Splunk/6.4.2/SearchReference/Outputcsv
+https://answers.splunk.com/answers/441004/how-to-create-a-scheduled-search-to-export-results.html
+http://docs.splunk.com/Documentation/SplunkCloud/latest/SearchReference/Outputlookup
+
+

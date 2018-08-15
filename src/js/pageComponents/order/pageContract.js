@@ -108,11 +108,11 @@ const PageContent = (props) => {
                 <div className="row">
                     <Divider orientation={"left"}><span>合同书面信息</span><Icon type="book"/></Divider>
                     <div className="col-sm-12 col-md-6">
-                        <img src={require("../../../img/products_img/lenovo1.jpg")}
+                        <img src={require("../../../assets/img/products_img/lenovo1.jpg")}
                              style={{width: '90%', border: 'solid 2px white'}}/>
                     </div>
                     <div className="col-sm-12 col-md-6">
-                        <img src={require("../../../img/products_img/lenovo2.jpg")}
+                        <img src={require("../../../assets/img/products_img/lenovo2.jpg")}
                              style={{width: '90%', border: 'solid 2px white'}}/>
                     </div>
                 </div>
