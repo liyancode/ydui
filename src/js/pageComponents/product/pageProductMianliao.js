@@ -156,7 +156,7 @@ const PageContent = (props) => {
                             </div>
                             <div className="col-sm-12 col-md-6">
                                 <Divider orientation={"left"}><span>详细信息</span><Icon type="picture"/></Divider>
-                                <img src={require("../../../assets/img/products_img/" + product["product_id"] + "/detail.png")}
+                                <img src={"/assets/img/products_img/" + product["product_id"] + "/detail.png"}
                                      style={{width: '95%', border: 'solid 2px white'}}/>
                                 {/*<img src={require("../../img/products_img/pi01.jpg")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
                                 {/*<img src={require("../../img/products_img/pi02.gif")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
