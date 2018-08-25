@@ -9,7 +9,6 @@ import CompnFooter from "../../_components/compnFooter"
 import {productService} from "../../_services/product.service"
 import WrappedNewProductForm from "../../_components/_compnNewProductForm";
 import WrappedEditProductForm from "../../_components/_compnEditProductForm";
-import {customerService} from "../../_services/customer.service";
 import {authHeader} from "../../_helpers/auth-header";
 //add calculate with input part
 const Option = Select.Option;
@@ -44,10 +43,9 @@ const PageContent = (props) => {
                         <span>刷新</span>
                     </Button>
                 </div>
-                产品分类
+                产品类别&nbsp;&nbsp;
                 <Select defaultValue={props.one_product_type} style={btnStyle}
                         onChange={props.productTypeSelectChange}>
-                    {/*<Option value="all">所有类别</Option>*/}
                     {type_select_options}
                 </Select>
                 <Spin spinning={props.loading}>
@@ -128,11 +126,9 @@ const PageContent = (props) => {
                             </div>
                             <div className="col-sm-12 col-md-6">
                                 <Divider orientation={"left"}><span>详细信息</span><Icon type="picture"/></Divider>
-                                <img src={"/public/assets/products_img/" + product["product_id"] + "/"+product["product_id"]+".png"}
-                                     style={{width: '95%', border: 'solid 2px white'}}/>
-                                {/*<img src={require("../../img/products_img/pi01.jpg")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
-                                {/*<img src={require("../../img/products_img/pi02.gif")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
-                                {/*<img src={require("../../img/products_img/pi03.gif")} style={{ width: 210 ,border:'solid 2px white'}}/>*/}
+                                <img
+                                    src={"/public/assets/products_img/" + product["product_id"] + "/" + product["product_id"] + ".png"}
+                                    style={{width: '95%', border: 'solid 2px white'}}/>
                             </div>
                         </Spin>
                     </div>
@@ -158,7 +154,7 @@ const PageContent = (props) => {
                 },
             };
             return (<div>
-                <div className="row">
+                <div>
                     <Button type="primary" style={btnStyle} onClick={props.backFromEditBtnOnclick}>
                         <Icon type="left"/>
                         <span>返回</span>
@@ -220,13 +216,29 @@ const PageContent = (props) => {
 //         "status": 1
 //     }]
 // }
-export default class PageProductMianliao extends React.Component {
+export default class PageProduct extends React.Component {
     constructor(props) {
         super(props);
+        let sub_page = props.location.pathname;
+        let page_conf = {}
+        if (sub_page.indexOf('mianliao') >= 0) {
+            page_conf = {
+                product_sub_page: 'product_mianliao_page',
+                breadcrumb: '阻燃产品',
+                product_type_id_minmax: ['7100', '7200']
+            }
+        } else if (sub_page.indexOf('fengguan') >= 0) {
+            page_conf = {
+                product_sub_page: 'product_fengguan_page',
+                breadcrumb: '风管产品',
+                product_type_id_minmax: ['7200', '7300']
+            }
+        }
         this.state = {
+            page_conf: page_conf,
             loading: true,
             page: 'view_all',//view_one/add_new/view_all/edit_product
-            breadcrumb: '阻燃产品',
+            breadcrumb: page_conf.breadcrumb,
             one_product: {},
             one_product_type: '',
             product_types: [],
@@ -239,7 +251,7 @@ export default class PageProductMianliao extends React.Component {
                     key: 'product_id'
                 },
                 {
-                    title: '名称',
+                    title: '产品名称',
                     dataIndex: 'name',
                     key: 'name',
 
@@ -248,16 +260,7 @@ export default class PageProductMianliao extends React.Component {
                     dataIndex: 'description',
                     key: 'description',
                 },
-                // {
-                //     title: '产品类型',
-                //     dataIndex: 'product_type_id',
-                //     key: 'product_type_id',
-                // },
                 {
-                    title: '计量单位',
-                    dataIndex: 'measurement_unit',
-                    key: 'measurement_unit',
-                }, {
                     title: '规格型号',
                     dataIndex: 'specification',
                     key: 'specification',
@@ -289,26 +292,31 @@ export default class PageProductMianliao extends React.Component {
         this.handleEditProductBtnOnclick = this.handleEditProductBtnOnclick.bind(this);
 
 
-
         productService.getAllProductTypes().then(data => {
-            let all_types=data["product_types"];
-            let show_types=[];
+            let all_types = data["product_types"];
+            let show_types = [];
             let tmp_tp;
-            for(let tp_idx in all_types){
-                tmp_tp=all_types[tp_idx];
-                if(tmp_tp['product_type_id']>='7100'&&tmp_tp['product_type_id']<'7200'){
+            for (let tp_idx in all_types) {
+                tmp_tp = all_types[tp_idx];
+                if (tmp_tp['product_type_id'] >= this.state.page_conf.product_type_id_minmax[0]
+                    && tmp_tp['product_type_id'] < this.state.page_conf.product_type_id_minmax[1]) {
                     show_types.push(tmp_tp)
                 }
             }
             this.setState({product_types: show_types});
-            if(show_types[0]){
+            if (show_types[0]) {
                 productService.getByProductTypeId(show_types[0]['product_type_id']).then(data => {
                     this.setState({
                         products: data["products"],
-                        one_product_type:show_types[0]['product_type_id'],
-                        breadcrumb: show_types[0]['name']+' 共 ' + data["products"].length + ' 条',
+                        one_product_type: show_types[0]['product_type_id'],
+                        breadcrumb: show_types[0]['name'] + ' 共 ' + data["products"].length + ' 条',
                         loading: false
                     });
+                });
+            }else{
+                this.setState({
+                    breadcrumb: '没有该类产品',
+                    loading: false
                 });
             }
         });
@@ -353,7 +361,7 @@ export default class PageProductMianliao extends React.Component {
                     products: data["products"],
                     loading: false,
                     one_product_type: e,
-                    breadcrumb: '阻燃产品' + ' 共 ' + data["products"].length + ' 条'
+                    breadcrumb: this.state.page_conf.breadcrumb + ' 共 ' + data["products"].length + ' 条'
                 });
             });
         } else {
@@ -373,7 +381,7 @@ export default class PageProductMianliao extends React.Component {
     }
 
     handleBackFromAddNewBtnOnclick() {
-        this.setState({page: "view_all", breadcrumb: '阻燃产品' + ' 共 ' + this.state.products.length + ' 条'});
+        this.setState({page: "view_all", breadcrumb: this.state.page_conf.breadcrumb + ' 共 ' + this.state.products.length + ' 条'});
     }
 
     handleBackFromEditBtnOnclick() {
@@ -394,7 +402,7 @@ export default class PageProductMianliao extends React.Component {
     render() {
         return (
             <Layout style={{height: '100%'}}>
-                <CompnSider defaultMenuKey={['product_mianliao_page']} defaultOpenKeys={['product_m']}/>
+                <CompnSider defaultMenuKey={[this.state.page_conf.product_sub_page]} defaultOpenKeys={['product_m']}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
