@@ -26,8 +26,7 @@ import './assets/css/style.css';
 import PageAskPrice from "./js/pageComponents/order/pageAskprice";
 import PageContract from "./js/pageComponents/order/pageContract";
 import PageOrder from "./js/pageComponents/order/pageOrder";
-import PageProductFengguan from "./js/pageComponents/product/pageProductFengguan"
-import PageProductMianliao from "./js/pageComponents/product/pageProductMianliao"
+import PageProduct from "./js/pageComponents/product/pageProduct"
 
 class App extends React.Component {
     constructor(props) {
@@ -72,8 +71,8 @@ class App extends React.Component {
         }
         //--- product
         if (user_authority['product'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/product_fengguan" component={PageProductFengguan} key='prt_product_fengguan'/>)
-            private_routes.push(<PrivateRoute path="/product_mianliao" component={PageProductMianliao} key='prt_product_mianliao'/>)
+            private_routes.push(<PrivateRoute path="/product_fengguan" component={PageProduct} key='prt_product_fengguan'/>)
+            private_routes.push(<PrivateRoute path="/product_mianliao" component={PageProduct} key='prt_product_mianliao'/>)
         }
         //--- warehouse
         if (user_authority['warehouse'] !== 'n') {
