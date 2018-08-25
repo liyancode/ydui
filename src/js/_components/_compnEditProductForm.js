@@ -8,18 +8,16 @@ const RadioGroup = Radio.Group;
 
 import {productService} from '../_services/product.service';
 
-class NewProductForm extends React.Component {
+class EditProductForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
             confirmDirty: false,
-            product_types:props['product_types'],
             autoCompleteResult: [],
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
-        this.handleWebsiteChange = this.handleWebsiteChange.bind(this);
     }
 
     handleSubmit(e) {
@@ -59,9 +57,11 @@ class NewProductForm extends React.Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 this.setState({loading: true});
+                let productMeta = this.props.one_product['product'];
                 let product = {
-                    "id": -1,
-                    "added_by_user_name": "",
+                    "id": productMeta.id,
+                    "product_id":productMeta.product_id,
+                    "added_by_user_name": productMeta.added_by_user_name,
                     "name": values["name"],
                     "product_type_id": values["product_type_id"],
                     "measurement_unit": values["measurement_unit"],
@@ -73,7 +73,7 @@ class NewProductForm extends React.Component {
                     "comment": values["comment"],
                     "status": 1,
                 };
-                productService.addProduct(product).then(data => {
+                productService.updateProduct(product).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -85,18 +85,9 @@ class NewProductForm extends React.Component {
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
     }
 
-    handleWebsiteChange(value) {
-        let autoCompleteResult;
-        if (!value) {
-            autoCompleteResult = [];
-        } else {
-            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        this.setState({autoCompleteResult});
-    }
-
     render() {
         const {getFieldDecorator} = this.props.form;
+        const {autoCompleteResult} = this.state;
 
         const formItemLayout = {
             labelCol: {
@@ -120,28 +111,31 @@ class NewProductForm extends React.Component {
                 },
             },
         };
-
-        //---- product types selector -----
-        let product_types=this.state.product_types;
-
-        let type_select_options = [];
-        for (let i = 0; i < product_types.length; i++) {
-            let type_i = product_types[i]
-            type_select_options.push(
-                <Option value={type_i["product_type_id"]} key={i}>{type_i["name"]+'('+type_i["description"]+')'}</Option>
-            );
-        }
-        const productTypeSelector = getFieldDecorator('product_type_id', {
-            initialValue: product_types[0]["product_type_id"],
+        const prefixSelector = getFieldDecorator('prefix', {
+            initialValue: '86',
         })(
-            <Select>
-                {type_select_options}
+            <Select style={{width: 70}}>
+                <Option value="86">+86</Option>
+                <Option value="87">+87</Option>
             </Select>
         );
 
+        const contactGenderRadio = getFieldDecorator('contact_gender', {
+            initialValue: 0,
+        })(
+            <RadioGroup>
+                <Radio value={0}>女士</Radio>
+                <Radio value={1}>先生</Radio>
+            </RadioGroup>
+        );
+
+        const websiteOptions = autoCompleteResult.map(website => (
+            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
+        ));
+        let product = this.props.one_product['product'];
         return (
             <Spin spinning={this.state.loading}>
-                <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
+                <Form onSubmit={this.handleSubmit} className="col-sm-12 col-md-6">
                     <FormItem
                         {...formItemLayout}
                         label="产品名称"
@@ -150,6 +144,7 @@ class NewProductForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入产品名称!',
                             }],
+                            initialValue: product['name']
                         })(
                             <Input/>
                         )}
@@ -160,6 +155,7 @@ class NewProductForm extends React.Component {
                     >
                         {getFieldDecorator('description', {
                             rules: [],
+                            initialValue: product['description']
                         })(
                             <Input/>
                         )}
@@ -168,7 +164,14 @@ class NewProductForm extends React.Component {
                         {...formItemLayout}
                         label="产品类型"
                     >
-                        {productTypeSelector}
+                        {getFieldDecorator('product_type_id', {
+                            rules: [{
+                                required: true, message: '请选择产品类型!',
+                            }],
+                            initialValue: product['product_type_id']
+                        })(
+                            <Input/>
+                        )}
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
@@ -183,6 +186,7 @@ class NewProductForm extends React.Component {
                     >
                         {getFieldDecorator('measurement_unit', {
                             rules: [],
+                            initialValue: product['measurement_unit']
                         })(
                             <Input/>
                         )}
@@ -193,6 +197,7 @@ class NewProductForm extends React.Component {
                     >
                         {getFieldDecorator('specification', {
                             rules: [],
+                            initialValue: product['specification']
                         })(
                             <Input/>
                         )}
@@ -203,6 +208,7 @@ class NewProductForm extends React.Component {
                     >
                         {getFieldDecorator('raw_material_ids', {
                             rules: [],
+                            initialValue: product['raw_material_ids']
                         })(
                             <Input/>
                         )}
@@ -213,6 +219,7 @@ class NewProductForm extends React.Component {
                     >
                         {getFieldDecorator('features', {
                             rules: [],
+                            initialValue: product['features']
                         })(
                             <Input/>
                         )}
@@ -223,6 +230,7 @@ class NewProductForm extends React.Component {
                     >
                         {getFieldDecorator('use_for', {
                             rules: [],
+                            initialValue: product['use_for']
                         })(
                             <Input/>
                         )}
@@ -234,6 +242,7 @@ class NewProductForm extends React.Component {
                     >
                         {getFieldDecorator('comment', {
                             rules: [],
+                            initialValue: product['comment']
                         })(
                             <Input/>
                         )}
@@ -250,6 +259,5 @@ class NewProductForm extends React.Component {
     }
 }
 
-const WrappedNewProductForm = Form.create()(NewProductForm);
-
-export default WrappedNewProductForm;
+const WrappedEditProductForm = Form.create()(EditProductForm);
+export default WrappedEditProductForm;
