@@ -353,7 +353,7 @@ export default class PageProductMianliao extends React.Component {
                     products: data["products"],
                     loading: false,
                     one_product_type: e,
-                    breadcrumb: '面料产品' + ' 共 ' + data["products"].length + ' 条'
+                    breadcrumb: '阻燃产品' + ' 共 ' + data["products"].length + ' 条'
                 });
             });
         } else {
@@ -373,7 +373,7 @@ export default class PageProductMianliao extends React.Component {
     }
 
     handleBackFromAddNewBtnOnclick() {
-        this.setState({page: "view_all", breadcrumb: '面料产品' + ' 共 ' + this.state.products.length + ' 条'});
+        this.setState({page: "view_all", breadcrumb: '阻燃产品' + ' 共 ' + this.state.products.length + ' 条'});
     }
 
     handleBackFromEditBtnOnclick() {
