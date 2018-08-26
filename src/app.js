@@ -20,7 +20,8 @@ import PageHome from "./js/pageComponents/pageHome"
 import PageFin from "./js/pageComponents/pageFin";
 import PageCRM from "./js/pageComponents/pageCRM";
 import PageWereHouse from "./js/pageComponents/pageWereHouse";
-import PageHR from "./js/pageComponents/pageHR";
+import PageHRMyInfo from "./js/pageComponents/hr/pageHRMyInfo";
+import PageHRAllUsers from "./js/pageComponents/hr/pageHRAllUsers";
 
 import './assets/css/style.css';
 import PageAskPrice from "./js/pageComponents/order/pageAskprice";
@@ -53,7 +54,10 @@ class App extends React.Component {
         const user_authority = authorityHash();
         //--- hr
         if (user_authority['hr'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/hr" component={PageHR} key='prt_hr'/>)
+            private_routes.push(<PrivateRoute path="/hr_myinfo" component={PageHRMyInfo} key='prt_hr_myinfo'/>)
+            if(user_authority['hr']==='rw'){
+                private_routes.push(<PrivateRoute path="/hr_allusers" component={PageHRAllUsers} key='prt_hr_allusers'/>)
+            }
         }
         //--- crm
         if (user_authority['crm'] !== 'n') {
