@@ -1,7 +1,7 @@
 import React from 'react';
 import {Table, Spin, Tag, Tabs, Icon, Layout, Breadcrumb, Divider, Upload, Button,message} from 'antd';
 import {orderService} from "../../_services/order.service";
-import { authHeader } from '../../_helpers/auth-header';
+import { authHeader } from '../../_helpers/authHeader';
 
 const {Header, Content, Footer, Sider} = Layout;
 const Dragger = Upload.Dragger;
