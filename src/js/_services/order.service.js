@@ -1,4 +1,5 @@
-import { authHeader } from '../_helpers/auth-header';
+import { authHeader } from '../_helpers/authHeader';
+import { tokenExpired } from '../_helpers/tokenExpired';
 import {message} from 'antd'
 export const orderService = {
     getOrders,
@@ -95,8 +96,9 @@ function handleResponse(response) {
         const data = text && JSON.parse(text);
         // console.log(data);
         if (response.status === 401) {
-            // auto logout if 401 response returned from api
+            // auto tokenExpired if 401 response returned from api
             message.error("登录信息过期，请重新登录！");
+            tokenExpired();
         }else if(response.status === 500){
             message.error("系统，请稍后再试！");
         }else if(response.status === 201){
