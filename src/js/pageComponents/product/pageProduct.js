@@ -9,11 +9,12 @@ import CompnFooter from "../../_components/compnFooter"
 import {productService} from "../../_services/product.service"
 import WrappedNewProductForm from "../../_components/_compnNewProductForm";
 import WrappedEditProductForm from "../../_components/_compnEditProductForm";
-import {authHeader} from "../../_helpers/auth-header";
+import {authHeader} from "../../_helpers/authHeader";
 //add calculate with input part
 const Option = Select.Option;
 const Dragger = Upload.Dragger;
 
+import {childPageConstrants} from "../../_helpers/childPageConstrants"
 const PageContent = (props) => {
     const btnStyle = {
         marginRight: '8px',
@@ -30,7 +31,7 @@ const PageContent = (props) => {
 
     if (props.page) {
         let page = props.page;
-        if (page === 'view_all') {
+        if (page === childPageConstrants.viewAll) {
 
             return (<div>
                 <div>
@@ -48,12 +49,12 @@ const PageContent = (props) => {
                         onChange={props.productTypeSelectChange}>
                     {type_select_options}
                 </Select>
-                <Spin spinning={props.loading}>
+                <Spin spinning={props.loading} tip="加载中..." size="large">
                     <Table rowKey="id" columns={props.product_table_columns}
                            dataSource={props.products} size="small"/>
                 </Spin>
             </div>)
-        } else if (page === 'add_new') {
+        } else if (page === childPageConstrants.createOne) {
 
             return (<div>
                 <div>
@@ -64,7 +65,7 @@ const PageContent = (props) => {
                 </div>
                 <WrappedNewProductForm product_type={props.addNewProductType} product_types={props.product_types}/>
             </div>)
-        } else if (page === 'view_one') {
+        } else if (page === childPageConstrants.viewOne) {
             let product = props.one_product['product'];
             //     {
 //         "id": 1,
@@ -90,7 +91,7 @@ const PageContent = (props) => {
                             <Icon type="left"/>
                             <span>返回</span>
                         </Button>
-                        <Spin spinning={props.loading}>
+                        <Spin spinning={props.loading} tip="加载中..." size="large">
                             <div className="col-sm-12 col-md-6">
                                 <Divider orientation={"left"}><span>基本信息</span><Icon type="list"/></Divider>
                                 <table className="table table-bordered table-condensed">
@@ -134,7 +135,7 @@ const PageContent = (props) => {
                     </div>
                 </div>
             )
-        } else if (page === 'edit_one') {
+        } else if (page === childPageConstrants.editOne) {
             let product = props.one_product['product'];
             const fp_props = {
                 name: 'file',
@@ -237,7 +238,7 @@ export default class PageProduct extends React.Component {
         this.state = {
             page_conf: page_conf,
             loading: true,
-            page: 'view_all',//view_one/add_new/view_all/edit_product
+            page: childPageConstrants.viewAll,//view_one/add_new/view_all/edit_product
             breadcrumb: page_conf.breadcrumb,
             one_product: {},
             one_product_type: '',
@@ -336,7 +337,7 @@ export default class PageProduct extends React.Component {
     handleCheckDetailOnclick(e) {
         let product_id = e.target.attributes.product_id.value;
         productService.getByProductId(product_id).then(data => {
-            this.setState({page: "view_one", breadcrumb: '产品详情: ' + product_id, one_product: data, loading: false});
+            this.setState({page: childPageConstrants.viewOne, breadcrumb: '产品详情: ' + product_id, one_product: data, loading: false});
         });
 
     }
@@ -355,6 +356,7 @@ export default class PageProduct extends React.Component {
     }
 
     handleProductTypeSelectChange(e) {
+        this.setState({loading: true});
         if (e === 'all') {
             productService.getAll().then(data => {
                 this.setState({
@@ -377,22 +379,23 @@ export default class PageProduct extends React.Component {
     }
 
     handleAddNewBtnOnclick() {
-        this.setState({page: "add_new", breadcrumb: '新建产品信息'});
+        this.setState({page: childPageConstrants.createOne, breadcrumb: '新建产品信息'});
     }
 
     handleBackFromAddNewBtnOnclick() {
-        this.setState({page: "view_all", breadcrumb: this.state.page_conf.breadcrumb + ' 共 ' + this.state.products.length + ' 条'});
+        this.setState({page: childPageConstrants.viewAll, breadcrumb: this.state.page_conf.breadcrumb + ' 共 ' + this.state.products.length + ' 条'});
     }
 
     handleBackFromEditBtnOnclick() {
         let product_id = this.state.one_product['product'].product_id;
+        this.setState({loading: true});
         productService.getByProductId(product_id).then(data => {
-            this.setState({page: "view_one", breadcrumb: '产品详情: ' + product_id, one_product: data, loading: false});
+            this.setState({page: childPageConstrants.viewOne, breadcrumb: '产品详情: ' + product_id, one_product: data, loading: false});
         });
     }
 
     handleEditProductBtnOnclick() {
-        this.setState({page: "edit_one", breadcrumb: '编辑产品信息'});
+        this.setState({page: childPageConstrants.editOne, breadcrumb: '编辑产品信息'});
     }
 
     handleAddNewProductTypeSelectChange(e) {
