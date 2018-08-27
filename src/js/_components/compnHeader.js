@@ -4,16 +4,9 @@ import {Layout, Divider, Avatar, Icon,Badge} from 'antd';
 const {Header} = Layout;
 import {userService} from "../_services/user.service";
 
+import moment from 'moment'
 const CompnHeader = (props) => {
-    // let imgp='';
-    // try{
-    //     imgp=require("../../img/avt_ymd.jpeg");
-    // }catch(err){
-    //     console.log(err)
-    //     imgp=require("../../img/avt_ym.jpeg");
-    // }
-    //
-    // console.log(imgp);
+    moment.locale();
     return (
         <Header style={{background: '#fff',padding: 0,borderBottom: '1px solid #eee'}}>
                     <span>
@@ -29,6 +22,7 @@ const CompnHeader = (props) => {
                             </Badge>
                         </a>
                         <Divider type="vertical"/>
+                        {moment().format('llll')}
 
                         <a type="danger" title={"登出"} style={{color:'#f5222d',float:'right',marginRight:40}}
                            onClick={() => {
