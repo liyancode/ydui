@@ -2,10 +2,6 @@ import React from 'react';
 import {Form, Input, Tooltip, Icon, Radio, Select, Popconfirm, Spin, Divider, Button, AutoComplete} from 'antd';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
-const RadioGroup = Radio.Group;
-
 import {productService} from '../_services/product.service';
 
 class EditProductForm extends React.Component {
@@ -22,19 +18,6 @@ class EditProductForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        //     #             "id": 1,
-//     #             "customer_id": "201",
-//     #             "added_by_user_name": "testname104",
-//     #             "company_name": "测试公司名称001",
-//     #             "company_location": "china",
-//     #             "company_tax_number": null,
-//     #             "company_legal_person": null,
-//     #             "company_main_business": null,
-//     #             "company_tel_number": null,
-//     #             "company_email": null,
-//     #             "company_description": null,
-//     #             "comment": null,
-//     #             "status": 1
 
         //     "products": [
 //     {
@@ -87,8 +70,6 @@ class EditProductForm extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
-        const {autoCompleteResult} = this.state;
-
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -111,27 +92,6 @@ class EditProductForm extends React.Component {
                 },
             },
         };
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
-        })(
-            <Select style={{width: 70}}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        );
-
-        const contactGenderRadio = getFieldDecorator('contact_gender', {
-            initialValue: 0,
-        })(
-            <RadioGroup>
-                <Radio value={0}>女士</Radio>
-                <Radio value={1}>先生</Radio>
-            </RadioGroup>
-        );
-
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
         let product = this.props.one_product['product'];
         return (
             <Spin spinning={this.state.loading}>
