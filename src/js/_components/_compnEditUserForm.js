@@ -1,18 +1,21 @@
 import React from 'react';
 import {Form, Input, Tooltip, Icon, Radio, Select, Popconfirm, Spin, Divider, Button, AutoComplete,DatePicker} from 'antd';
-
+import moment from 'moment'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 
 import {userService} from "../_services/user.service";
-class NewUserForm extends React.Component {
+
+class EditUserForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
             confirmDirty: false,
+            one_user:props.one_user,
             defaultPassword:Math.random().toString(36).slice(-8),
+            resetPassword:'***',
             autoCompleteResult: [],
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -55,28 +58,28 @@ class NewUserForm extends React.Component {
 // }
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.setState({loading: true})
+                this.setState({loading: true});
                 let auth_str=values["authority"].toString();
                 if(auth_str.indexOf('(')>=0){
                     auth_str=auth_str.substring(1,auth_str.length-1)
                 }
                 let user={
                     "id": -1,
-                    "user_id":'-1',
+                    "user_id":this.state.one_user.user["user_id"],
                     "user_name":values["user_name"],
                     "password":values["password"],
                     "authority":auth_str,
-                    "type":"normal",
+                    "type":this.state.one_user.user["type"],
                     "status": 1
                 }
 
                 let user_employee_info={
                     "id": -1,
-                    "user_id":'-1',
+                    "user_id":this.state.one_user.user["user_id"],
                     "full_name":values["full_name"],
                     "gender":values["gender"],
                     "birthday":values["birthday"],
-                    "marital_status": "0",
+                    "marital_status": this.state.one_user.user["marital_status"],
                     "department_id": values["department_id"],
                     "title": values["title"],
                     "office": values["office"],
@@ -84,7 +87,7 @@ class NewUserForm extends React.Component {
                     "position_status": values["position_status"],
                     "email": values["email"],
                     "phone_number": values["phone_number"],
-                    "address": "",
+                    "address": this.state.one_user.user["address"],
                     "hometown": values["hometown"],
                     "status": 1
                 }
@@ -93,7 +96,7 @@ class NewUserForm extends React.Component {
                     user:user,
                     user_employee_info:user_employee_info
                 }
-                userService.addUser(userData).then(data => {
+                userService.updateUser(userData).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -107,13 +110,13 @@ class NewUserForm extends React.Component {
 
     handleResetPasswordBtnOnclick(){
         this.setState({
-            defaultPassword:Math.random().toString(36).slice(-8),
+            resetPassword:Math.random().toString(36).slice(-8),
         })
     }
 
     render() {
         const {getFieldDecorator} = this.props.form;
-
+        const one_user=this.state.one_user;
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -139,7 +142,8 @@ class NewUserForm extends React.Component {
 
         const authoritySelectOptions=[
             <Option key='admin' value='hr:rw,crm:rw,order:rw,fin:rw,product:rw,warehouse:rw'>超级管理员(最高权限)</Option>,
-            <Option key='hr:r' value='hr:r'>员工档案</Option>,
+            <Option key='hr:r' value='hr:r'>员工档案(普通用户)</Option>,
+            <Option key='hr:rw' value='hr:rw'>员工档案(管理员)</Option>,
             <Option key='crm:rw' value='crm:rw'>客户管理</Option>,
             <Option key='order:rw' value='order:rw'>订单管理</Option>,
             <Option key='fin:rw' value='fin:rw'>财务审批</Option>,
@@ -150,7 +154,7 @@ class NewUserForm extends React.Component {
             rules: [{
                 required: true, message: '至少需要 员工档案 !',
             }],
-            initialValue: 'hr:r',
+            initialValue: one_user.user.authority.split(','),
         })(
             <Select
                 mode="multiple"
@@ -165,7 +169,7 @@ class NewUserForm extends React.Component {
             rules: [{
                 required: true, message: '请选择办公地点!',
             }],
-            initialValue: '苏州盛泽',
+            initialValue: one_user.employee_info.office,
         })(
             <Select
                 placeholder="办公地点"
@@ -179,7 +183,7 @@ class NewUserForm extends React.Component {
             rules: [{
                 required: true, message: '请选择职位状态!',
             }],
-            initialValue: 'normal',
+            initialValue: one_user.employee_info.position_status,
         })(
             <Select
                 placeholder="职位状态"
@@ -192,10 +196,10 @@ class NewUserForm extends React.Component {
 
         );
 
-        const resetPasswordBtn=(<Button onClick={this.handleResetPasswordBtnOnclick}>随机密码</Button>);
+        const resetPasswordBtn=(<Button onClick={this.handleResetPasswordBtnOnclick}>重置密码</Button>);
 
         const userGenderRadio = getFieldDecorator('gender', {
-            initialValue: 0,
+            initialValue: one_user.employee_info.gender,
         })(
             <RadioGroup>
                 <Radio value={0}>女</Radio>
@@ -209,14 +213,15 @@ class NewUserForm extends React.Component {
                     <Divider orientation={"left"}><span>个人信息</span><Icon type="solution"/></Divider>
                     <FormItem
                         {...formItemLayout}
-                        label="用户名(唯一！例如：xiaoming01)"
+                        label="用户名(唯一！例如：liming01)"
                     >
                         {getFieldDecorator('user_name', {
                             rules: [{
                                 required: true, message: '请输入唯一的用户名(只能包含 英文字母、数字）!',
                             }],
+                            initialValue: one_user.user.user_name,
                         })(
-                            <Input/>
+                            <Input disabled={true}/>
                         )}
                     </FormItem>
                     <FormItem
@@ -227,7 +232,7 @@ class NewUserForm extends React.Component {
                             rules: [{
                                 required: true, message: '请记住初始密码!',
                             }],
-                            initialValue:this.state.defaultPassword
+                            initialValue:this.state.resetPassword
                         })(
                             <Input disabled={true} addonAfter={resetPasswordBtn}/>
                         )}
@@ -246,6 +251,7 @@ class NewUserForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入员工真实姓名!',
                             }],
+                            initialValue: one_user.employee_info.full_name,
                         })(
                             <Input/>
                         )}
@@ -262,6 +268,7 @@ class NewUserForm extends React.Component {
                     >
                         {getFieldDecorator('birthday', {
                             rules: [],
+                            initialValue: moment(one_user.employee_info.birthday, "YYYY-MM-DD"),
                         })(
                             <DatePicker/>
                         )}
@@ -272,6 +279,7 @@ class NewUserForm extends React.Component {
                     >
                         {getFieldDecorator('hometown', {
                             rules: [],
+                            initialValue: one_user.employee_info.hometown,
                         })(
                             <Input/>
                         )}
@@ -285,6 +293,7 @@ class NewUserForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入部门信息!',
                             }],
+                            initialValue: one_user.employee_info.department_id,
                         })(
                             <Input/>
                         )}
@@ -297,6 +306,7 @@ class NewUserForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入职位信息!',
                             }],
+                            initialValue: one_user.employee_info.title,
                         })(
                             <Input/>
                         )}
@@ -313,8 +323,9 @@ class NewUserForm extends React.Component {
                     >
                         {getFieldDecorator('onboard_at', {
                             rules: [{
-                                required: true, message: '请输入入职日期!',
+                                required: true, message: '请输入职日期!',
                             }],
+                            initialValue: moment(one_user.employee_info.onboard_at, "YYYY-MM-DD"),
                         })(
                             <DatePicker/>
                         )}
@@ -333,6 +344,7 @@ class NewUserForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入手机号!',
                             }],
+                            initialValue: one_user.employee_info.phone_number,
                         })(
                             <Input/>
                         )}
@@ -343,13 +355,14 @@ class NewUserForm extends React.Component {
                     >
                         {getFieldDecorator('email', {
                             rules: [],
+                            initialValue: one_user.employee_info.email,
                         })(
                             <Input/>
                         )}
                     </FormItem>
 
                     <FormItem {...tailFormItemLayout}>
-                        <Popconfirm title="确认提交？" onConfirm={this.handleSubmit}
+                        <Popconfirm title="确认提交更新？" onConfirm={this.handleSubmit}
                                     okText="是" cancelText="否">
                             <Button type="primary" htmlType="submit">提交</Button>
                         </Popconfirm>
@@ -360,6 +373,6 @@ class NewUserForm extends React.Component {
     }
 }
 
-const WrappedNewUserForm = Form.create()(NewUserForm);
+const WrappedEditUserForm = Form.create()(EditUserForm);
 
-export default WrappedNewUserForm;
+export default WrappedEditUserForm;
