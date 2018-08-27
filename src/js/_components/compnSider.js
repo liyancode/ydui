@@ -25,21 +25,37 @@ const CompnSider = (props) => {
     let hr_autho = user_authority['hr'];
     if (hr_autho === 'r') {
         menu_items.push(
-            <Menu.Item key="1">
-                <Link to='/hr' replace>
-                    <Icon type="user"/>
-                    <span>员工档案</span>
-                </Link>
-            </Menu.Item>
+            <SubMenu
+                key="hr_m"
+                title={<span><Icon type="user"/><span>员工档案</span></span>}
+            >
+                <Menu.Item key="hr_myinfo">
+                    <Link to='/hr_myinfo' replace>
+                        <Icon type="user"/>
+                        <span>我的信息</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
         )
     } else if (hr_autho === 'rw') {
         menu_items.push(
-            <Menu.Item key="1">
-                <Link to='/hr' replace>
-                    <Icon type="user"/>
-                    <span>员工档案</span>
-                </Link>
-            </Menu.Item>
+            <SubMenu
+                key="hr_m"
+                title={<span><Icon type="user"/><span>员工档案</span></span>}
+            >
+                <Menu.Item key="hr_myinfo">
+                    <Link to='/hr_myinfo' replace>
+                        <Icon type="user"/>
+                        <span>我的信息</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="hr_allusers">
+                    <Link to='/hr_allusers' replace>
+                        <Icon type="user"/>
+                        <span>所有员工</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
         )
     }
 
