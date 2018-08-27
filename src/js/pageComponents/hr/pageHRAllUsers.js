@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Icon, Spin, Layout, Table, Breadcrumb, Tag, Divider, Button} from 'antd';
+import {Popconfirm, Icon, Spin, Layout, Table, Breadcrumb, Tag, Divider, Button} from 'antd';
 
 const {Header, Content, Footer, Sider} = Layout;
 import {userService} from "../../_services/user.service";
@@ -10,6 +10,7 @@ import CompnFooter from "../../_components/compnFooter"
 
 import {childPageConstrants} from "../../_helpers/childPageConstrants"
 import WrappedNewUserForm from "../../_components/_compnNewUserForm";
+import WrappedEditUserForm from "../../_components/_compnEditUserForm";
 
 const PageContent = (props) => {
     const btnStyle = {
@@ -99,7 +100,7 @@ const PageContent = (props) => {
                     </Button>
                 </div>
                 <Spin spinning={props.loading} tip="加载中..." size="large">
-                    <Table rowKey="user.user_id" columns={users_table_columns}
+                    <Table rowKey="user_name" columns={users_table_columns}
                            dataSource={props.users} size="small"/>
                 </Spin>
             </div>);
@@ -110,6 +111,17 @@ const PageContent = (props) => {
                         <Icon type="left"/>
                         <span>返回</span>
                     </Button>
+                    <Button type="primary" style={btnStyle} onClick={props.editOneBtnOnclick}>
+                        <Icon type="edit"/>
+                        <span>更新该员工信息</span>
+                    </Button>
+                    <Popconfirm title="确认删除？" onConfirm={props.deleteOneBtnOnclick}
+                                okText="是" cancelText="否">
+                        <Button type="danger" style={btnStyle}>
+                            <Icon type="delete"/>
+                            <span>删除该员工信息</span>
+                        </Button>
+                    </Popconfirm>
                 </div>
                 <div>
                     <div className="col-sm-12 col-md-4">
@@ -202,7 +214,16 @@ const PageContent = (props) => {
                 </div>)
 
         } else if (page === childPageConstrants.editOne) {
-
+            return (
+                <div>
+                    <div>
+                        <Button type="primary" style={btnStyle} onClick={props.backEditOneBtnOnclick}>
+                            <Icon type="left"/>
+                            <span>返回</span>
+                        </Button>
+                    </div>
+                    <WrappedEditUserForm one_user={props.one_user}/>
+                </div>)
         }
     } else {
         return (<div>未知页面</div>);
@@ -261,6 +282,9 @@ export default class PageHRAllUsers extends React.Component {
         this.handleReloadBtnOnclick = this.handleReloadBtnOnclick.bind(this);
         this.handleCheckDetailOnclick = this.handleCheckDetailOnclick.bind(this);
         this.handleBackViewOneBtnOnclick = this.handleBackViewOneBtnOnclick.bind(this);
+        this.handleEditOneBtnOnclick = this.handleEditOneBtnOnclick.bind(this);
+        this.handleDeleteOneBtnOnclick = this.handleDeleteOneBtnOnclick.bind(this);
+        this.handleBackEditOneBtnOnclick = this.handleBackEditOneBtnOnclick.bind(this);
     }
 
     handleAddNewBtnOnclick() {
@@ -271,6 +295,7 @@ export default class PageHRAllUsers extends React.Component {
         this.setState({loading: true});
         userService.getAll().then(data => {
             this.setState({
+                page: childPageConstrants.viewAll,
                 users: data,
                 loading: false,
                 breadcrumb: '全部员工信息 共 ' + data.length + ' 条'
@@ -295,6 +320,34 @@ export default class PageHRAllUsers extends React.Component {
         this.setState({
             page: childPageConstrants.viewAll,
             breadcrumb: '全部员工信息 共 ' + this.state.users.length + ' 条'
+        });
+    }
+
+    handleEditOneBtnOnclick(){
+        this.setState({
+            page: childPageConstrants.editOne,
+            breadcrumb: '更新员工信息: ' + this.state.one_user.user['user_name']
+        });
+    }
+
+    handleDeleteOneBtnOnclick(){
+        this.setState({loading: true});
+        let user_id = this.state.one_user.user["user_id"];
+        userService.deleteUser(user_id).then(data => {
+            this.handleReloadBtnOnclick();
+        });
+    }
+
+    handleBackEditOneBtnOnclick(){
+        this.setState({loading: true});
+        let user_name = this.state.one_user.user["user_name"];
+        userService.getUserByUsername(user_name).then(data => {
+            this.setState({
+                page: childPageConstrants.viewOne,
+                breadcrumb: '员工详细信息: ' + user_name,
+                one_user: data,
+                loading: false
+            });
         });
     }
 
@@ -326,6 +379,9 @@ export default class PageHRAllUsers extends React.Component {
                                 reloadBtnOnclick={this.handleReloadBtnOnclick}
                                 checkDetailOnclick={this.handleCheckDetailOnclick}
                                 backViewOneBtnOnclick={this.handleBackViewOneBtnOnclick}
+                                editOneBtnOnclick={this.handleEditOneBtnOnclick}
+                                deleteOneBtnOnclick={this.handleDeleteOneBtnOnclick}
+                                backEditOneBtnOnclick={this.handleBackEditOneBtnOnclick}
                             />
                         </div>
                     </Content>
