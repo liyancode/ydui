@@ -165,3 +165,6 @@ div * {
 .my-info-table td{
     padding-left: 12px;
 }
+.ant-layout-sider-zero-width-trigger{
+    top: 120px;
+}
