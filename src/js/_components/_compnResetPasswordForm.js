@@ -1,11 +1,20 @@
 import React from 'react';
-import {Form, Input, Tooltip, Icon, Radio, Select, Popconfirm, Spin, Divider, Button, AutoComplete,DatePicker} from 'antd';
-import moment from 'moment'
+import {
+    Form,
+    Input,
+    Icon,
+    Radio,
+    Select,
+    Popconfirm,
+    Spin,
+    Divider,
+    Button,
+} from 'antd';
+
 const FormItem = Form.Item;
-const Option = Select.Option;
-const RadioGroup = Radio.Group;
 
 import {userService} from "../_services/user.service";
+import {tokenExpired} from "../_helpers/tokenExpired"
 
 class ResetPasswordForm extends React.Component {
     constructor(props) {
@@ -13,45 +22,34 @@ class ResetPasswordForm extends React.Component {
         this.state = {
             loading: false,
             confirmDirty: false,
-            one_user:props.one_user,
-            defaultPassword:Math.random().toString(36).slice(-8),
-            resetPassword:'***',
+            one_user: props.one_user,
+            defaultPassword: Math.random().toString(36).slice(-8),
+            resetPassword: '***',
             autoCompleteResult: [],
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
         this.handleResetPasswordBtnOnclick = this.handleResetPasswordBtnOnclick.bind(this);
+        this.compareToFirstPassword = this.compareToFirstPassword.bind(this);
+        this.validateToNextPassword = this.validateToNextPassword.bind(this);
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        // "user": {
-//     "id": 2,
-//         "user_id": "102",
-//         "user_name": "testname102",
-//         "password": "***",
-//         "authority": "1",
-//         "type": "super",
-//         "created_at": "2018-07-04 20:52:17 +0800",
-//         "last_update_at": "2018-07-04 20:52:17 +0800",
-//         "status": 1
-// },
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 this.setState({loading: true});
-                let auth_str=values["authority"].toString();
-                if(auth_str.indexOf('(')>=0){
-                    auth_str=auth_str.substring(1,auth_str.length-1)
+                let body = {
+                    "user_name": this.state.one_user.user_name,
+                    "old_password": values["password"],
+                    "new_password": values["password_new"]
                 }
-                let user={
-                    "id": -1,
-                    "user_id":this.state.one_user.user["user_id"],
-                    "user_name":values["user_name"],
-                    "password":values["password"],
-                    "authority":auth_str,
-                    "type":this.state.one_user.user["type"],
-                    "status": 1
-                }
+                userService.updatePassword(body).then(data => {
+                    this.setState({loading: false});
+                    if (data!=null) {
+                        tokenExpired();
+                    }
+                });
             }
         });
     }
@@ -61,15 +59,32 @@ class ResetPasswordForm extends React.Component {
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
     }
 
-    handleResetPasswordBtnOnclick(){
+    handleResetPasswordBtnOnclick() {
         this.setState({
-            resetPassword:Math.random().toString(36).slice(-8),
+            resetPassword: Math.random().toString(36).slice(-8),
         })
+    }
+
+    compareToFirstPassword(rule, value, callback) {
+        const form = this.props.form;
+        if (value && value !== form.getFieldValue('password_new')) {
+            callback('两次输入的密码不一致！');
+        } else {
+            callback();
+        }
+    }
+
+    validateToNextPassword(rule, value, callback) {
+        const form = this.props.form;
+        if (value && this.state.confirmDirty) {
+            form.validateFields(['confirm'], {force: true});
+        }
+        callback();
     }
 
     render() {
         const {getFieldDecorator} = this.props.form;
-        const one_user=this.state.one_user;
+        const one_user = this.state.one_user;
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -130,7 +145,9 @@ class ResetPasswordForm extends React.Component {
                         {getFieldDecorator('password_new', {
                             rules: [{
                                 required: true, message: '请输入新密码!',
-                            }],
+                            }, {
+                                validator: this.validateToNextPassword,
+                            }]
                         })(
                             <Input type='password'/>
                         )}
@@ -139,12 +156,13 @@ class ResetPasswordForm extends React.Component {
                         {...formItemLayout}
                         label="确认新密码"
                     >
-                        {getFieldDecorator('password_new_1', {
+                        {getFieldDecorator('confirm', {
                             rules: [{
                                 required: true, message: '请再次输入新密码!',
-                            }],
+                            }, {validator: this.compareToFirstPassword,}],
+
                         })(
-                            <Input type='password'/>
+                            <Input type='password' onBlur={this.handleConfirmBlur}/>
                         )}
                     </FormItem>
 
