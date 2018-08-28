@@ -22,7 +22,7 @@ const CompnHeader = (props) => {
                             </Badge>
                         </a>
                         <Divider type="vertical"/>
-                        {moment().format('llll')}
+                        {moment().format('ll')}
 
                         <a type="danger" title={"登出"} style={{color:'#f5222d',float:'right',marginRight:40}}
                            onClick={() => {
