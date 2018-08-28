@@ -91,7 +91,7 @@ const PageContent = (props) => {
             return (<div>
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
-                        <Icon type="plus"/>
+                        <Icon type="user-add" />
                         <span>添加员工信息</span>
                     </Button>
                     <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
@@ -118,7 +118,7 @@ const PageContent = (props) => {
                     <Popconfirm title="确认删除？" onConfirm={props.deleteOneBtnOnclick}
                                 okText="是" cancelText="否">
                         <Button type="danger" style={btnStyle}>
-                            <Icon type="delete"/>
+                            <Icon type="user-delete" />
                             <span>删除该员工信息</span>
                         </Button>
                     </Popconfirm>
@@ -362,7 +362,7 @@ export default class PageHRAllUsers extends React.Component {
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <div className="page-header">
                                 <h4 style={{display: "inline"}}>
-                                    <Icon type="user"/>
+                                    <Icon type="team" />
                                     <span>员工档案</span>
                                 </h4>
                                 <Breadcrumb style={{display: "inline"}}>

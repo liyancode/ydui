@@ -40,12 +40,6 @@ const PageContent = (props) => {
             </div>);
         } else if (page === childPageConstrants.viewOne) {
             return (<div>
-                <div>
-                    <Button type="primary" style={btnStyle} onClick={props.updatePasswordBtnOnclick}>
-                        <Icon type="unlock"/>
-                        <span>修改密码</span>
-                    </Button>
-                </div>
                 <Spin spinning={props.loading} tip="加载中..." size="large">
                     <div className="col-sm-12 col-md-4">
 
@@ -126,6 +120,14 @@ const PageContent = (props) => {
                         </table>
                     </div>
                 </Spin>
+                <div className="col-sm-12 col-md-4">
+                    <Button type="danger" style={btnStyle} onClick={props.updatePasswordBtnOnclick}>
+                        <Icon type="unlock"/>
+                        <span>修改密码</span>
+                    </Button>
+                    <Icon type="bulb" style={{color:"#00ac47"}}/>
+                    <span>修改其他信息，请找管理员。</span>
+                </div>
             </div>);
         }
     } else {
@@ -181,7 +183,7 @@ export default class PageHRMyInfo extends React.Component {
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <div className="page-header">
                                 <h4 style={{display: "inline"}}>
-                                    <Icon type="user"/>
+                                    <Icon type="team"/>
                                     <span>员工档案</span>
                                 </h4>
                                 <Breadcrumb style={{display: "inline"}}>
