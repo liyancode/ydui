@@ -8,6 +8,7 @@ import CompnSider from "../../_components/compnSider"
 import CompnHeader from "../../_components/compnHeader"
 import CompnFooter from "../../_components/compnFooter"
 
+import {childPageConstrants} from "../../_helpers/childPageConstrants"
 // # {
 //     #     "id": 1,
 //         #     "ask_price_id": "470001",
