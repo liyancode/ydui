@@ -24,10 +24,10 @@ import PageHRMyInfo from "./js/pageComponents/hr/pageHRMyInfo";
 import PageHRAllUsers from "./js/pageComponents/hr/pageHRAllUsers";
 
 import './assets/css/style.css';
-import PageAskPrice from "./js/pageComponents/order/pageAskprice";
-import PageContract from "./js/pageComponents/order/pageContract";
 import PageOrder from "./js/pageComponents/order/pageOrder";
 import PageProduct from "./js/pageComponents/product/pageProduct"
+import PageContractN from "./js/pageComponents/order/pageContractN";
+import PageAskPriceN from "./js/pageComponents/order/pageAskpriceN";
 
 class App extends React.Component {
     constructor(props) {
@@ -65,8 +65,8 @@ class App extends React.Component {
         }
         //--- order
         if (user_authority['order'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/ask_price" component={PageAskPrice} key='prt_ask_price'/>)
-            private_routes.push(<PrivateRoute path="/contract" component={PageContract} key='prt_contract'/>)
+            private_routes.push(<PrivateRoute path="/ask_price" component={PageAskPriceN} key='prt_ask_price'/>)
+            private_routes.push(<PrivateRoute path="/contract" component={PageContractN} key='prt_contract'/>)
             private_routes.push(<PrivateRoute path="/order" component={PageOrder} key='prt_order'/>)
         }
         //--- fin
