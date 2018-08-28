@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox, Spin} from 'antd';
+import {Form, Icon, Input, Button, Checkbox, Spin,Alert} from 'antd';
 
 import {userService} from "./_services/user.service"
 
@@ -26,10 +26,8 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 this.setState({loading: true});
-                console.log('fdsafaaaaaa');
                 userService.login(values["userName"], values["password"]).then(data=>{
                     this.setState({loading: false});
-                    console.log('fdsafaaaaaa2');
                 });
             }
         });
@@ -40,7 +38,7 @@ class NormalLoginForm extends React.Component {
         return (
             <Spin spinning={this.state.loading} tip="正在登录..." size="large">
                 <Form onSubmit={this.handleSubmit} className="login-form"
-                      style={{maxWidth: 320, padding: 20, backgroundColor: 'rgba(0, 0, 0, 0.25)'}}>
+                      style={{maxWidth: 320, padding: 20, backgroundColor: 'rgba(0, 0, 0, 0.45)'}}>
                     <FormItem>
                         {getFieldDecorator('userName', {
                             rules: [{required: true, message: '请输入你的用户名!'}],
@@ -63,11 +61,12 @@ class NormalLoginForm extends React.Component {
                         })(
                             <Checkbox style={{color: 'white'}}>记住我</Checkbox>
                         )}
-                        <a className="login-form-forgot" href="" style={{float: 'right', color: 'white'}}>忘记密码？</a>
+                        <a className="login-form-forgot" href="#" style={{float: 'right', color: 'white'}}/>
                         <Button type="primary" htmlType="submit" className="login-form-button" style={{width: '100%'}}>
                             登录
                         </Button>
-                        <a href="" style={{color: 'white'}}>还没有账号？</a>
+                        <Icon type="bulb" style={{color:"#00ac47"}}/>
+                        <span style={{color: 'white'}}>提示：没账号或忘记密码，请找管理员。</span>
                     </FormItem>
                 </Form>
             </Spin>

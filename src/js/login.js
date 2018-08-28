@@ -27,7 +27,7 @@ export default class Login extends React.Component {
                 <Content style={{padding: '0 50px'}} className='login-wrapper-container'>
                     <div id={'logo_div'} style={{fontSize:21}}>
                         <img src={require("../assets/img/yd_logo.png")} style={{height:40}}/>
-                        <span style={{color: '#fff'}}>耀迪·管理助手v0.1</span>
+                        <span style={{color: '#fff'}}>耀迪·管理助手</span>
                     </div>
                     {/*<WrappedHorizontalLoginForm />*/}
                     <WrappedNormalLoginForm />
