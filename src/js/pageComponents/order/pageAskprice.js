@@ -248,7 +248,7 @@ export default class PageAskPrice extends React.Component{
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <div className="page-header">
                                 <h4 style={{display: "inline"}}>
-                                    <Icon type="shopping-cart"/>
+                                    <Icon type="table" />
                                     <span>询价管理</span>
                                 </h4>
                                 <Breadcrumb style={{display: "inline"}}>
