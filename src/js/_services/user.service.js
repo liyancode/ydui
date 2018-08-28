@@ -9,7 +9,8 @@ export const userService = {
     updateUser,
     getUserByUsername,
     // update,
-    deleteUser
+    deleteUser,
+    updatePassword,
 };
 
 function login(username, password) {
@@ -59,6 +60,15 @@ function updateUser(userData){
         body: JSON.stringify(userData)
     };
     return fetch(`/api/users/user`, requestOptions).then(handleResponse);
+}
+
+function updatePassword(body){
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader(),
+        body: JSON.stringify(body)
+    };
+    return fetch(`/api/users/password`, requestOptions).then(handleResponse);
 }
 
 function deleteUser(user_id){
@@ -112,7 +122,10 @@ function handleResponse(response) {
                 message.success("操作完成！")
             }
             return response.text().then(text => {
-                const data = text && JSON.parse(text);
+                let data = text && JSON.parse(text);
+                if(data==null){
+                    data='ok'
+                }
                 return data;
             });
 
