@@ -27,7 +27,7 @@ const CompnSider = (props) => {
         menu_items.push(
             <SubMenu
                 key="hr_m"
-                title={<span><Icon type="user"/><span>员工档案</span></span>}
+                title={<span><Icon type="team" /><span>员工档案</span></span>}
             >
                 <Menu.Item key="hr_myinfo">
                     <Link to='/hr_myinfo' replace>
@@ -41,7 +41,7 @@ const CompnSider = (props) => {
         menu_items.push(
             <SubMenu
                 key="hr_m"
-                title={<span><Icon type="user"/><span>员工档案</span></span>}
+                title={<span><Icon type="team" /><span>员工档案</span></span>}
             >
                 <Menu.Item key="hr_myinfo">
                     <Link to='/hr_myinfo' replace>
@@ -51,7 +51,7 @@ const CompnSider = (props) => {
                 </Menu.Item>
                 <Menu.Item key="hr_allusers">
                     <Link to='/hr_allusers' replace>
-                        <Icon type="user"/>
+                        <Icon type="team" />
                         <span>所有员工</span>
                     </Link>
                 </Menu.Item>
@@ -67,7 +67,7 @@ const CompnSider = (props) => {
         menu_items.push(
             <SubMenu
                 key="order_m"
-                title={<span><Icon type="shopping-cart"/><span>订单管理</span></span>}
+                title={<span><Icon type="table" /><span>订单管理</span></span>}
             >
 
                 <Menu.Item key="order_page">
@@ -172,9 +172,10 @@ const CompnSider = (props) => {
             }}
         >
             <div className="logo">
-                <span>
-                    耀迪·管理助手v0.1
-                </span>
+                <div style={{fontSize:18}}>
+                    <img src={require("../../assets/img/yd_logo.png")} style={{height:36}}/>
+                    <span style={{color: '#fff'}}>耀迪·管理助手</span>
+                </div>
             </div>
             <Menu theme="dark" mode="inline"
                   defaultSelectedKeys={props.defaultMenuKey}
