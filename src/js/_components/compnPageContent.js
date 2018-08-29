@@ -32,7 +32,7 @@ const PageContent = (props) => {
                     </Button>
                 </div>
                 <Spin spinning={props.loading} tip="加载中..." size="large">
-                    <Table rowKey="id" columns={props.item_table_columns({checkDetailOnclick:props.checkDetailOnclick})}
+                    <Table rowKey="id" columns={props.item_table_columns({items:props.items,checkDetailOnclick:props.checkDetailOnclick})}
                            dataSource={props.items} size="small"/>
                 </Spin>
             </div>);
@@ -95,29 +95,9 @@ export default class CompnPageContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
             page: childPageConstrants.viewAll,//view_one/add_new/view_all/edit_user
             breadcrumb: '全部' + props.breadcrumbKeyWord + '信息',
-            breadcrumbKeyWord: props.breadcrumbKeyWord,
-            service: props.service,
-            _compnViewOne: props._compnViewOne,
-            _compnCreateOne: props._compnCreateOne,
-            _compnEditOne: props._compnEditOne,
-            siderDefaultMenuKey:props.siderDefaultMenuKey,
-            siderDefaultOpenKeys:props.siderDefaultOpenKeys,
-            subTitle:props.subTitle,
-            items: [],
-            one_item: {},
-            item_table_columns: props.item_table_columns,
         }
-
-        props.service.getAll().then(data => {
-            this.setState({
-                items: data,
-                loading: false,
-                breadcrumb: '全部' + this.state.breadcrumbKeyWord + '信息 共 ' + data.length + ' 条'
-            });
-        });
 
         this.handleAddNewBtnOnclick = this.handleAddNewBtnOnclick.bind(this);
         this.handleReloadBtnOnclick = this.handleReloadBtnOnclick.bind(this);
@@ -131,98 +111,70 @@ export default class CompnPageContent extends React.Component {
     handleAddNewBtnOnclick() {
         this.setState({
             page: childPageConstrants.createOne,
-            breadcrumb: '添加' + this.state.breadcrumbKeyWord + '信息'
+            breadcrumb: '添加' + this.props.breadcrumbKeyWord + '信息'
         });
     }
 
     handleReloadBtnOnclick() {
-        this.setState({loading: true});
-        this.state.service.getAll().then(data => {
-            this.setState({
-                page: childPageConstrants.viewAll,
-                items: data,
-                loading: false,
-                breadcrumb: '全部' + this.state.breadcrumbKeyWord + '信息 共 ' + data.length + ' 条'
-            });
-        });
+        this.props.update_items();
     }
 
     handleCheckDetailOnclick(e) {
-        this.setState({loading: true});
-        // let user_name = e.target.attributes.user_name.value;
+        this.setState({page: childPageConstrants.viewOne,breadcrumb: this.props.breadcrumbKeyWord + '详细信息',});
         let id = e.target.attributes.id.value;
-        this.state.service.getOneItemById(id).then(data => {
-            this.setState({
-                page: childPageConstrants.viewOne,
-                breadcrumb: this.state.breadcrumbKeyWord + '详细信息',
-                one_item: data,
-                loading: false
-            });
-        });
+        this.props.update_one_item(id);
     }
 
     handleBackViewOneBtnOnclick() {
         this.setState({
             page: childPageConstrants.viewAll,
-            breadcrumb: '全部' + this.state.breadcrumbKeyWord + '信息 共 ' + this.state.items.length + ' 条'
+            breadcrumb: '全部' + this.props.breadcrumbKeyWord + '信息 共 ' + this.props.items.length + ' 条'
         });
     }
 
     handleEditOneBtnOnclick() {
         this.setState({
             page: childPageConstrants.editOne,
-            breadcrumb: '更新' + this.state.breadcrumbKeyWord + '信息'
+            breadcrumb: '更新' + this.props.breadcrumbKeyWord + '信息'
         });
     }
 
     handleDeleteOneBtnOnclick() {
-        this.setState({loading: true});
-        // let user_id = this.state.one_user.user["user_id"];
-        let id = this.state.one_item["id"];
-        this.state.service.deleteOneItemById(id).then(data => {
-            this.handleReloadBtnOnclick();
-        });
+        this.props.delete_one_item();
     }
 
     handleBackEditOneBtnOnclick() {
-        this.setState({loading: true});
-        let id = this.state.one_item["id"];
-        this.state.service.getOneItemById(id).then(data => {
-            this.setState({
-                page: childPageConstrants.viewOne,
-                breadcrumb: this.state.breadcrumbKeyWord + '详细信息',
-                one_item: data,
-                loading: false
-            });
-        });
+        this.setState({page: childPageConstrants.viewOne,breadcrumb: this.props.breadcrumbKeyWord + '详细信息',});
+        let id = this.props.one_item["id"];
+        this.props.update_one_item(id);
     }
 
 
     render() {
         return (
             <Layout style={{height: '100%'}}>
-                <CompnSider defaultMenuKey={this.state.siderDefaultMenuKey} defaultOpenKeys={this.state.siderDefaultOpenKeys}/>
+                <CompnSider defaultMenuKey={this.props.siderDefaultMenuKey} defaultOpenKeys={this.props.siderDefaultOpenKeys}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <div className="page-header">
-                                {this.state.subTitle}
+                                {this.props.subTitle()}
                                 <Breadcrumb style={{display: "inline"}}>
                                     <Breadcrumb.Item> </Breadcrumb.Item>
                                     <Breadcrumb.Item>{this.state.breadcrumb}</Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
                             <PageContent
-                                loading={this.state.loading}
+                                loading={this.props.loading}
                                 page={this.state.page}
-                                breadcrumbKeyWord={this.state.breadcrumbKeyWord}
-                                items={this.state.items}
-                                one_item={this.state.one_item}
-                                item_table_columns={this.state.item_table_columns}
-                                _compnViewOne={this.state._compnViewOne}
-                                _compnCreateOne={this.state._compnCreateOne}
-                                _compnEditOne={this.state._compnEditOne}
+                                breadcrumbKeyWord={this.props.breadcrumbKeyWord}
+                                items={this.props.items}
+                                one_item={this.props.one_item}
+                                item_table_columns={this.props.item_table_columns}
+                                _compnViewOne={this.props._compnViewOne}
+                                _compnCreateOne={this.props._compnCreateOne}
+                                _compnEditOne={this.props._compnEditOne}
                                 addNewBtnOnclick={this.handleAddNewBtnOnclick}
                                 reloadBtnOnclick={this.handleReloadBtnOnclick}
                                 checkDetailOnclick={this.handleCheckDetailOnclick}
