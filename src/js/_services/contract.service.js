@@ -1,5 +1,6 @@
 import { authHeader } from '../_helpers/authHeader';
 import {message} from 'antd'
+import {tokenExpired} from "../_helpers/tokenExpired";
 export const contractService = {
     getAll,
     getOneItemById,
@@ -55,7 +56,7 @@ function handleResponse(response) {
         if (response.status === 401) {
             // auto tokenExpired if 401 response returned from api
             message.error("用户名或密码错误！");
-            logout();
+            tokenExpired();
         }else if(response.status === 500){
             message.error("错误，请稍后再试！");
         }else if(response.status === 404){
