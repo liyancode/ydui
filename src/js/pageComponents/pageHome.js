@@ -32,12 +32,13 @@ const PageContent = (props) => {
                 {/*<div id="home_hc02" style={hc_style}></div>*/}
                 {/*</div>*/}
                 {/*</div>*/}
+                <Divider orientation={"left"}><span>消息通知</span><Icon type="bell"/></Divider>
                 <Card>
-                    国务院办公厅关于2018年
+                    <p>国务院办公厅关于2018年
 
                     部分节假日安排的通知
 
-                    国办发明电〔2017〕12号
+                        国办发明电〔2017〕12号</p>
                     <p>各省、自治区、直辖市人民政府，国务院各部委、各直属机构：</p>
 
                     <p>经国务院批准，现将2018年元旦、春节、清明节、劳动节、端午节、中秋节和国庆节放假调休日期的具体安排通知如下。</p>
