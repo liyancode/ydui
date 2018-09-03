@@ -21,23 +21,29 @@ const PageContent = (props) => {
 
         if (page === childPageConstrants.viewAll) {
             return (<div>
-                <div>
-                    <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
-                        <Icon type="plus"/>
-                        <span>添加{breadcrumbKeyWord}信息</span>
-                    </Button>
-                    <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
-                        <Icon type="reload"/>
-                        <span>刷新</span>
-                    </Button>
-                </div>
                 <Spin spinning={props.loading} tip="加载中..." size="large">
-                    <Table rowKey="id" columns={props.item_table_columns({items:props.items,checkDetailOnclick:props.checkDetailOnclick})}
+                    <div>
+
+                        <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
+                            <Icon type="plus"/>
+                            <span>添加{breadcrumbKeyWord}信息</span>
+                        </Button>
+                        <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
+                            <Icon type="reload"/>
+                            <span>刷新</span>
+                        </Button>
+                    </div>
+
+                    <Table rowKey="id" columns={props.item_table_columns({
+                        items: props.items,
+                        checkDetailOnclick: props.checkDetailOnclick
+                    })}
                            dataSource={props.items} size="small"/>
                 </Spin>
             </div>);
         } else if (page === childPageConstrants.viewOne) {
             return (<div>
+                <Spin spinning={props.loading} tip="加载中..." size="large">
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.backViewOneBtnOnclick}>
                         <Icon type="left"/>
@@ -56,8 +62,9 @@ const PageContent = (props) => {
                     </Popconfirm>
                 </div>
                 <div>
-                    {props._compnViewOne({one_item:one_item})}
+                    {props._compnViewOne({one_item: one_item})}
                 </div>
+                </Spin>
             </div>);
 
         } else if (page === childPageConstrants.createOne) {
@@ -69,7 +76,6 @@ const PageContent = (props) => {
                             <span>返回</span>
                         </Button>
                     </div>
-                    {/*<WrappedNewUserForm/>*/}
                     {props._compnCreateOne()}
                 </div>)
 
@@ -82,8 +88,7 @@ const PageContent = (props) => {
                             <span>返回</span>
                         </Button>
                     </div>
-                    {/*<WrappedEditUserForm one_user={props.one_user}/>*/}
-                    {props._compnCreateOne({one_item:one_item})} />
+                    {props._compnEditOne({one_item: one_item})}
                 </div>)
         }
     } else {
@@ -120,7 +125,7 @@ export default class CompnPageContent extends React.Component {
     }
 
     handleCheckDetailOnclick(e) {
-        this.setState({page: childPageConstrants.viewOne,breadcrumb: this.props.breadcrumbKeyWord + '详细信息',});
+        this.setState({page: childPageConstrants.viewOne, breadcrumb: this.props.breadcrumbKeyWord + '详细信息',});
         let id = e.target.attributes.id.value;
         this.props.update_one_item(id);
     }
@@ -144,8 +149,8 @@ export default class CompnPageContent extends React.Component {
     }
 
     handleBackEditOneBtnOnclick() {
-        this.setState({page: childPageConstrants.viewOne,breadcrumb: this.props.breadcrumbKeyWord + '详细信息',});
-        let id = this.props.one_item["id"];
+        this.setState({page: childPageConstrants.viewOne, breadcrumb: this.props.breadcrumbKeyWord + '详细信息',});
+        let id = this.props.one_item[this.props.update_one_item_by_key];
         this.props.update_one_item(id);
     }
 
@@ -153,7 +158,8 @@ export default class CompnPageContent extends React.Component {
     render() {
         return (
             <Layout style={{height: '100%'}}>
-                <CompnSider defaultMenuKey={this.props.siderDefaultMenuKey} defaultOpenKeys={this.props.siderDefaultOpenKeys}/>
+                <CompnSider defaultMenuKey={this.props.siderDefaultMenuKey}
+                            defaultOpenKeys={this.props.siderDefaultOpenKeys}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
@@ -175,6 +181,7 @@ export default class CompnPageContent extends React.Component {
                                 _compnViewOne={this.props._compnViewOne}
                                 _compnCreateOne={this.props._compnCreateOne}
                                 _compnEditOne={this.props._compnEditOne}
+                                update_one_item_by_key={this.props.update_one_item_by_key}
                                 addNewBtnOnclick={this.handleAddNewBtnOnclick}
                                 reloadBtnOnclick={this.handleReloadBtnOnclick}
                                 checkDetailOnclick={this.handleCheckDetailOnclick}

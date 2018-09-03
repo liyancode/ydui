@@ -3,12 +3,15 @@ import {Form, Input, DatePicker, Radio, Select, Popconfirm, Spin, Tag, Button, A
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const AutoCompleteOption = AutoComplete.Option;
+const RadioGroup = Radio.Group;
 
 import {orderService} from '../../_services/order.service';
+import moment from "moment/moment";
 
 const {TextArea} = Input;
 
-class NewOrderForm extends React.Component {
+class EditOrderForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -48,14 +51,14 @@ class NewOrderForm extends React.Component {
             if (!err) {
                 this.setState({loading: true});
                 let order = {
-                    "id": -1,
-                    "order_id": "",
-                    "added_by_user_name": "",
-                    "sign_by_user_name": "",
+                    "id": this.props.one_order.id,
+                    "order_id": this.props.one_order.order_id,
+                    "added_by_user_name": this.props.one_order.added_by_user_name,
+                    "sign_by_user_name": this.props.one_order.sign_by_user_name,
                     "order_status": values["order_status"],
                     "order_status_update_by": "",
-                    "is_finished": 0,
-                    "comment": "",
+                    "is_finished": this.props.one_order.is_finished,
+                    "comment": this.props.one_order.comment,
                     "contract_id": values["contract_id"],
                     "customer_id": values["customer_id"],
                     "order_type": values["order_type"],
@@ -67,7 +70,7 @@ class NewOrderForm extends React.Component {
                     "description": values["description"],
                     "status": 1,
                 };
-                orderService.addNewOrder(order).then(data => {
+                orderService.updateOrder(order).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -80,6 +83,10 @@ class NewOrderForm extends React.Component {
     }
 
     render() {
+
+        let one_order=this.props.one_order;
+        let one_customer=this.props.one_customer;
+
         let my_customers = this.props.my_customers;
         let my_contracts = this.props.my_contracts;
 
@@ -108,57 +115,8 @@ class NewOrderForm extends React.Component {
             },
         };
 
-        //=============customerSelect
-        let customerIdCompanynameMap = {}
-        let customerSelectOptions = [];
-        for (let idx in my_customers) {
-            customerSelectOptions.push(
-                <Option key={idx} value={my_customers[idx].customer_id}>{my_customers[idx].company_name}</Option>
-            )
-            customerIdCompanynameMap[my_customers[idx].customer_id] = my_customers[idx].company_name;
-        }
-        const customerSelect = getFieldDecorator('customer_id', {
-            rules: [{
-                required: true, message: '请输入客户名称!',
-            }],
-        })(
-            <Select
-                showSearch
-                placeholder="客户名称"
-                optionFilterProp="children"
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-                {customerSelectOptions}
-            </Select>
-        );
-
-        //=============contractSelect
-        let contractSelectOptions = [];
-        for (let idx in my_contracts) {
-            contractSelectOptions.push(
-                <Option key={idx} value={my_contracts[idx].contract_id}>
-                    {/*{my_contracts[idx].contract_id} ({customerIdCompanynameMap[my_contracts[idx].customer_id]})*/}
-                    {my_contracts[idx].contract_id + ' [' + customerIdCompanynameMap[my_contracts[idx].customer_id] + ']'}
-                </Option>
-            )
-        }
-        const contractSelect = getFieldDecorator('contract_id', {
-            rules: [{
-                required: true, message: '请输入合同编号!',
-            }],
-        })(
-            <Select
-                showSearch
-                placeholder="合同编号"
-                optionFilterProp="children"
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-                {contractSelectOptions}
-            </Select>
-        );
-
         const orderTypeSelector = getFieldDecorator('order_type', {
-            initialValue: 'normal',
+            initialValue: one_order.order_type,
         })(
             <Select>
                 <Option value="normal">正式订单</Option>
@@ -168,7 +126,7 @@ class NewOrderForm extends React.Component {
 
         //start,producing,produced,delivering,delivered,tail,end
         const orderStatusSelector = getFieldDecorator('order_status', {
-            initialValue: 'start',
+            initialValue: one_order.order_status,
         })(
             <Select>
                 <Option value="start"><Tag>未开始生产<Icon type="minus-circle-o" /></Tag></Option>
@@ -182,7 +140,7 @@ class NewOrderForm extends React.Component {
         );
 
         const payTypeSelector = getFieldDecorator('pay_type', {
-            initialValue: '先定金，再尾款',
+            initialValue: one_order.pay_type,
         })(
             <Select>
                 <Option value="fenqi">先定金，再尾款</Option>
@@ -198,7 +156,7 @@ class NewOrderForm extends React.Component {
         }
 
         const currencySelector = getFieldDecorator('total_value_currency', {
-            initialValue: 'rmb',
+            initialValue: one_order.total_value_currency,
         })(
             <Select>
                 {currencySelectorOptions}
@@ -206,12 +164,14 @@ class NewOrderForm extends React.Component {
         );
 
         const currencySelectorPaid = getFieldDecorator('paid_value_currency', {
-            initialValue: 'rmb',
+            initialValue: one_order.paid_value_currency,
         })(
             <Select>
                 {currencySelectorOptions}
             </Select>
         );
+
+
 
         return (
             <Spin spinning={this.state.loading}>
@@ -221,13 +181,27 @@ class NewOrderForm extends React.Component {
                         {...formItemLayout}
                         label="合同编号"
                     >
-                        {contractSelect}
+                        {getFieldDecorator('contract_id', {
+                            rules: [{
+                                required: true, message: '合同编号!',
+                            }],
+                            initialValue:one_order.contract_id
+                        })(
+                            <Input disabled={true}/>
+                        )}
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
                         label="客户名称"
                     >
-                        {customerSelect}
+                        {getFieldDecorator('customer_id', {
+                            rules: [{
+                                required: true, message: '客户名称!',
+                            }],
+                            initialValue:one_order.customer_id
+                        })(
+                            <Input disabled={true} placeholder={one_customer.company_name}/>
+                        )}
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
@@ -249,6 +223,7 @@ class NewOrderForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入订单开始日期!',
                             }],
+                            initialValue:moment(one_order.start_date, "YYYY-MM-DD")
                         })(
                             <DatePicker/>
                         )}
@@ -261,6 +236,7 @@ class NewOrderForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入订单结束日期!',
                             }],
+                            initialValue:moment(one_order.end_date, "YYYY-MM-DD")
                         })(
                             <DatePicker/>
                         )}
@@ -273,6 +249,7 @@ class NewOrderForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入订单总额!',
                             }],
+                            initialValue:one_order.total_value
                         })(
                             <Input addonBefore={currencySelector}/>
                         )}
@@ -291,6 +268,7 @@ class NewOrderForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入已支付金额!',
                             }],
+                            initialValue:one_order.paid_value
                         })(
                             <Input addonBefore={currencySelectorPaid}/>
                         )}
@@ -301,6 +279,7 @@ class NewOrderForm extends React.Component {
                     >
                         {getFieldDecorator('description', {
                             rules: [],
+                            initialValue:one_order.description
                         })(
                             <TextArea rows={4}/>
                         )}
@@ -318,5 +297,5 @@ class NewOrderForm extends React.Component {
     }
 }
 
-const WrappedNewOrderForm = Form.create()(NewOrderForm);
-export default WrappedNewOrderForm;
+const WrappedEditOrderForm = Form.create()(EditOrderForm);
+export default WrappedEditOrderForm;

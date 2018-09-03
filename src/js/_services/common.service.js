@@ -4,6 +4,7 @@ import {tokenExpired} from "../_helpers/tokenExpired";
 export const commonService = {
     getUsersByUsernames,
     getCustomersByCustomerIds,
+    getAllCanSignContractUsers,
 };
 
 const apiStartPath='/api/common';
@@ -18,6 +19,15 @@ function getUsersByUsernames(user_names){
     };
 
     return fetch(apiStartPath+`/users/`+user_names, requestOptions).then(handleResponse);
+}
+
+function getAllCanSignContractUsers(){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(apiStartPath+`/users/contract_sign_users/`, requestOptions).then(handleResponse);
 }
 
 function getCustomersByCustomerIds(customer_ids){

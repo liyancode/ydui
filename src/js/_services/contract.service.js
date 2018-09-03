@@ -4,6 +4,7 @@ import {tokenExpired} from "../_helpers/tokenExpired";
 export const contractService = {
     getAll,
     getOneItemById,
+    addContract,
 };
 
 function getAll(){
@@ -24,14 +25,14 @@ function getOneItemById(id){
     return fetch(`/api/orders/contracts/contract/by_id/`+id, requestOptions).then(handleResponse);
 }
 
-// function addUser(userData){
-//     const requestOptions = {
-//         method: 'POST',
-//         headers: authHeader(),
-//         body: JSON.stringify(userData)
-//     };
-//     return fetch(`/api/users/user`, requestOptions).then(handleResponse);
-// }
+function addContract(contract){
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify(contract)
+    };
+    return fetch(`/api/orders/contracts/contract`, requestOptions).then(handleResponse);
+}
 //
 // function updateUser(userData){
 //     const requestOptions = {

@@ -6,7 +6,7 @@ const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 const RadioGroup = Radio.Group;
 
-import {orderService} from '../../_services/order.service';
+import {contractService} from '../../_services/contract.service';
 const { TextArea } = Input;
 class NewContractForm extends React.Component {
     constructor(props) {
@@ -23,52 +23,46 @@ class NewContractForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        // {
-//     "id": 1,
-//     "order_id": "660001",
-//     "added_by_user_name": "testname105",
-//     "contract_id": "8800011",
-//     "sign_by_user_name": "testname105",
-//     "customer_id": "215",
-//     "order_type": "normal",
-//     "start_date": "2018-08-01",
-//     "end_date": "2019-09-01",
-//     "total_value": "1890000",
-//     "pay_type": "fenqi",
-//     "paid_value": "500000",
-//     "order_status": "start",
-//     "order_status_update_by": "admin",
-//     "is_finished": 0,
-//     "description": "测试订单",
-//     "comment": null,
-//     "created_at": "2018-07-24 21:50:36 +0800",
-//     "last_update_at": "2018-07-24 21:50:36 +0800",
-//     "status": 1
-// }
+        // # ---- contract
+        // # {
+        //                  "id": 1,
+        //                      "contract_id": "880001",
+        //                      "added_by_user_name": "testname105",
+        //                      "sign_by_user_name": "testname105",
+        //                      "customer_id": "215",
+        //                      "sign_at": "2018-07-01",
+        //                      "start_date": "2018-07-10",
+        //                      "end_date": "2019-05-01",
+        //                      "total_value": "1500000",
+        //                      "description": "这是一个测试合同",
+        //                      "contract_status": 1,
+        //                      "comment": "测试",
+        //                      "created_at": "2018-07-23 22:54:33 +0800",
+        //                      "last_update_at": "2018-07-23 22:54:33 +0800",
+        //                      "status": 1
+        //     #         }
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 this.setState({loading: true});
-                let order = {
+                let contract = {
                     "id": -1,
-                    "order_id":"",
+                    "contract_id": "",
                     "added_by_user_name": "",
-                    "sign_by_user_name": "",
-                    "order_status": "",
-                    "order_status_update_by": "",
-                    "is_finished": 0,
-                    "comment": "",
-                    "contract_id": values["contract_id"],
+                    "sign_by_user_name": values["sign_by_user_name"],
                     "customer_id": values["customer_id"],
-                    "order_type": values["order_type"],
+                    "sign_at": values["sign_at"],
                     "start_date": values["start_date"],
                     "end_date": values["end_date"],
                     "total_value": values["total_value"],
-                    "pay_type": values["pay_type"],
-                    "paid_value": values["paid_value"],
+                    "total_value_currency": values["total_value_currency"],
                     "description": values["description"],
-                    "status": 1,
+                    "contract_status": 1,
+                    "comment": "",
+                    "created_at": "",
+                    "last_update_at": "",
+                    "status": 1
                 };
-                orderService.addNewOrder(order).then(data => {
+                contractService.addContract(contract).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -92,7 +86,6 @@ class NewContractForm extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
-        const {autoCompleteResult} = this.state;
 
         const formItemLayout = {
             labelCol: {
@@ -116,76 +109,105 @@ class NewContractForm extends React.Component {
                 },
             },
         };
-        const orderTypeSelector = getFieldDecorator('order_type', {
-            initialValue: 'normal',
+
+        let my_customers = this.props.my_customers;
+        let currency_list = this.props.currency_list;
+        let can_sign_contract_users = this.props.can_sign_contract_users;
+        
+        let currencySelectorOptions = [];
+        for (let k in currency_list) {
+            currencySelectorOptions.push(<Option key={k} value={k}>{currency_list[k]}</Option>)
+        }
+        const currencySelector = getFieldDecorator('total_value_currency', {
+            initialValue: 'rmb',
         })(
             <Select>
-                <Option value="normal">正式订单</Option>
-                <Option value="demo">打样订单</Option>
+                {currencySelectorOptions}
             </Select>
         );
 
-        const payTypeSelector = getFieldDecorator('pay_type', {
-            initialValue: '先定金，再尾款',
+        let customerIdCompanynameMap = {}
+        let customerSelectOptions = [];
+        for (let idx in my_customers) {
+            customerSelectOptions.push(
+                <Option key={idx} value={my_customers[idx].customer_id}>{my_customers[idx].company_name}</Option>
+            )
+            customerIdCompanynameMap[my_customers[idx].customer_id] = my_customers[idx].company_name;
+        }
+        const customerSelect = getFieldDecorator('customer_id', {
+            rules: [{
+                required: true, message: '请输入客户名称!',
+            }],
         })(
-            <Select>
-                <Option value="fenqi">先定金，再尾款</Option>
-                <Option value="one_time">全款</Option>
+            <Select
+                showSearch
+                placeholder="客户名称"
+                optionFilterProp="children"
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+                {customerSelectOptions}
             </Select>
         );
 
-        const contactGenderRadio = getFieldDecorator('contact_gender', {
-            initialValue: 0,
+        let can_sign_contract_usersSelectOptions = [];
+        for (let idx in can_sign_contract_users) {
+            can_sign_contract_usersSelectOptions.push(
+                <Option key={idx} value={can_sign_contract_users[idx].user_name}>
+                {can_sign_contract_users[idx].full_name+
+                    "("+
+                    can_sign_contract_users[idx].user_name+")"}
+                </Option>
+            )
+        }
+        const can_sign_contract_usersSelect = getFieldDecorator('sign_by_user_name', {
+            rules: [{
+                required: true, message: '请输入合同负责人!',
+            }],
         })(
-            <RadioGroup>
-                <Radio value={0}>女士</Radio>
-                <Radio value={1}>先生</Radio>
-            </RadioGroup>
+            <Select
+                showSearch
+                placeholder="合同负责人"
+                optionFilterProp="children"
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+                {can_sign_contract_usersSelectOptions}
+            </Select>
         );
 
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
         return (
             <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
                     <FormItem
                         {...formItemLayout}
-                        label="合同编号"
+                        label="合同负责人"
                     >
-                        {getFieldDecorator('contract_id', {
+                        {can_sign_contract_usersSelect}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="签定客户"
+                    >
+                        {customerSelect}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="合同签署日期"
+                    >
+                        {getFieldDecorator('sign_at', {
                             rules: [{
-                                required: true, message: '请输入合同编号!',
+                                required: true, message: '请输入合同签署日期!',
                             }],
                         })(
-                            <Input/>
+                            <DatePicker/>
                         )}
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="客户编号"
-                    >
-                        {getFieldDecorator('customer_id', {
-                            rules: [{
-                                required: true, message: '请输入客户编号!',
-                            }],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="订单类型"
-                    >
-                        {orderTypeSelector}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="订单开始日期"
+                        label="合同开始日期"
                     >
                         {getFieldDecorator('start_date', {
                             rules: [{
-                                required: true, message: '请输入订单开始日期!',
+                                required: true, message: '请输入合同开始日期!',
                             }],
                         })(
                             <DatePicker/>
@@ -193,11 +215,11 @@ class NewContractForm extends React.Component {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="订单结束日期"
+                        label="合同结束日期"
                     >
                         {getFieldDecorator('end_date', {
                             rules: [{
-                                required: true, message: '请输入订单结束日期!',
+                                required: true, message: '请输入合同结束日期!',
                             }],
                         })(
                             <DatePicker/>
@@ -205,40 +227,24 @@ class NewContractForm extends React.Component {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="订单总额"
+                        label="合同总额"
                     >
                         {getFieldDecorator('total_value', {
                             rules: [{
                                 required: true, message: '请输入订单总额!',
                             }],
                         })(
-                            <Input/>
+                            <Input addonBefore={currencySelector}/>
                         )}
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="订单款项支付方式"
-                    >
-                        {payTypeSelector}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="已支付金额"
-                    >
-                        {getFieldDecorator('paid_value', {
-                            rules: [{
-                                required: true, message: '请输入已支付金额!',
-                            }],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="订单说明"
+                        label="合同说明"
                     >
                         {getFieldDecorator('description', {
-                            rules: [],
+                            rules: [{
+                                required: true, message: '请输入合同描述信息!',
+                            }],
                         })(
                             <TextArea rows={4}/>
                         )}

@@ -4,6 +4,10 @@ import CompnPageContent from "../../_components/compnPageContent";
 
 import {contractService} from "../../_services/contract.service"
 import {commonService} from "../../_services/common.service"
+import {orderRelatedConstrants} from "../../_helpers/orderRelatedConstrants"
+import {customerService} from "../../_services/customer.service";
+
+import WrappedNewContractForm from "../../_components/order/_compnNewContractForm"
 
 export default class PageContractN extends React.Component {
     constructor(props) {
@@ -13,7 +17,10 @@ export default class PageContractN extends React.Component {
             contracts: [],
             one_contract: {},
             users: {},
-            customers: {}
+            can_sign_contract_users:[],
+            customers: {},
+            my_customers: [],
+            currency_list:orderRelatedConstrants.currency_list
         }
 
         contractService.getAll().then(data => {
@@ -45,6 +52,17 @@ export default class PageContractN extends React.Component {
 
                 });
             }
+            customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+                this.setState({
+                    my_customers: data.customers
+                });
+            });
+
+            commonService.getAllCanSignContractUsers().then(data => {
+                this.setState({
+                    can_sign_contract_users: data
+                })
+            });
         });
 
         this.func_update_contracts = this.func_update_contracts.bind(this);
@@ -154,7 +172,6 @@ export default class PageContractN extends React.Component {
                     return (
                         company_name
                     )
-
                 }
             },
             {
@@ -183,7 +200,6 @@ export default class PageContractN extends React.Component {
 
     func_content_view_one() {
         let one_item = this.state.one_contract;
-
         let company_name;
         let customer = this.state.customers[one_item["customer_id"]];
         if (customer) {
@@ -192,12 +208,12 @@ export default class PageContractN extends React.Component {
             company_name = "公司名未知，客户ID:" + one_item["customer_id"];
         }
 
-        let approve_by_user_full_name;
+        let added_by_user_full_name;
         let user = this.state.users[one_item["added_by_user_name"]];
         if (user) {
-            approve_by_user_full_name = user.employee_info.full_name;
+            added_by_user_full_name = user.employee_info.full_name;
         } else {
-            approve_by_user_full_name = "用户名: " + one_item["added_by_user_name"];
+            added_by_user_full_name = "用户名: " + one_item["added_by_user_name"];
         }
 
         let sign_by_user_full_name;
@@ -207,21 +223,10 @@ export default class PageContractN extends React.Component {
         } else {
             sign_by_user_full_name = "用户名: " + one_item["sign_by_user_name"];
         }
-
-        // let approve_status;
-        // if (one_item["approve_status"] === 'waiting') {
-        //     approve_status = <span>
-        //             <Tag color="geekblue">等待审批<Icon type="clock-circle"/></Tag>
-        //             </span>
-        // } else if (one_item["approve_status"] === 'pass') {
-        //     approve_status = <span>
-        //             <Tag color="green">审批通过<Icon type="check-circle"/></Tag>
-        //             </span>
-        // } else {
-        //     approve_status = <span>
-        //             <Tag color="red">审批拒绝<Icon type="exclamation-circle"/></Tag>
-        //             </span>
-        // }
+        let currency='*';
+        if(one_item["total_value_currency"]){
+            currency=this.state.currency_list[one_item["total_value_currency"].toLowerCase()];
+        }
 
         return (
             <div className="col-sm-12 col-md-6">
@@ -234,7 +239,7 @@ export default class PageContractN extends React.Component {
                     </tr>
                     <tr>
                         <td>记录创建者</td>
-                        <td>{approve_by_user_full_name}</td>
+                        <td>{added_by_user_full_name}</td>
                     </tr>
                     <tr>
                         <td>合同负责人</td>
@@ -259,7 +264,7 @@ export default class PageContractN extends React.Component {
                     </tr>
                     <tr>
                         <td>合同金额</td>
-                        <td>{one_item["total_value"]}</td>
+                        <td>{currency}{one_item["total_value"]}</td>
                     </tr>
                     <tr>
                         <td>其他说明</td>
@@ -273,13 +278,16 @@ export default class PageContractN extends React.Component {
 
     func_content_create_one() {
         return (
-            <div>创建新询价</div>
+            <WrappedNewContractForm
+                my_customers={this.state.my_customers}
+                currency_list={this.state.currency_list}
+                can_sign_contract_users={this.state.can_sign_contract_users}
+            />
         );
     }
 
     func_content_edit_one() {
         let one_item = this.state.one_ask_price;
-        console.log(one_item);
         return (
             <div>编辑询价{one_item.id}</div>
         );
@@ -294,6 +302,7 @@ export default class PageContractN extends React.Component {
                 one_item={this.state.one_contract}
                 update_items={this.func_update_contracts}
                 update_one_item={this.func_update_one_contract}
+                update_one_item_by_key={"id"}
                 delete_one_item={this.func_delete_one_contract}
                 _compnViewOne={this.func_content_view_one}
                 _compnCreateOne={this.func_content_create_one}

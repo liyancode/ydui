@@ -283,6 +283,7 @@ export default class PageAskPriceN extends React.Component {
                 one_item={this.state.one_ask_price}
                 update_items={this.func_update_ask_prices}
                 update_one_item={this.func_update_one_ask_price}
+                update_one_item_by_key={"id"}
                 delete_one_item={this.func_delete_one_ask_price}
                 _compnViewOne={this.func_content_view_one}
                 _compnCreateOne={this.func_content_create_one}

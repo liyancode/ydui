@@ -2,7 +2,7 @@ import {userService} from "../_services/user.service";
 
 export const userActions = {
     login,
-    logout,
+    logout: tokenExpired,
     register,
     getAll,
     delete: _delete
