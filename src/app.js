@@ -28,6 +28,7 @@ import PageOrder from "./js/pageComponents/order/pageOrder";
 import PageProduct from "./js/pageComponents/product/pageProduct"
 import PageContractN from "./js/pageComponents/order/pageContractN";
 import PageAskPriceN from "./js/pageComponents/order/pageAskpriceN";
+import PageOrderN from "./js/pageComponents/order/pageOrderN";
 
 class App extends React.Component {
     constructor(props) {
@@ -67,7 +68,7 @@ class App extends React.Component {
         if (user_authority['order'] !== 'n') {
             private_routes.push(<PrivateRoute path="/ask_price" component={PageAskPriceN} key='prt_ask_price'/>)
             private_routes.push(<PrivateRoute path="/contract" component={PageContractN} key='prt_contract'/>)
-            private_routes.push(<PrivateRoute path="/order" component={PageOrder} key='prt_order'/>)
+            private_routes.push(<PrivateRoute path="/order" component={PageOrderN} key='prt_order'/>)
         }
         //--- fin
         if (user_authority['fin'] !== 'n') {
