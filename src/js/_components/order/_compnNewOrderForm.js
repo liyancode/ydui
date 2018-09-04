@@ -62,8 +62,10 @@ class NewOrderForm extends React.Component {
                     "start_date": values["start_date"],
                     "end_date": values["end_date"],
                     "total_value": values["total_value"],
+                    "total_value_currency": values["total_value_currency"],
                     "pay_type": values["pay_type"],
                     "paid_value": values["paid_value"],
+                    "paid_value_currency": values["paid_value_currency"],
                     "description": values["description"],
                     "status": 1,
                 };
