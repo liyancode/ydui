@@ -9,6 +9,14 @@ import {customerService} from "../../_services/customer.service";
 
 import WrappedNewContractForm from "../../_components/order/_compnNewContractForm"
 
+function arr_set_add(arr,obj){
+    if(arr&&obj){
+        if(!arr.includes(obj)){
+            arr.push(obj)
+        }
+    }
+}
+
 export default class PageContractN extends React.Component {
     constructor(props) {
         super(props);
@@ -28,14 +36,21 @@ export default class PageContractN extends React.Component {
                 loading: false,
                 contracts: data,
             })
-            let user_names_set = new Set();
-            let customer_ids_set = new Set();
+            // let user_names_set = new Set();
+            let user_names_set = [];
+            // let customer_ids_set = new Set();
+            let customer_ids_set = [];
+
             for (let idx in data) {
-                user_names_set.add(data[idx].added_by_user_name);
-                user_names_set.add(data[idx].sign_by_user_name);
-                customer_ids_set.add(data[idx].customer_id)
+                // user_names_set.add(data[idx].added_by_user_name);
+                arr_set_add(user_names_set,data[idx].added_by_user_name);
+                // user_names_set.add(data[idx].sign_by_user_name);
+                arr_set_add(user_names_set,data[idx].sign_by_user_name);
+                // customer_ids_set.add(data[idx].customer_id);
+                arr_set_add(customer_ids_set,data[idx].customer_id);
             }
-            let user_names = Array.from(user_names_set).toString();
+            // let user_names = Array.from(user_names_set).toString();
+            let user_names = user_names_set.toString();
             if (user_names.length > 0) {
                 commonService.getUsersByUsernames(user_names).then(data => {
                     this.setState({
@@ -43,7 +58,8 @@ export default class PageContractN extends React.Component {
                     })
                 });
             }
-            let customer_ids = Array.from(customer_ids_set).toString();
+            // let customer_ids = Array.from(customer_ids_set).toString();
+            let customer_ids = customer_ids_set.toString();
             if (customer_ids.length > 0) {
                 commonService.getCustomersByCustomerIds(customer_ids).then(data => {
                     this.setState({

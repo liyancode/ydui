@@ -14,6 +14,13 @@ import WrappedEditOrderForm from "../../_components/order/_compnEditOrderForm"
 
 const Step = Steps.Step;
 
+function arr_set_add(arr,obj){
+    if(arr&&obj){
+        if(!arr.includes(obj)){
+            arr.push(obj)
+        }
+    }
+}
 export default class PageOrderN extends React.Component {
     constructor(props) {
         super(props);
@@ -36,15 +43,21 @@ export default class PageOrderN extends React.Component {
                 loading: false,
                 orders: data.orders,
             })
-            let user_names_set = new Set();
-            let customer_ids_set = new Set();
+            // let user_names_set = new Set();
+            let user_names_set = [];
+            // let customer_ids_set = new Set();
+            let customer_ids_set =[];
             let orders = data.orders;
             for (let idx in orders) {
-                user_names_set.add(orders[idx].added_by_user_name);
-                user_names_set.add(orders[idx].sign_by_user_name);
-                customer_ids_set.add(orders[idx].customer_id)
+                // user_names_set.add(orders[idx].added_by_user_name);
+                arr_set_add(user_names_set,orders[idx].added_by_user_name)
+                // user_names_set.add(orders[idx].sign_by_user_name);
+                arr_set_add(user_names_set,orders[idx].sign_by_user_name)
+                // customer_ids_set.add(orders[idx].customer_id)
+                arr_set_add(customer_ids_set,orders[idx].customer_id)
             }
-            let user_names = Array.from(user_names_set).toString();
+            // let user_names = Array.from(user_names_set).toString();
+            let user_names = user_names_set.toString();
             if (user_names.length > 0) {
                 commonService.getUsersByUsernames(user_names).then(data => {
                     this.setState({
@@ -52,7 +65,8 @@ export default class PageOrderN extends React.Component {
                     })
                 });
             }
-            let customer_ids = Array.from(customer_ids_set).toString();
+            // let customer_ids = Array.from(customer_ids_set).toString();
+            let customer_ids = customer_ids_set.toString();
             if (customer_ids.length > 0) {
                 commonService.getCustomersByCustomerIds(customer_ids).then(data => {
                     this.setState({
@@ -188,12 +202,14 @@ export default class PageOrderN extends React.Component {
             {
                 title: '订单号',
                 dataIndex: 'order_id',
-                key: 'order_id'
+                key: 'order_id',
+                fixed: 'left'
             },
             {
                 title: '合同编号',
                 dataIndex: 'contract_id',
-                key: 'contract_id'
+                key: 'contract_id',
+                fixed: 'left'
             },
             {
                 title: '负责人',
