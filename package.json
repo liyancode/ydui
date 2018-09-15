@@ -6,11 +6,15 @@
   "dependencies": {
     "antd": "^3.6.4",
     "datatables": "*",
+    "es6-promise": "^4.2.5",
     "highcharts": "^6.1.1",
+    "isomorphic-fetch": "^2.2.1",
     "jquery": "*",
+    "moment": "^2.22.2",
     "popper.js": "*",
     "react": "*",
     "react-dom": "*",
+    "react-router": "^4.3.1",
     "react-router-dom": "*"
   },
   "devDependencies": {
