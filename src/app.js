@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import {HashRouter, Router, Route,Switch} from 'react-router-dom';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
+import "isomorphic-fetch"
 
 // import { browserHistory,Router, Route,Switch } from 'react-router'
 
