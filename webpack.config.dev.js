@@ -11,6 +11,7 @@ module.exports = {
     entry: SRC_DIR + "/app.js",
     output: {
         path: __dirname + "/dist",
+        // publicPath: "/assets/",
         filename: "bundle.js"
     },
 
@@ -35,7 +36,12 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                loader: 'css-loader!less-loader'
+                loader: 'css-loader!less-loader',
+                options: {
+                    modifyVars: {
+                        '@icon-url': '"/font/antd"',
+                    },
+                },
             },
             {test: /\.(js|jsx)$/, loader: 'babel-loader'},
             {
@@ -60,7 +66,8 @@ module.exports = {
         hot: true,
         proxy: {
             "/api/*":"http://localhost:9292",
-            "/auth/**": "http://localhost:9292"
+            "/auth/**": "http://localhost:9292",
+            "/assets/*":"http://localhost:9292",
         }
     }
 }

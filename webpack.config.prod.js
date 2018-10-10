@@ -7,11 +7,12 @@ var path=require("path");
 var SRC_DIR = path.resolve(__dirname, 'src');
 
 module.exports={
-    devtool:'source-map',
+    // devtool:'source-map',
 
     entry:SRC_DIR+"/app.js",
     output:{
         path:__dirname+"/dist",
+        // publicPath: SRC_DIR+"/assets/",
         filename:"bundle[hash].js"
     },
     module: {
