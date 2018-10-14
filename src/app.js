@@ -5,6 +5,8 @@ import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import "isomorphic-fetch"
 
+import "@babel/polyfill";
+
 // import { browserHistory,Router, Route,Switch } from 'react-router'
 
 import './assets/3rdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css'
