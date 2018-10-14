@@ -4,6 +4,7 @@
   "description": "webpack and react turial",
   "main": "index.js",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "antd": "^3.6.4",
     "datatables": "*",
     "es6-promise": "^4.2.5",
@@ -12,6 +13,7 @@
     "jquery": "*",
     "moment": "^2.22.2",
     "popper.js": "*",
+    "promise-polyfill": "8.1.0",
     "react": "*",
     "react-dom": "*",
     "react-router": "^4.3.1",
