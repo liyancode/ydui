@@ -154,12 +154,29 @@ const CompnSider = (props) => {
 
     } else if (warehouse_autho === 'rw') {
         menu_items.push(
-            <Menu.Item key="6">
-                <Link to='/warehouse' replace>
-                    <Icon type="database"/>
-                    <span>库存管理</span>
-                </Link>
-            </Menu.Item>
+            <SubMenu
+                key="wh_m"
+                title={<span><Icon type="database" /><span>仓储管理</span></span>}
+            >
+                <Menu.Item key="wh_rm">
+                    <Link to='/wh_rm' replace>
+                        <Icon type="file"/>
+                        <span>原材料</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="wh_sfp">
+                    <Link to='/wh_sfp' replace>
+                        <Icon type="appstore-o" />
+                        <span>半成品</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="wh_fp">
+                    <Link to='/wh_fp' replace>
+                        <Icon type="shopping-cart" />
+                        <span>成品</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
         )
     }
 

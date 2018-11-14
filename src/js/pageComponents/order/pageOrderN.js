@@ -209,7 +209,6 @@ export default class PageOrderN extends React.Component {
                 title: '合同编号',
                 dataIndex: 'contract_id',
                 key: 'contract_id',
-                fixed: 'left'
             },
             {
                 title: '负责人',

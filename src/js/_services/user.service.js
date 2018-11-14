@@ -1,5 +1,8 @@
 import { authHeader } from '../_helpers/authHeader';
 import {message} from 'antd'
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
+
 export const userService = {
     login,
     logout,

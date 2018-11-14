@@ -43,7 +43,7 @@ const GlobalLayout = (props) => {
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="5">
-                        <Link to='/werehouse' replace>
+                        <Link to='/warehouse' replace>
                             <Icon type="database"/>
                             <span>仓储管理</span>
                         </Link>

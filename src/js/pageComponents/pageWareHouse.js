@@ -5,7 +5,7 @@ import CompnSider from "../_components/compnSider"
 import CompnHeader from "../_components/compnHeader"
 import CompnFooter from "../_components/compnFooter"
 
-const PageWereHouse=(props)=> {
+const PageWareHouse=(props)=> {
     return (
         <Layout style={{height: '100%'}}>
             <CompnSider defaultMenuKey={['6']}/>
@@ -25,4 +25,4 @@ const PageWereHouse=(props)=> {
     )
 }
 
-export default PageWereHouse;
+export default PageWareHouse;
