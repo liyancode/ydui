@@ -22,7 +22,7 @@ import Login from './js/login'
 import PageHome from "./js/pageComponents/pageHome"
 import PageFin from "./js/pageComponents/pageFin";
 import PageCRM from "./js/pageComponents/pageCRM";
-import PageWereHouse from "./js/pageComponents/pageWereHouse";
+import PageWareHouse from "./js/pageComponents/pageWareHouse";
 import PageHRMyInfo from "./js/pageComponents/hr/pageHRMyInfo";
 import PageHRAllUsers from "./js/pageComponents/hr/pageHRAllUsers";
 
@@ -32,6 +32,8 @@ import PageProduct from "./js/pageComponents/product/pageProduct"
 import PageContractN from "./js/pageComponents/order/pageContractN";
 import PageAskPriceN from "./js/pageComponents/order/pageAskpriceN";
 import PageOrderN from "./js/pageComponents/order/pageOrderN";
+
+import PageRawMaterial from "./js/pageComponents/warehouse/pageRawMaterial";
 
 class App extends React.Component {
     constructor(props) {
@@ -84,7 +86,7 @@ class App extends React.Component {
         }
         //--- warehouse
         if (user_authority['warehouse'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/warehouse" component={PageWereHouse} key='prt_warehouse'/>)
+            private_routes.push(<PrivateRoute path="/wh_rm" component={PageRawMaterial} key='prt_wh_rm'/>)
         }
         return (
             <HashRouter>
