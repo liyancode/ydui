@@ -86,7 +86,7 @@ function deleteOneInvenroty(inventory_id){
         method: 'DELETE',
         headers: authHeader(),
     };
-    return fetch(`/api/inventories/inventory`+inventory_id, requestOptions).then(handleResponse);
+    return fetch(`/api/inventories/inventory/`+inventory_id, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
@@ -98,7 +98,7 @@ function handleResponse(response) {
         }else if(response.status === 500){
             message.error("错误，请稍后再试！");
         }else if(response.status === 404){
-            message.error("用户名不存在！");
+            message.error("记录不存在！");
         }else if(response.status === 403){
             message.error("无权限！");
         }else if(response.status === 504){
@@ -111,7 +111,7 @@ function handleResponse(response) {
         // return Promise.reject(error);
         return null;
     }else{
-        if(response.status === 201){
+        if(response.status===201){
             message.success("操作完成！")
         }
         return response.text().then(text => {
