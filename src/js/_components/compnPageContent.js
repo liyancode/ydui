@@ -33,7 +33,7 @@ const PageContent = (props) => {
                             <span>刷新</span>
                         </Button>
                     </div>
-
+                    {props.contentHeader()}
                     <Table rowKey="id" columns={props.item_table_columns({
                         items: props.items,
                         checkDetailOnclick: props.checkDetailOnclick
@@ -189,6 +189,7 @@ export default class CompnPageContent extends React.Component {
                                 editOneBtnOnclick={this.handleEditOneBtnOnclick}
                                 deleteOneBtnOnclick={this.handleDeleteOneBtnOnclick}
                                 backEditOneBtnOnclick={this.handleBackEditOneBtnOnclick}
+                                contentHeader={this.props.contentHeader}
                             />
                         </div>
                     </Content>
