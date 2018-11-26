@@ -20,14 +20,17 @@ const PageContent = (props) => {
         let breadcrumbKeyWord = props.breadcrumbKeyWord;
 
         if (page === childPageConstrants.viewAll) {
+            let btn_add='';
+            if(props._btnTag_Add){
+                btn_add=<Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
+                    <Icon type="plus"/>
+                    <span>添加{breadcrumbKeyWord}信息</span>
+                </Button>
+            }
             return (<div>
                 <Spin spinning={props.loading} tip="加载中..." size="large">
                     <div>
-
-                        <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
-                            <Icon type="plus"/>
-                            <span>添加{breadcrumbKeyWord}信息</span>
-                        </Button>
+                        {btn_add}
                         <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
                             <Icon type="reload"/>
                             <span>刷新</span>
@@ -42,6 +45,23 @@ const PageContent = (props) => {
                 </Spin>
             </div>);
         } else if (page === childPageConstrants.viewOne) {
+            let btn_delete='';
+            let btn_update='';
+            if(props._btnTag_Delete){
+                btn_delete=<Popconfirm title="确认删除？" onConfirm={props.deleteOneBtnOnclick}
+                                       okText="是" cancelText="否">
+                    <Button type="danger" style={btnStyle}>
+                        <Icon type="user-delete"/>
+                        <span>删除该{breadcrumbKeyWord}信息</span>
+                    </Button>
+                </Popconfirm>
+            }
+            if(props._btnTag_Update){
+                btn_update=<Button type="primary" style={btnStyle} onClick={props.editOneBtnOnclick}>
+                    <Icon type="edit"/>
+                    <span>更新该{breadcrumbKeyWord}信息</span>
+                </Button>
+            }
             return (<div>
                 <Spin spinning={props.loading} tip="加载中..." size="large">
                 <div>
@@ -49,17 +69,8 @@ const PageContent = (props) => {
                         <Icon type="left"/>
                         <span>返回</span>
                     </Button>
-                    <Button type="primary" style={btnStyle} onClick={props.editOneBtnOnclick}>
-                        <Icon type="edit"/>
-                        <span>更新该{breadcrumbKeyWord}信息</span>
-                    </Button>
-                    <Popconfirm title="确认删除？" onConfirm={props.deleteOneBtnOnclick}
-                                okText="是" cancelText="否">
-                        <Button type="danger" style={btnStyle}>
-                            <Icon type="user-delete"/>
-                            <span>删除该{breadcrumbKeyWord}信息</span>
-                        </Button>
-                    </Popconfirm>
+                    {btn_update}
+                    {btn_delete}
                 </div>
                 <div>
                     {props._compnViewOne({one_item: one_item})}
@@ -191,6 +202,9 @@ export default class CompnPageContent extends React.Component {
                                 deleteOneBtnOnclick={this.handleDeleteOneBtnOnclick}
                                 backEditOneBtnOnclick={this.handleBackEditOneBtnOnclick}
                                 contentHeader={this.props.contentHeader}
+                                _btnTag_Add={this.props._btnTag_Add}
+                                _btnTag_Delete={this.props._btnTag_Delete}
+                                _btnTag_Update={this.props._btnTag_Update}
                             />
                         </div>
                     </Content>
