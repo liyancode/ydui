@@ -221,19 +221,27 @@ export default class PageFinApproval extends React.Component {
                 title: '编号',
                 dataIndex: 'fin_approval_id',
                 key: 'fin_approval_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.fin_approval_id > b.fin_approval_id?1:-1,
             },
             {
                 title: '创建时间',
                 dataIndex: 'created_at',
                 key: 'created_at',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.created_at > b.created_at?1:-1,
             }, {
                 title: this.state.breadcrumbKeyWord + '编号',
                 dataIndex: 'ref_id',
                 key: 'ref_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.ref_id > b.ref_id?1:-1,
             }, {
                 title: '状态',
                 dataIndex: 'approval_result',
                 key: 'approval_result',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.approval_result > b.approval_result?1:-1,
                 render: (text) => {
                     if (text === 'waiting') {
                         return (
