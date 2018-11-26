@@ -159,7 +159,8 @@ export default class CompnPageContent extends React.Component {
         return (
             <Layout style={{height: '100%'}}>
                 <CompnSider defaultMenuKey={this.props.siderDefaultMenuKey}
-                            defaultOpenKeys={this.props.siderDefaultOpenKeys}/>
+                            defaultOpenKeys={this.props.siderDefaultOpenKeys}
+                            fin_approval_count={this.props.fin_approval_count}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
