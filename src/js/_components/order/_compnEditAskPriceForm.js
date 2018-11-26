@@ -1,15 +1,13 @@
 import React from 'react';
-import {Form, Input, Icon, Radio, Select, Popconfirm, Spin, Divider, Button, AutoComplete} from 'antd';
+import {Form, Input, Select, Popconfirm, Spin,Button,} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
-const RadioGroup = Radio.Group;
 
 import {askPriceService} from '../../_services/askprice.service';
 const { TextArea } = Input
 
-class NewAskPriceForm extends React.Component {
+class EditAskPriceForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +17,6 @@ class NewAskPriceForm extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
-        this.handleWebsiteChange = this.handleWebsiteChange.bind(this);
     }
 
     handleSubmit(e) {
@@ -42,18 +39,18 @@ class NewAskPriceForm extends React.Component {
             if (!err) {
                 this.setState({loading: true});
                 let ask_price = {
-                    "id": -1,
-                    "ask_price_id": "",
-                    "added_by_user_name": "",
+                    "id": this.props.ask_price.id,
+                    "ask_price_id": this.props.ask_price.ask_price_id,
+                    "added_by_user_name": this.props.ask_price.added_by_user_name,
                     "customer_id": values["customer_id"],
                     "product_ids": values["product_ids"],
                     "description": values["description"],
-                    "approve_by_user_name": values["approve_by_user_name"],
-                    "approve_status": "waiting",
+                    "approve_by_user_name": this.props.ask_price.approve_by_user_name,
+                    "approve_status": this.props.ask_price.approve_status,
                     "comment": values["comment"],
                     "status": 1,
                 };
-                askPriceService.addOneAskPrice(ask_price).then(data => {
+                askPriceService.updateOneAskPrice(ask_price).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -65,19 +62,9 @@ class NewAskPriceForm extends React.Component {
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
     }
 
-    handleWebsiteChange(value) {
-        let autoCompleteResult;
-        if (!value) {
-            autoCompleteResult = [];
-        } else {
-            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        this.setState({autoCompleteResult});
-    }
-
     render() {
+        let ask_price=this.props.ask_price;
         const {getFieldDecorator} = this.props.form;
-        const {autoCompleteResult} = this.state;
         const my_customers=this.props.my_customers;
 
         const formItemLayout = {
@@ -116,6 +103,7 @@ class NewAskPriceForm extends React.Component {
             rules: [{
                 required: true, message: '请输入客户名称!',
             }],
+            initialValue: ask_price.customer_id,
         })(
             <Select
                 showSearch
@@ -127,27 +115,6 @@ class NewAskPriceForm extends React.Component {
             </Select>
         );
 
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
-        })(
-            <Select style={{width: 70}}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        );
-
-        const contactGenderRadio = getFieldDecorator('contact_gender', {
-            initialValue: 0,
-        })(
-            <RadioGroup>
-                <Radio value={0}>女士</Radio>
-                <Radio value={1}>先生</Radio>
-            </RadioGroup>
-        );
-
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
         return (
             <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
@@ -165,6 +132,7 @@ class NewAskPriceForm extends React.Component {
                             rules: [{
                                 required: true, message: '请选择产品!',
                             }],
+                            initialValue: ask_price.product_ids,
                         })(
                             <Input/>
                         )}
@@ -177,6 +145,7 @@ class NewAskPriceForm extends React.Component {
                             rules: [{
                                 required: true, message: '请填写详细询价说明!',
                             }],
+                            initialValue: ask_price.description,
                         })(
                             <TextArea rows={4}/>
                         )}
@@ -187,8 +156,9 @@ class NewAskPriceForm extends React.Component {
                     >
                         {getFieldDecorator('approve_by_user_name', {
                             rules: [],
+                            initialValue: ask_price.approve_by_user_name,
                         })(
-                            <Input/>
+                            <Input disabled={true}/>
                         )}
                     </FormItem>
                     <FormItem
@@ -197,6 +167,7 @@ class NewAskPriceForm extends React.Component {
                     >
                         {getFieldDecorator('comment', {
                             rules: [],
+                            initialValue: ask_price.comment,
                         })(
                             <Input/>
                         )}
@@ -213,5 +184,5 @@ class NewAskPriceForm extends React.Component {
     }
 }
 
-const WrappedNewAskPriceForm = Form.create()(NewAskPriceForm);
-export default WrappedNewAskPriceForm;
+const WrappedEditAskPriceForm = Form.create()(EditAskPriceForm);
+export default WrappedEditAskPriceForm;
