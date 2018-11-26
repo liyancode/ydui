@@ -20,14 +20,11 @@ import {PrivateRoute} from './js/PrivateRoute'
 
 import Login from './js/login'
 import PageHome from "./js/pageComponents/pageHome"
-import PageFin from "./js/pageComponents/pageFin";
 import PageCRM from "./js/pageComponents/pageCRM";
-import PageWareHouse from "./js/pageComponents/pageWareHouse";
 import PageHRMyInfo from "./js/pageComponents/hr/pageHRMyInfo";
 import PageHRAllUsers from "./js/pageComponents/hr/pageHRAllUsers";
 
 import './assets/css/style.css';
-import PageOrder from "./js/pageComponents/order/pageOrder";
 import PageProduct from "./js/pageComponents/product/pageProduct"
 import PageContractN from "./js/pageComponents/order/pageContractN";
 import PageAskPriceN from "./js/pageComponents/order/pageAskpriceN";
