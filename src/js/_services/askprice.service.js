@@ -3,7 +3,11 @@ import {message} from 'antd'
 import {tokenExpired} from "../_helpers/tokenExpired";
 export const askPriceService = {
     getAll,
+    getOneItemByAskPriceId,
     getOneItemById,
+    addOneAskPrice,
+    updateOneAskPrice,
+    deleteOneAskPrice,
 };
 
 function getAll(){
@@ -15,6 +19,15 @@ function getAll(){
     return fetch(`/api/orders/ask_prices/by_user_name`, requestOptions).then(handleResponse);
 }
 
+function getOneItemByAskPriceId(ask_price_id){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`/api/orders/ask_prices/ask_price/`+ask_price_id, requestOptions).then(handleResponse);
+}
+
 function getOneItemById(id){
     const requestOptions = {
         method: 'GET',
@@ -22,6 +35,33 @@ function getOneItemById(id){
     };
 
     return fetch(`/api/orders/ask_prices/ask_price/by_id/`+id, requestOptions).then(handleResponse);
+}
+
+function addOneAskPrice(ask_price){
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify(ask_price)
+    };
+    return fetch(`/api/orders/ask_prices/ask_price`, requestOptions).then(handleResponse);
+}
+
+function updateOneAskPrice(ask_price){
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader(),
+        body: JSON.stringify(ask_price)
+    };
+    return fetch(`/api/orders/ask_prices/ask_price`, requestOptions).then(handleResponse);
+}
+
+function deleteOneAskPrice(ask_price_id){
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+
+    return fetch(`/api/orders/ask_prices/ask_price/`+ask_price_id, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
