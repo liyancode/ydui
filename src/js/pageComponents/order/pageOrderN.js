@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Divider, Tag,Steps} from 'antd';
+import {Icon, Divider, Tag, Steps} from 'antd';
 import CompnPageContent from "../../_components/compnPageContent";
 
 import {orderService} from "../../_services/order.service"
@@ -14,13 +14,14 @@ import WrappedEditOrderForm from "../../_components/order/_compnEditOrderForm"
 
 const Step = Steps.Step;
 
-function arr_set_add(arr,obj){
-    if(arr&&obj){
-        if(!arr.includes(obj)){
+function arr_set_add(arr, obj) {
+    if (arr && obj) {
+        if (!arr.includes(obj)) {
             arr.push(obj)
         }
     }
 }
+
 export default class PageOrderN extends React.Component {
     constructor(props) {
         super(props);
@@ -29,11 +30,11 @@ export default class PageOrderN extends React.Component {
             orders: [],
             one_order: {},
             users: {},
-            one_user:{},
+            one_user: {},
             customers: {},
             my_customers: [],
-            one_customer:{},
-            one_contract:{},
+            one_customer: {},
+            one_contract: {},
             my_contracts: [],
             currency_list: orderRelatedConstrants.currency_list
         }
@@ -46,15 +47,15 @@ export default class PageOrderN extends React.Component {
             // let user_names_set = new Set();
             let user_names_set = [];
             // let customer_ids_set = new Set();
-            let customer_ids_set =[];
+            let customer_ids_set = [];
             let orders = data.orders;
             for (let idx in orders) {
                 // user_names_set.add(orders[idx].added_by_user_name);
-                arr_set_add(user_names_set,orders[idx].added_by_user_name)
+                arr_set_add(user_names_set, orders[idx].added_by_user_name)
                 // user_names_set.add(orders[idx].sign_by_user_name);
-                arr_set_add(user_names_set,orders[idx].sign_by_user_name)
+                arr_set_add(user_names_set, orders[idx].sign_by_user_name)
                 // customer_ids_set.add(orders[idx].customer_id)
-                arr_set_add(customer_ids_set,orders[idx].customer_id)
+                arr_set_add(customer_ids_set, orders[idx].customer_id)
             }
             // let user_names = Array.from(user_names_set).toString();
             let user_names = user_names_set.toString();
@@ -120,7 +121,7 @@ export default class PageOrderN extends React.Component {
             let customer = this.state.customers[data.order["customer_id"]];
             if (customer !== undefined) {
                 this.setState({
-                    one_customer:customer
+                    one_customer: customer
                 });
             }
             this.setState({
@@ -132,14 +133,13 @@ export default class PageOrderN extends React.Component {
 
     func_delete_one_order() {
         this.setState({loading: true});
-        orderService.deleteOrder(this.state.one_order.order_id).then(data=>{
+        orderService.deleteOrder(this.state.one_order.order_id).then(data => {
             this.setState({
                 loading: false,
             })
             this.func_update_orders();
         });
     }
-
 
 
     func_sub_title() {
@@ -218,19 +218,19 @@ export default class PageOrderN extends React.Component {
                 render: (text, record) => {
                     let full_name;
                     let contract;
-                    for(let idx in this.state.my_contracts){
-                        if(this.state.my_contracts[idx].contract_id===record["contract_id"]){
-                            contract=this.state.my_contracts[idx]
+                    for (let idx in this.state.my_contracts) {
+                        if (this.state.my_contracts[idx].contract_id === record["contract_id"]) {
+                            contract = this.state.my_contracts[idx]
                         }
                     }
-                    if(contract){
+                    if (contract) {
                         let user = this.state.users[contract["sign_by_user_name"]];
                         if (user) {
                             full_name = user.employee_info.full_name;
                         } else {
                             full_name = "用户名: " + contract["sign_by_user_name"];
                         }
-                    }else{
+                    } else {
                         full_name = "用户名: 未知"
                     }
 
@@ -413,8 +413,8 @@ export default class PageOrderN extends React.Component {
                         <td>{this.func_order_type_tag(one_item["order_type"])}</td>
                     </tr>
                     {/*<tr>*/}
-                        {/*<td>订单当前状态</td>*/}
-                        {/*<td>{this.func_order_status_tag(one_item["order_status"])}</td>*/}
+                    {/*<td>订单当前状态</td>*/}
+                    {/*<td>{this.func_order_status_tag(one_item["order_status"])}</td>*/}
                     {/*</tr>*/}
                     <tr>
                         <td>订单期限</td>
@@ -459,15 +459,18 @@ export default class PageOrderN extends React.Component {
 
     func_content_edit_one() {
         return (
-            <WrappedEditOrderForm
-                one_order={this.state.one_order}
-                one_customer={this.state.one_customer}
-                currency_list={this.state.currency_list}
-            />
+            <div>
+                <h4>订单编号:{this.state.one_order.order_id}</h4>
+                <WrappedEditOrderForm
+                    one_order={this.state.one_order}
+                    one_customer={this.state.one_customer}
+                    currency_list={this.state.currency_list}
+                />
+            </div>
         );
     }
 
-    func_content_header(){
+    func_content_header() {
         return <div></div>
     }
 

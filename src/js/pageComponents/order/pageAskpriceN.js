@@ -117,7 +117,7 @@ export default class PageAskPriceN extends React.Component {
         this.setState({loading: true});
         askPriceService.deleteOneAskPrice(this.state.one_ask_price.ask_price_id).then(data => {
             this.setState({
-                loading:false
+                loading: false
             })
             this.func_update_ask_prices();
         })
@@ -189,19 +189,19 @@ export default class PageAskPriceN extends React.Component {
                     if (text === 'waiting') {
                         return (
                             <span>
-                    <Tag color="geekblue">等待审批<Icon type="clock-circle" /></Tag>
+                    <Tag color="geekblue">等待审批<Icon type="clock-circle"/></Tag>
                     </span>
                         )
                     } else if (text === 'pass') {
                         return (
                             <span>
-                    <Tag color="green">审批通过<Icon type="check-circle" /></Tag>
+                    <Tag color="green">审批通过<Icon type="check-circle"/></Tag>
                     </span>
                         )
                     } else {
                         return (
                             <span>
-                    <Tag color="red">审批拒绝<Icon type="exclamation-circle" /></Tag>
+                    <Tag color="red">审批拒绝<Icon type="exclamation-circle"/></Tag>
                     </span>
                         )
                     }
@@ -244,15 +244,15 @@ export default class PageAskPriceN extends React.Component {
         let approve_status;
         if (one_item["approve_status"] === 'waiting') {
             approve_status = <span>
-                    <Tag color="geekblue">等待审批<Icon type="clock-circle" /></Tag>
+                    <Tag color="geekblue">等待审批<Icon type="clock-circle"/></Tag>
                     </span>
         } else if (one_item["approve_status"] === 'pass') {
             approve_status = <span>
-                    <Tag color="green">审批通过<Icon type="check-circle" /></Tag>
+                    <Tag color="green">审批通过<Icon type="check-circle"/></Tag>
                     </span>
         } else {
             approve_status = <span>
-                    <Tag color="red">审批拒绝<Icon type="exclamation-circle" /></Tag>
+                    <Tag color="red">审批拒绝<Icon type="exclamation-circle"/></Tag>
                     </span>
         }
 
@@ -270,7 +270,7 @@ export default class PageAskPriceN extends React.Component {
                         <td>{one_item["created_at"]}</td>
                     </tr>
                     <tr>
-                        <td style={{minWidth:80}}>客户</td>
+                        <td style={{minWidth: 80}}>客户</td>
                         <td>{company_name}</td>
                     </tr>
                     <tr>
@@ -304,10 +304,16 @@ export default class PageAskPriceN extends React.Component {
 
     func_content_edit_one() {
         return (
-            <WrappedEditAskPriceForm my_customers={this.state.my_customers} ask_price={this.state.one_ask_price}/>
+            <div>
+                <h4>询价编号:{this.state.one_ask_price.ask_price_id}</h4>
+                <WrappedEditAskPriceForm
+                    my_customers={this.state.my_customers}
+                    ask_price={this.state.one_ask_price}/>
+            </div>
         );
     }
-    func_content_header(){
+
+    func_content_header() {
         return <div></div>
     }
 

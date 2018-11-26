@@ -1,12 +1,14 @@
 import React from 'react';
-import {Form, Input, DatePicker, Radio, Select, Popconfirm, Spin, Divider, Button, AutoComplete} from 'antd';
+import {Form, Input, DatePicker, Select, Popconfirm, Spin, Button, } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 import {contractService} from '../../_services/contract.service';
+import moment from "moment/moment";
+
 const { TextArea } = Input;
-class NewContractForm extends React.Component {
+class EditContractForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,9 +44,9 @@ class NewContractForm extends React.Component {
             if (!err) {
                 this.setState({loading: true});
                 let contract = {
-                    "id": -1,
-                    "contract_id": "",
-                    "added_by_user_name": "",
+                    "id": this.props.contract.id,
+                    "contract_id": this.props.contract.contract_id,
+                    "added_by_user_name": this.props.contract.added_by_user_name,
                     "sign_by_user_name": values["sign_by_user_name"],
                     "customer_id": values["customer_id"],
                     "sign_at": values["sign_at"],
@@ -53,8 +55,8 @@ class NewContractForm extends React.Component {
                     "total_value": values["total_value"],
                     "total_value_currency": values["total_value_currency"],
                     "description": values["description"],
-                    "contract_status": 1,
-                    "comment": "",
+                    "contract_status": this.props.contract.contract_status,
+                    "comment": this.props.contract.comment,
                     "status": 1
                 };
                 contractService.addOneContract(contract).then(data => {
@@ -94,6 +96,7 @@ class NewContractForm extends React.Component {
                 },
             },
         };
+        let contract=this.props.contract;
 
         let my_customers = this.props.my_customers;
         let currency_list = this.props.currency_list;
@@ -104,7 +107,7 @@ class NewContractForm extends React.Component {
             currencySelectorOptions.push(<Option key={k} value={k}>{currency_list[k]}</Option>)
         }
         const currencySelector = getFieldDecorator('total_value_currency', {
-            initialValue: 'rmb',
+            initialValue: contract.total_value_currency,
         })(
             <Select>
                 {currencySelectorOptions}
@@ -123,6 +126,7 @@ class NewContractForm extends React.Component {
             rules: [{
                 required: true, message: '请输入客户名称!',
             }],
+            initialValue: contract.customer_id,
         })(
             <Select
                 showSearch
@@ -148,6 +152,7 @@ class NewContractForm extends React.Component {
             rules: [{
                 required: true, message: '请输入合同负责人!',
             }],
+            initialValue: contract.sign_by_user_name,
         })(
             <Select
                 showSearch
@@ -182,6 +187,7 @@ class NewContractForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入合同签署日期!',
                             }],
+                            initialValue: moment(contract.sign_at, "YYYY-MM-DD"),
                         })(
                             <DatePicker/>
                         )}
@@ -194,6 +200,7 @@ class NewContractForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入合同开始日期!',
                             }],
+                            initialValue: moment(contract.start_date, "YYYY-MM-DD"),
                         })(
                             <DatePicker/>
                         )}
@@ -206,6 +213,7 @@ class NewContractForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入合同结束日期!',
                             }],
+                            initialValue: moment(contract.end_date, "YYYY-MM-DD"),
                         })(
                             <DatePicker/>
                         )}
@@ -218,6 +226,7 @@ class NewContractForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入订单总额!',
                             }],
+                            initialValue: contract.total_value,
                         })(
                             <Input addonBefore={currencySelector}/>
                         )}
@@ -230,6 +239,7 @@ class NewContractForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入合同描述信息!',
                             }],
+                            initialValue: contract.description,
                         })(
                             <TextArea rows={4}/>
                         )}
@@ -247,5 +257,5 @@ class NewContractForm extends React.Component {
     }
 }
 
-const WrappedNewContractForm = Form.create()(NewContractForm);
-export default WrappedNewContractForm;
+const WrappedEditContractForm = Form.create()(EditContractForm);
+export default WrappedEditContractForm;

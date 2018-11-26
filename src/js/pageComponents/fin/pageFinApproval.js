@@ -4,8 +4,8 @@ import CompnPageContent from "../../_components/compnPageContent";
 
 import {finService} from "../../_services/fin.service"
 import {commonService} from "../../_services/common.service"
-import WrappedNewInventoryForm from "../../_components/warehouse/_compNewInventoryForm"
-import WrappedEditInventoryForm from "../../_components/warehouse/_compEditInventoryForm"
+import {askPriceService} from "../../_services/askprice.service"
+import {contractService} from "../../_services/contract.service"
 
 const RadioGroup = Radio.Group;
 
@@ -32,6 +32,7 @@ export default class PageFinApproval extends React.Component {
             one_item: {},
             inventory_types: [],
             waiting_count:0,
+            ref_item:{},
         }
         // subPage: 'rm'
         finService.getFinApprovalsByType(this.state.subPage).then(data => {
@@ -91,7 +92,20 @@ export default class PageFinApproval extends React.Component {
                 loading: false,
                 one_item: data,
             })
-        })
+            if(this.state.subPage.indexOf('ask_price')>0){
+                askPriceService.getOneItemByAskPriceId(data.ref_id).then(data1 => {
+                    this.setState({
+                        ref_item: data1,
+                    })
+                });
+            }else if(this.state.subPage.indexOf('contract')>0){
+                contractService.getOneByContractId(data.ref_id).then(data2 => {
+                    this.setState({
+                        ref_item: data2,
+                    })
+                });
+            }
+        });
         commonService.getFinApprovalCountByStatus('waiting').then(data=>{
             this.setState({
                 waiting_count: data.count,

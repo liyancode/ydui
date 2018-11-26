@@ -8,10 +8,11 @@ import {orderRelatedConstrants} from "../../_helpers/orderRelatedConstrants"
 import {customerService} from "../../_services/customer.service";
 
 import WrappedNewContractForm from "../../_components/order/_compnNewContractForm"
+import WrappedEditContractForm from "../../_components/order/_compnEditContractForm"
 
-function arr_set_add(arr,obj){
-    if(arr&&obj){
-        if(!arr.includes(obj)){
+function arr_set_add(arr, obj) {
+    if (arr && obj) {
+        if (!arr.includes(obj)) {
             arr.push(obj)
         }
     }
@@ -25,10 +26,10 @@ export default class PageContractN extends React.Component {
             contracts: [],
             one_contract: {},
             users: {},
-            can_sign_contract_users:[],
+            can_sign_contract_users: [],
             customers: {},
             my_customers: [],
-            currency_list:orderRelatedConstrants.currency_list
+            currency_list: orderRelatedConstrants.currency_list
         }
 
         contractService.getAll().then(data => {
@@ -43,11 +44,11 @@ export default class PageContractN extends React.Component {
 
             for (let idx in data) {
                 // user_names_set.add(data[idx].added_by_user_name);
-                arr_set_add(user_names_set,data[idx].added_by_user_name);
+                arr_set_add(user_names_set, data[idx].added_by_user_name);
                 // user_names_set.add(data[idx].sign_by_user_name);
-                arr_set_add(user_names_set,data[idx].sign_by_user_name);
+                arr_set_add(user_names_set, data[idx].sign_by_user_name);
                 // customer_ids_set.add(data[idx].customer_id);
-                arr_set_add(customer_ids_set,data[idx].customer_id);
+                arr_set_add(customer_ids_set, data[idx].customer_id);
             }
             // let user_names = Array.from(user_names_set).toString();
             let user_names = user_names_set.toString();
@@ -65,7 +66,6 @@ export default class PageContractN extends React.Component {
                     this.setState({
                         customers: data,
                     })
-
                 });
             }
             customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
@@ -99,12 +99,43 @@ export default class PageContractN extends React.Component {
                 loading: false,
                 contracts: data,
             })
+            // let user_names_set = new Set();
+            let user_names_set = [];
+            // let customer_ids_set = new Set();
+            let customer_ids_set = [];
+
+            for (let idx in data) {
+                // user_names_set.add(data[idx].added_by_user_name);
+                arr_set_add(user_names_set, data[idx].added_by_user_name);
+                // user_names_set.add(data[idx].sign_by_user_name);
+                arr_set_add(user_names_set, data[idx].sign_by_user_name);
+                // customer_ids_set.add(data[idx].customer_id);
+                arr_set_add(customer_ids_set, data[idx].customer_id);
+            }
+            // let user_names = Array.from(user_names_set).toString();
+            let user_names = user_names_set.toString();
+            if (user_names.length > 0) {
+                commonService.getUsersByUsernames(user_names).then(data => {
+                    this.setState({
+                        users: data,
+                    })
+                });
+            }
+            // let customer_ids = Array.from(customer_ids_set).toString();
+            let customer_ids = customer_ids_set.toString();
+            if (customer_ids.length > 0) {
+                commonService.getCustomersByCustomerIds(customer_ids).then(data => {
+                    this.setState({
+                        customers: data,
+                    })
+                });
+            }
         })
     }
 
-    func_update_one_contract(id) {
+    func_update_one_contract(contract_id) {
         this.setState({loading: true});
-        contractService.getOneItemById(id).then(data => {
+        contractService.getOneByContractId(contract_id).then(data => {
             this.setState({
                 loading: false,
                 one_contract: data,
@@ -112,14 +143,15 @@ export default class PageContractN extends React.Component {
         })
     }
 
-    func_delete_one_contract(id) {
-        // this.setState({loading: true});
-        // askPriceService.getOneItemById(id).then(data => {
-        //     this.setState({
-        //         loading:false,
-        //         one_ask_price: data,
-        //     })
-        // })
+    func_delete_one_contract() {
+        this.setState({loading: true});
+        contractService.deleteOneContract(this.state.one_contract.contract_id).then(data => {
+            this.setState({
+                loading: false,
+                one_ask_price: data,
+            })
+            this.func_update_contracts();
+        })
     }
 
     func_sub_title() {
@@ -208,7 +240,7 @@ export default class PageContractN extends React.Component {
                     return (<span>
                         <a href="javascript:;"
                            onClick={props.checkDetailOnclick}
-                           id={record["id"]}>详细信息</a>
+                           id={record.contract_id}>详细信息</a>
                         </span>)
                 },
             }
@@ -240,9 +272,9 @@ export default class PageContractN extends React.Component {
         } else {
             sign_by_user_full_name = "用户名: " + one_item["sign_by_user_name"];
         }
-        let currency='*';
-        if(one_item["total_value_currency"]){
-            currency=this.state.currency_list[one_item["total_value_currency"].toLowerCase()];
+        let currency = '*';
+        if (one_item["total_value_currency"]) {
+            currency = this.state.currency_list[one_item["total_value_currency"].toLowerCase()];
         }
 
         return (
@@ -304,15 +336,23 @@ export default class PageContractN extends React.Component {
     }
 
     func_content_edit_one() {
-        let one_item = this.state.one_ask_price;
         return (
-            <div>编辑询价{one_item.id}</div>
+            <div>
+                <h4>合同编号:{this.state.one_contract.contract_id}</h4>
+                <WrappedEditContractForm
+                    my_customers={this.state.my_customers}
+                    currency_list={this.state.currency_list}
+                    can_sign_contract_users={this.state.can_sign_contract_users}
+                    contract={this.state.one_contract}
+                />
+            </div>
         );
     }
 
-    func_content_header(){
+    func_content_header() {
         return <div></div>
     }
+
     render() {
         return (
             <CompnPageContent
@@ -322,7 +362,7 @@ export default class PageContractN extends React.Component {
                 one_item={this.state.one_contract}
                 update_items={this.func_update_contracts}
                 update_one_item={this.func_update_one_contract}
-                update_one_item_by_key={"id"}
+                update_one_item_by_key={"contract_id"}
                 delete_one_item={this.func_delete_one_contract}
                 _compnViewOne={this.func_content_view_one}
                 _compnCreateOne={this.func_content_create_one}

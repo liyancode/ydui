@@ -4,7 +4,10 @@ import {tokenExpired} from "../_helpers/tokenExpired";
 export const contractService = {
     getAll,
     getOneItemById,
-    addContract,
+    getOneByContractId,
+    addOneContract,
+    updateOneContract,
+    deleteOneContract,
 };
 
 function getAll(){
@@ -24,8 +27,16 @@ function getOneItemById(id){
 
     return fetch(`/api/orders/contracts/contract/by_id/`+id, requestOptions).then(handleResponse);
 }
+function getOneByContractId(contract_id){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
 
-function addContract(contract){
+    return fetch(`/api/orders/contracts/contract/`+contract_id, requestOptions).then(handleResponse);
+}
+
+function addOneContract(contract){
     const requestOptions = {
         method: 'POST',
         headers: authHeader(),
@@ -33,24 +44,24 @@ function addContract(contract){
     };
     return fetch(`/api/orders/contracts/contract`, requestOptions).then(handleResponse);
 }
-//
-// function updateUser(userData){
-//     const requestOptions = {
-//         method: 'PUT',
-//         headers: authHeader(),
-//         body: JSON.stringify(userData)
-//     };
-//     return fetch(`/api/users/user`, requestOptions).then(handleResponse);
-// }
-//
-//
-// function deleteUser(user_id){
-//     const requestOptions = {
-//         method: 'DELETE',
-//         headers: authHeader(),
-//     };
-//     return fetch(`/api/users/`+user_id, requestOptions).then(handleResponse);
-// }
+
+function updateOneContract(ask_price){
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader(),
+        body: JSON.stringify(ask_price)
+    };
+    return fetch(`/api/orders/contracts/contract`, requestOptions).then(handleResponse);
+}
+
+function deleteOneContract(contract_id){
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+
+    return fetch(`/api/orders/contracts/contract/`+contract_id, requestOptions).then(handleResponse);
+}
 
 function handleResponse(response) {
     if (!response.ok) {

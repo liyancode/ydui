@@ -177,7 +177,6 @@ class EditOrderForm extends React.Component {
 
         return (
             <Spin spinning={this.state.loading}>
-                <span style={{color: 'red'}}>[注意：新建订单之前要先建合同记录!]</span>
                 <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
                     <FormItem
                         {...formItemLayout}
