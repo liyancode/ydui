@@ -6,6 +6,7 @@ import {askPriceService} from "../../_services/askprice.service"
 import {commonService} from "../../_services/common.service"
 
 import WrappedNewAskPriceForm from "../../_components/order/_compnNewAskPriceForm"
+import WrappedEditAskPriceForm from "../../_components/order/_compnEditAskPriceForm"
 import {customerService} from "../../_services/customer.service";
 
 export default class PageAskPriceN extends React.Component {
@@ -75,12 +76,36 @@ export default class PageAskPriceN extends React.Component {
                 loading: false,
                 ask_prices: data,
             })
+            let user_names_set = new Set();
+            let customer_ids_set = new Set();
+            for (let idx in data) {
+                user_names_set.add(data[idx].added_by_user_name);
+                user_names_set.add(data[idx].approve_by_user_name);
+                customer_ids_set.add(data[idx].customer_id)
+            }
+            let user_names = Array.from(user_names_set).toString();
+            if (user_names.length > 0) {
+                commonService.getUsersByUsernames(user_names).then(data => {
+                    this.setState({
+                        users: data,
+                    })
+                });
+            }
+            let customer_ids = Array.from(customer_ids_set).toString();
+            if (customer_ids.length > 0) {
+                commonService.getCustomersByCustomerIds(customer_ids).then(data => {
+                    this.setState({
+                        customers: data,
+                    })
+
+                });
+            }
         })
     }
 
-    func_update_one_ask_price(id) {
+    func_update_one_ask_price(ask_price_id) {
         this.setState({loading: true});
-        askPriceService.getOneItemById(id).then(data => {
+        askPriceService.getOneItemByAskPriceId(ask_price_id).then(data => {
             this.setState({
                 loading: false,
                 one_ask_price: data,
@@ -88,14 +113,14 @@ export default class PageAskPriceN extends React.Component {
         })
     }
 
-    func_delete_one_ask_price(id) {
-        // this.setState({loading: true});
-        // askPriceService.getOneItemById(id).then(data => {
-        //     this.setState({
-        //         loading:false,
-        //         one_ask_price: data,
-        //     })
-        // })
+    func_delete_one_ask_price() {
+        this.setState({loading: true});
+        askPriceService.deleteOneAskPrice(this.state.one_ask_price.ask_price_id).then(data => {
+            this.setState({
+                loading:false
+            })
+            this.func_update_ask_prices();
+        })
     }
 
     func_sub_title() {
@@ -191,7 +216,7 @@ export default class PageAskPriceN extends React.Component {
                 render: (text, record) => {
                     return (<span>
             <a href="javascript:;" onClick={props.checkDetailOnclick}
-               id={record.id}>查看详情</a>
+               id={record.ask_price_id}>查看详情</a>
             </span>)
                 },
             }]
@@ -278,10 +303,8 @@ export default class PageAskPriceN extends React.Component {
     }
 
     func_content_edit_one() {
-        let one_item = this.state.one_ask_price;
-        console.log(one_item);
         return (
-            <div>编辑询价{one_item.id}</div>
+            <WrappedEditAskPriceForm my_customers={this.state.my_customers} ask_price={this.state.one_ask_price}/>
         );
     }
     func_content_header(){
@@ -297,7 +320,7 @@ export default class PageAskPriceN extends React.Component {
                 one_item={this.state.one_ask_price}
                 update_items={this.func_update_ask_prices}
                 update_one_item={this.func_update_one_ask_price}
-                update_one_item_by_key={"id"}
+                update_one_item_by_key={"ask_price_id"}
                 delete_one_item={this.func_delete_one_ask_price}
                 _compnViewOne={this.func_content_view_one}
                 _compnCreateOne={this.func_content_create_one}
