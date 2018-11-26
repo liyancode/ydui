@@ -1,10 +1,9 @@
 import React from 'react';
 import {Card, Icon, Steps, Table, Layout, Timeline, Divider, Spin, Button, Progress, Breadcrumb} from 'antd';
 
-const {Content, Footer} = Layout;
+const {Content, } = Layout;
 import CompnSider from "../_components/compnSider";
 import CompnHeader from "../_components/compnHeader";
-import CompnFooter from "../_components/compnFooter";
 
 import WrappedNewCustomerForm from "../_components/_compnNewCustomerForm";
 import WrappedEditCustomerForm from "../_components/_compnEditCustomerForm";
@@ -116,7 +115,7 @@ const PageContent = (props) => {
                                 </tr>
                                 <tr>
                                     <td><span>公司所在地</span>
-                                    <Icon type="environment-o"/></td>
+                                        <Icon type="environment-o"/></td>
                                     <td>{customer["company_location"]}</td>
                                 </tr>
                                 <tr>
@@ -130,7 +129,7 @@ const PageContent = (props) => {
                                     <td>{customer["company_legal_person"]}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{minWidth:120}}><span>公司主营业务</span><Icon type="global"/></td>
+                                    <td style={{minWidth: 120}}><span>公司主营业务</span><Icon type="global"/></td>
                                     <td>{customer["company_main_business"]}</td>
                                 </tr>
                                 <tr>
@@ -148,7 +147,7 @@ const PageContent = (props) => {
                                     <td>{customer["company_email"]}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{minWidth:120}}>备注</td>
+                                    <td style={{minWidth: 120}}>备注</td>
                                     <td>{customer["comment"]}</td>
                                 </tr>
                                 <tr>
@@ -260,7 +259,7 @@ export default class PageCRM extends React.Component {
             loading: true,
             page: 'view_all',//view_one/add_new/view_all/edit_customer/edit_contact
             breadcrumb: breadcrumbKeyWord,
-            subPage:subpage,
+            subPage: subpage,
             one_customer: null,
             one_contact: null,
             customers: [],
@@ -268,7 +267,9 @@ export default class PageCRM extends React.Component {
                 {
                     title: '客户编号',
                     dataIndex: 'customer_id',
-                    key: 'customer_id'
+                    key: 'customer_id',
+                    defaultSortOrder: 'descend',
+                    sorter: (a, b) => a.customer_id - b.customer_id,
                 },
                 {
                     title: '创建者',
@@ -278,10 +279,14 @@ export default class PageCRM extends React.Component {
                     title: '创建时间',
                     dataIndex: 'created_at',
                     key: 'created_at',
+                    defaultSortOrder: 'descend',
+                    sorter: (a, b) => a.created_at > b.created_at?1:-1,
                 }, {
                     title: '公司名称',
                     dataIndex: 'company_name',
                     key: 'company_name',
+                    defaultSortOrder: 'descend',
+                    sorter: (a, b) => a.company_name > b.company_name?1:-1,
                 }, {
                     title: '公司法人',
                     dataIndex: 'company_legal_person',
@@ -290,6 +295,8 @@ export default class PageCRM extends React.Component {
                     title: '公司所在地',
                     dataIndex: 'company_location',
                     key: 'company_location',
+                    defaultSortOrder: 'descend',
+                    sorter: (a, b) => a.company_location > b.company_location?1:-1,
                 }, {
                     title: '跟进状态',
                     key: 'progress',
@@ -324,7 +331,7 @@ export default class PageCRM extends React.Component {
         this.handleEditContactBtnOnclick = this.handleEditContactBtnOnclick.bind(this);
         this.handleBackFromEditCustomerBtnOnclick = this.handleBackFromEditCustomerBtnOnclick.bind(this);
 
-        customerService.getCustomers(localStorage.getItem('user_name'),subpage).then(data => {
+        customerService.getCustomers(localStorage.getItem('user_name'), subpage).then(data => {
             this.setState({customers: data["customers"], loading: false});
         });
     }
@@ -347,7 +354,7 @@ export default class PageCRM extends React.Component {
 
     handleReloadBtnOnclick() {
         this.setState({loading: true});
-        customerService.getCustomers(localStorage.getItem('user_name'),this.state.subPage).then(data => {
+        customerService.getCustomers(localStorage.getItem('user_name'), this.state.subPage).then(data => {
             this.setState({customers: data["customers"], loading: false});
         });
     };

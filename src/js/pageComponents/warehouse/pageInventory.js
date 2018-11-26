@@ -150,7 +150,7 @@ export default class PageInventory extends React.Component {
                 dataIndex: 'inventory_type_id',
                 key: 'inventory_type_id',
                 defaultSortOrder: 'descend',
-                sorter: (a, b) => a.created_at - b.created_at,
+                sorter: (a, b) => a.inventory_type_id - b.inventory_type_id,
                 render: (text, record) => {
                     let inventory_type_name=null;
                     const inventory_types=this.state.inventory_types;
@@ -174,7 +174,7 @@ export default class PageInventory extends React.Component {
                 dataIndex: 'last_update_at',
                 key: 'last_update_at',
                 defaultSortOrder: 'descend',
-                sorter: (a, b) => a.created_at - b.created_at,
+                sorter: (a, b) => a.last_update_at - b.last_update_at,
             },{
                 title: '描述',
                 dataIndex: 'description',

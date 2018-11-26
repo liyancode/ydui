@@ -56,11 +56,11 @@ class EditOrderForm extends React.Component {
                     "added_by_user_name": this.props.one_order.added_by_user_name,
                     "sign_by_user_name": this.props.one_order.sign_by_user_name,
                     "order_status": values["order_status"],
-                    "order_status_update_by": "",
+                    "order_status_update_by": this.props.one_order.order_status_update_by,
                     "is_finished": this.props.one_order.is_finished,
                     "comment": this.props.one_order.comment,
-                    "contract_id": values["contract_id"],
-                    "customer_id": values["customer_id"],
+                    "contract_id": this.props.one_order.contract_id,
+                    "customer_id": this.props.one_order.customer_id,
                     "order_type": values["order_type"],
                     "start_date": values["start_date"],
                     "end_date": values["end_date"],
@@ -186,7 +186,7 @@ class EditOrderForm extends React.Component {
                             rules: [{
                                 required: true, message: '合同编号!',
                             }],
-                            initialValue:one_order.contract_id
+                            initialValue:one_order.contract_id+'['+one_customer.company_name+']'
                         })(
                             <Input disabled={true}/>
                         )}
@@ -199,7 +199,7 @@ class EditOrderForm extends React.Component {
                             rules: [{
                                 required: true, message: '客户名称!',
                             }],
-                            initialValue:one_order.customer_id
+                            initialValue:one_customer.company_name
                         })(
                             <Input disabled={true} placeholder={one_customer.company_name}/>
                         )}
