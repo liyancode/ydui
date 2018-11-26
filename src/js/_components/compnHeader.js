@@ -11,7 +11,7 @@ const CompnHeader = (props) => {
         <Header style={{background: '#fff',padding: 0,borderBottom: '1px solid #eee'}}>
                     <span>
                         <Divider type="vertical"/>
-                        <a href={'#/hr'}><Avatar shape="square" size="small" src={require("../../assets/img/avt_ym.jpeg")}/></a>
+                        <a href={'#/hr_myinfo'}><Avatar shape="square" size="small" style={{ backgroundColor: '#87d068' }} icon="user"/></a>
                         {/*<Icon type="user" />*/}
                         <span>{" "+localStorage.getItem('user_name')}</span>
                         <Divider type="vertical"/>
