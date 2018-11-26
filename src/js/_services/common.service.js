@@ -5,6 +5,7 @@ export const commonService = {
     getUsersByUsernames,
     getCustomersByCustomerIds,
     getAllCanSignContractUsers,
+    getFinApprovalCountByStatus,
 };
 
 const apiStartPath='/api/common';
@@ -37,6 +38,14 @@ function getCustomersByCustomerIds(customer_ids){
     };
 
     return fetch(apiStartPath+`/customers/`+customer_ids, requestOptions).then(handleResponse);
+}
+
+function getFinApprovalCountByStatus(status){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(apiStartPath+`/fin_approvals/count/`+status, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
