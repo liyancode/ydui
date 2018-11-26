@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Layout, Menu} from 'antd';
+import {Icon, Layout, Menu,Badge} from 'antd';
 import {authorityHash} from '../_helpers/authorityConstants.js';
 
 const {Sider} = Layout;
@@ -131,6 +131,10 @@ const CompnSider = (props) => {
     }
 
     //--- fin
+    let fa_count=0;
+    if(props.fin_approval_count){
+        fa_count=props.fin_approval_count;
+    }
     let fin_autho = user_authority['fin']
     if (fin_autho === 'r') {
 
@@ -138,7 +142,7 @@ const CompnSider = (props) => {
         menu_items.push(
             <SubMenu
                 key="fin_m"
-                title={<span><Icon type="table" /><span>财务审批</span></span>}
+                title={<span><Icon type="table" /><span>财务审批</span>&nbsp;<Badge count={fa_count}/></span>}
             >
                 <Menu.Item key="fap_ask_price">
                     <Link to='/fap_ask_price' replace>
