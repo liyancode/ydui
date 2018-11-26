@@ -33,7 +33,9 @@ import PageContractN from "./js/pageComponents/order/pageContractN";
 import PageAskPriceN from "./js/pageComponents/order/pageAskpriceN";
 import PageOrderN from "./js/pageComponents/order/pageOrderN";
 
-import PageRawMaterial from "./js/pageComponents/warehouse/pageRawMaterial";
+import PageInventory from "./js/pageComponents/warehouse/pageInventory";
+
+import PageFinApproval  from "./js/pageComponents/fin/pageFinApproval";
 
 class App extends React.Component {
     constructor(props) {
@@ -67,8 +69,17 @@ class App extends React.Component {
         }
         //--- crm
         if (user_authority['crm'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/crm" component={PageCRM} key='prt_crm'/>)
+            private_routes.push(<PrivateRoute path="/crm_my" component={PageCRM} key='prt_crm_my'/>)
+            if(user_authority['crm']==='rw'){
+                private_routes.push(<PrivateRoute path="/crm_all" component={PageCRM} key='prt_crm_all'/>)
+            }
         }
+        // if (user_authority['crm'] !== 'n') {
+        //     private_routes.push(<PrivateRoute path="/crm_my" component={PageCRMMy} key='prt_crm_my'/>)
+        //     if(user_authority['crm']==='rw'){
+        //         private_routes.push(<PrivateRoute path="/crm_all" component={PageCRMMy} key='prt_crm_all'/>)
+        //     }
+        // }
         //--- order
         if (user_authority['order'] !== 'n') {
             private_routes.push(<PrivateRoute path="/ask_price" component={PageAskPriceN} key='prt_ask_price'/>)
@@ -77,7 +88,8 @@ class App extends React.Component {
         }
         //--- fin
         if (user_authority['fin'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/fin" component={PageFin} key='prt_fin'/>)
+            // private_routes.push(<PrivateRoute path="/fin" component={PageFin} key='prt_fin'/>)
+            private_routes.push(<PrivateRoute path="/fap_ask_price" component={PageFinApproval} key='prt_fap_ask_price'/>)
         }
         //--- product
         if (user_authority['product'] !== 'n') {
@@ -86,7 +98,9 @@ class App extends React.Component {
         }
         //--- warehouse
         if (user_authority['warehouse'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/wh_rm" component={PageRawMaterial} key='prt_wh_rm'/>)
+            private_routes.push(<PrivateRoute path="/wh_rm" component={PageInventory} key='prt_wh_rm'/>)
+            private_routes.push(<PrivateRoute path="/wh_fp" component={PageInventory} key='prt_wh_fp'/>)
+            private_routes.push(<PrivateRoute path="/wh_sfp" component={PageInventory} key='prt_wh_sfp'/>)
         }
         return (
             <HashRouter>
