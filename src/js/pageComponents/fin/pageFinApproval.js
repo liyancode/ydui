@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Divider, Tag,Radio} from 'antd';
+import {Icon, Divider, Tag, Radio, Button} from 'antd';
 import CompnPageContent from "../../_components/compnPageContent";
 
 import {finService} from "../../_services/fin.service"
@@ -26,13 +26,15 @@ export default class PageFinApproval extends React.Component {
         this.state = {
             subPage: subpage,
             breadcrumbKeyWord: breadcrumbKeyWord,
-            status_select:'all',
+            status_select: 'all',
             loading: true,
             items: [],
             one_item: {},
             inventory_types: [],
-            waiting_count:0,
-            ref_item:{},
+            waiting_count: 0,
+            ref_item: {},
+            customers: {},
+            users: {},
         }
         // subPage: 'rm'
         finService.getFinApprovalsByType(this.state.subPage).then(data => {
@@ -42,7 +44,7 @@ export default class PageFinApproval extends React.Component {
             })
         });
 
-        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+        commonService.getFinApprovalCountByStatus('waiting').then(data => {
             this.setState({
                 waiting_count: data.count,
             })
@@ -58,27 +60,29 @@ export default class PageFinApproval extends React.Component {
         this.func_content_edit_one = this.func_content_edit_one.bind(this);
         this.func_content_header = this.func_content_header.bind(this);
         this.onChangeStatusRadio = this.onChangeStatusRadio.bind(this);
+        this.func_status_tag = this.func_status_tag.bind(this);
+        this.func_approve = this.func_approve.bind(this);
     };
 
     func_update_items() {
         this.setState({loading: true});
-        if(this.state.status_select==='all'){
+        if (this.state.status_select === 'all') {
             finService.getFinApprovalsByType(this.state.subPage).then(data => {
                 this.setState({
                     loading: false,
                     items: data.fin_approvals,
                 })
             });
-        }else{
+        } else {
             this.setState({loading: true});
-            finService.getFinApprovalsByTypeAndResult(this.state.subPage,this.state.status_select).then(data => {
+            finService.getFinApprovalsByTypeAndResult(this.state.subPage, this.state.status_select).then(data => {
                 this.setState({
                     loading: false,
                     items: data.fin_approvals,
                 })
             });
         }
-        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+        commonService.getFinApprovalCountByStatus('waiting').then(data => {
             this.setState({
                 waiting_count: data.count,
             })
@@ -92,13 +96,34 @@ export default class PageFinApproval extends React.Component {
                 loading: false,
                 one_item: data,
             })
-            if(this.state.subPage.indexOf('ask_price')>0){
+            if (this.state.subPage.indexOf('ask_price') > 0) {
                 askPriceService.getOneItemByAskPriceId(data.ref_id).then(data1 => {
                     this.setState({
                         ref_item: data1,
                     })
+                    let user_names_set = new Set();
+                    let customer_ids_set = new Set();
+                    user_names_set.add(data1.added_by_user_name);
+                    user_names_set.add(data1.approve_by_user_name);
+                    customer_ids_set.add(data1.customer_id);
+                    let user_names = Array.from(user_names_set).toString();
+                    if (user_names.length > 0) {
+                        commonService.getUsersByUsernames(user_names).then(data => {
+                            this.setState({
+                                users: data,
+                            })
+                        });
+                    }
+                    let customer_ids = Array.from(customer_ids_set).toString();
+                    if (customer_ids.length > 0) {
+                        commonService.getCustomersByCustomerIds(customer_ids).then(data => {
+                            this.setState({
+                                customers: data,
+                            })
+                        });
+                    }
                 });
-            }else if(this.state.subPage.indexOf('contract')>0){
+            } else if (this.state.subPage.indexOf('contract') > 0) {
                 contractService.getOneByContractId(data.ref_id).then(data2 => {
                     this.setState({
                         ref_item: data2,
@@ -106,7 +131,7 @@ export default class PageFinApproval extends React.Component {
                 });
             }
         });
-        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+        commonService.getFinApprovalCountByStatus('waiting').then(data => {
             this.setState({
                 waiting_count: data.count,
             })
@@ -121,7 +146,7 @@ export default class PageFinApproval extends React.Component {
             })
             this.func_update_items();
         });
-        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+        commonService.getFinApprovalCountByStatus('waiting').then(data => {
             this.setState({
                 waiting_count: data.count,
             })
@@ -137,6 +162,46 @@ export default class PageFinApproval extends React.Component {
         )
     }
 
+    func_status_tag(status) {
+        if (status === 'waiting') {
+            return (
+                <span>
+                    <Tag color="geekblue">等待审批<Icon type="clock-circle"/></Tag>
+                    </span>
+            )
+        } else if (status === 'pass') {
+            return (
+                <span>
+                    <Tag color="green">审批通过<Icon type="check-circle"/></Tag>
+                    </span>
+            )
+        } else {
+            return (
+                <span>
+                    <Tag color="red">审批拒绝<Icon type="exclamation-circle"/></Tag>
+                    </span>
+            )
+        }
+    }
+
+    func_approve(e){
+        let result=e.target.getAttribute('result');
+        let fa=this.state.one_item;
+        if(result&&fa.approval_result!==result){
+            if(result==='pass'){
+                fa.approval_result='pass';
+            }else if(result==='no'){
+                fa.approval_result='no';
+            }
+            this.setState({loading: true});
+            finService.updateOneFinApproval(fa).then(data=>{
+                this.setState({
+                    loading: false,
+                })
+                this.func_update_one_item(fa.fin_approval_id)
+            });
+        }
+    }
 // {
 //     "ref_id": "880001",
 //     "updated_by_user_name": "admin",
@@ -162,7 +227,7 @@ export default class PageFinApproval extends React.Component {
                 dataIndex: 'created_at',
                 key: 'created_at',
             }, {
-                title: this.state.breadcrumbKeyWord+'编号',
+                title: this.state.breadcrumbKeyWord + '编号',
                 dataIndex: 'ref_id',
                 key: 'ref_id',
             }, {
@@ -173,19 +238,19 @@ export default class PageFinApproval extends React.Component {
                     if (text === 'waiting') {
                         return (
                             <span>
-                    <Tag color="geekblue">等待审批<Icon type="clock-circle" /></Tag>
+                    <Tag color="geekblue">等待审批<Icon type="clock-circle"/></Tag>
                     </span>
                         )
                     } else if (text === 'pass') {
                         return (
                             <span>
-                    <Tag color="green">审批通过<Icon type="check-circle" /></Tag>
+                    <Tag color="green">审批通过<Icon type="check-circle"/></Tag>
                     </span>
                         )
                     } else {
                         return (
                             <span>
-                    <Tag color="red">审批拒绝<Icon type="exclamation-circle" /></Tag>
+                    <Tag color="red">审批拒绝<Icon type="exclamation-circle"/></Tag>
                     </span>
                         )
                     }
@@ -204,6 +269,61 @@ export default class PageFinApproval extends React.Component {
 
     func_content_view_one() {
         let one_item = this.state.one_item;
+        let detail_info = '';
+        if (this.state.subPage.indexOf('ask_price') > 0) {
+            let one_item = this.state.ref_item;
+
+            let company_name;
+            let customer = this.state.customers[one_item["customer_id"]];
+            if (customer) {
+                company_name = customer.company_name;
+            } else {
+                company_name = "公司名未知，客户ID:" + one_item["customer_id"];
+            }
+
+            let user_full_name;
+            let user = this.state.users[one_item["added_by_user_name"]];
+            if (user) {
+                user_full_name = user.employee_info.full_name;
+            } else {
+                user_full_name = "用户名: " + one_item["added_by_user_name"];
+            }
+            detail_info = (
+                <div className="col-sm-12">
+                    <Divider orientation={"left"}><span>询价信息</span><Icon type="team"/></Divider>
+                    <table className="table table-bordered table-condensed">
+                        <tbody>
+                        <tr>
+                            <td>编号</td>
+                            <td>{one_item["ask_price_id"]}</td>
+                        </tr>
+                        <tr>
+                            <td>创建人</td>
+                            <td>{user_full_name}</td>
+                        </tr>
+                        <tr>
+                            <td>创建时间</td>
+                            <td>{one_item["created_at"]}</td>
+                        </tr>
+                        <tr>
+                            <td style={{minWidth: 80}}>客户</td>
+                            <td>{company_name}</td>
+                        </tr>
+                        <tr>
+                            <td>询价描述</td>
+                            <td>{one_item["description"]}</td>
+                        </tr>
+                        <tr>
+                            <td>最后更新</td>
+                            <td>{one_item["last_update_at"]}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
+        } else if (this.state.subPage.indexOf('contract') > 0) {
+
+        }
 
         return (
             <div className="col-sm-12 col-md-6">
@@ -230,8 +350,22 @@ export default class PageFinApproval extends React.Component {
                         <td>描述</td>
                         <td>{one_item["comment"]}</td>
                     </tr>
+                    <tr>
+                        <td>状态</td>
+                        <td>{this.func_status_tag(one_item.approval_result)}</td>
+                    </tr>
+                    <tr>
+                        <td>操作</td>
+                        <td>
+                            <Button type="primary" onClick={this.func_approve} result={'pass'}>审批通过</Button>
+                            &nbsp;
+                            <Button type={"danger"} onClick={this.func_approve} result={'no'}>审批拒绝</Button>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
+                <br/>
+                {detail_info}
             </div>
         );
     }
@@ -248,42 +382,43 @@ export default class PageFinApproval extends React.Component {
         );
     }
 
-    onChangeStatusRadio(e){
-        let status=e.target.value;
+    onChangeStatusRadio(e) {
+        let status = e.target.value;
         this.setState({
             status_select: status,
         });
         this.setState({loading: true});
-        if(status==='all'){
+        if (status === 'all') {
             finService.getFinApprovalsByType(this.state.subPage).then(data => {
                 this.setState({
                     loading: false,
                     items: data.fin_approvals,
                 })
             });
-        }else{
+        } else {
             this.setState({loading: true});
-            finService.getFinApprovalsByTypeAndResult(this.state.subPage,status).then(data => {
+            finService.getFinApprovalsByTypeAndResult(this.state.subPage, status).then(data => {
                 this.setState({
                     loading: false,
                     items: data.fin_approvals,
                 })
             });
         }
-        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+        commonService.getFinApprovalCountByStatus('waiting').then(data => {
             this.setState({
                 waiting_count: data.count,
             })
         });
     }
+
     func_content_header() {
 
         return (
             <RadioGroup onChange={this.onChangeStatusRadio} value={this.state.status_select}>
                 <Radio value={'all'}>所有</Radio>
-                <Radio value={'waiting'}><Tag color="geekblue">等待审批<Icon type="clock-circle" /></Tag></Radio>
-                <Radio value={'pass'}><Tag color="green">审批通过<Icon type="check-circle" /></Tag></Radio>
-                <Radio value={'no'}><Tag color="red">审批拒绝<Icon type="exclamation-circle" /></Tag></Radio>
+                <Radio value={'waiting'}><Tag color="geekblue">等待审批<Icon type="clock-circle"/></Tag></Radio>
+                <Radio value={'pass'}><Tag color="green">审批通过<Icon type="check-circle"/></Tag></Radio>
+                <Radio value={'no'}><Tag color="red">审批拒绝<Icon type="exclamation-circle"/></Tag></Radio>
             </RadioGroup>
         );
     }
@@ -308,6 +443,9 @@ export default class PageFinApproval extends React.Component {
                 siderDefaultOpenKeys={['fin_m']}
                 contentHeader={this.func_content_header}
                 fin_approval_count={this.state.waiting_count}
+                _btnTag_Add={false}
+                _btnTag_Delete={false}
+                _btnTag_Update={false}
             />
         )
     }

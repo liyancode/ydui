@@ -168,12 +168,16 @@ export default class PageContractN extends React.Component {
             {
                 title: '合同编号',
                 dataIndex: 'contract_id',
-                key: 'contract_id'
+                key: 'contract_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.contract_id > b.contract_id?1:-1,
             },
             {
                 title: '记录创建者',
                 dataIndex: 'added_by_user_name',
                 key: 'added_by_user_name',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.added_by_user_name > b.added_by_user_name?1:-1,
                 render: (text, record) => {
                     let full_name;
                     let user = this.state.users[record["added_by_user_name"]];
@@ -192,6 +196,8 @@ export default class PageContractN extends React.Component {
                 title: '合同负责人',
                 dataIndex: 'sign_by_user_name',
                 key: 'sign_by_user_name',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.sign_by_user_name > b.sign_by_user_name?1:-1,
                 render: (text, record) => {
                     let full_name;
                     let user = this.state.users[record["sign_by_user_name"]];
@@ -210,6 +216,8 @@ export default class PageContractN extends React.Component {
                 title: '签订客户',
                 dataIndex: 'customer_id',
                 key: 'customer_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.customer_id > b.customer_id?1:-1,
                 render: (text, record) => {
                     let customer, company_name;
                     customer = this.state.customers[record['customer_id']];
@@ -226,12 +234,16 @@ export default class PageContractN extends React.Component {
             {
                 title: '签订时间',
                 dataIndex: 'sign_at',
-                key: 'sign_at'
+                key: 'sign_at',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.sign_at > b.sign_at?1:-1,
             },
             {
                 title: '合同当前状态',
                 dataIndex: 'contract_status',
-                key: 'contract_status'
+                key: 'contract_status',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.contract_status > b.contract_status?1:-1,
             },
             {
                 title: '操作',
@@ -372,6 +384,9 @@ export default class PageContractN extends React.Component {
                 siderDefaultMenuKey={['contract_page']}
                 siderDefaultOpenKeys={['order_m']}
                 contentHeader={this.func_content_header}
+                _btnTag_Add={true}
+                _btnTag_Delete={true}
+                _btnTag_Update={true}
             />
         )
     }

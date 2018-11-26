@@ -1,7 +1,7 @@
 import React from 'react';
 import {Popconfirm, Icon, Spin, Layout, Table, Breadcrumb, Tag, Divider, Button} from 'antd';
 
-const {Header, Content, Footer, Sider} = Layout;
+const {Content,} = Layout;
 import {userService} from "../../_services/user.service";
 
 import CompnSider from "../../_components/compnSider"
@@ -28,22 +28,30 @@ const PageContent = (props) => {
         {
             title: '员工ID',
             dataIndex: 'user.user_id',
-            key: 'user_id'
+            key: 'user_id',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.user.user_id > b.user.user_id?1:-1,
         },
         {
             title: '用户名',
             dataIndex: 'user.user_name',
-            key: 'user_name'
+            key: 'user_name',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.user.user_name > b.user.user_name?1:-1,
         },
         {
             title: '姓名',
             dataIndex: 'employee_info.full_name',
-            key: 'full_name'
+            key: 'full_name',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.employee_info.full_name > b.employee_info.full_name?1:-1,
         },
         {
             title: '性别',
             dataIndex: 'employee_info.gender',
             key: 'gender',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.employee_info.gender > b.employee_info.gender?1:-1,
             render: (text, record) => (
                 record["employee_info"]["gender"] === 0 ?
                     <div><Icon type="woman" style={{color: 'pink'}}/><span>女</span></div>
@@ -52,22 +60,30 @@ const PageContent = (props) => {
         {
             title: '部门',
             dataIndex: 'employee_info.department_id',
-            key: 'department_id'
+            key: 'department_id',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.employee_info.department_id > b.employee_info.department_id?1:-1,
         },
         {
             title: '职位',
             dataIndex: 'employee_info.title',
-            key: 'title'
+            key: 'title',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.employee_info.title > b.employee_info.title?1:-1,
         },
         {
             title: '入职时间',
             dataIndex: 'employee_info.onboard_at',
-            key: 'onboard_at'
+            key: 'onboard_at',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.employee_info.onboard_at > b.employee_info.onboard_at?1:-1,
         },
         {
             title: '当前状态',
             dataIndex: 'employee_info.position_status',
             key: 'position_status',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.employee_info.position_status > b.employee_info.position_status?1:-1,
             render: (text, record) => (
                 positionStatusTag[record["employee_info"]["position_status"]]
             )
@@ -91,7 +107,7 @@ const PageContent = (props) => {
             return (<div>
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
-                        <Icon type="user-add" />
+                        <Icon type="user-add"/>
                         <span>添加员工信息</span>
                     </Button>
                     <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
@@ -118,7 +134,7 @@ const PageContent = (props) => {
                     <Popconfirm title="确认删除？" onConfirm={props.deleteOneBtnOnclick}
                                 okText="是" cancelText="否">
                         <Button type="danger" style={btnStyle}>
-                            <Icon type="user-delete" />
+                            <Icon type="user-delete"/>
                             <span>删除该员工信息</span>
                         </Button>
                     </Popconfirm>
@@ -323,14 +339,14 @@ export default class PageHRAllUsers extends React.Component {
         });
     }
 
-    handleEditOneBtnOnclick(){
+    handleEditOneBtnOnclick() {
         this.setState({
             page: childPageConstrants.editOne,
             breadcrumb: '更新员工信息: ' + this.state.one_user.user['user_name']
         });
     }
 
-    handleDeleteOneBtnOnclick(){
+    handleDeleteOneBtnOnclick() {
         this.setState({loading: true});
         let user_id = this.state.one_user.user["user_id"];
         userService.deleteUser(user_id).then(data => {
@@ -338,7 +354,7 @@ export default class PageHRAllUsers extends React.Component {
         });
     }
 
-    handleBackEditOneBtnOnclick(){
+    handleBackEditOneBtnOnclick() {
         this.setState({loading: true});
         let user_name = this.state.one_user.user["user_name"];
         userService.getUserByUsername(user_name).then(data => {
@@ -362,7 +378,7 @@ export default class PageHRAllUsers extends React.Component {
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <div className="page-header">
                                 <h4 style={{display: "inline"}}>
-                                    <Icon type="team" />
+                                    <Icon type="team"/>
                                     <span>员工档案</span>
                                 </h4>
                                 <Breadcrumb style={{display: "inline"}}>

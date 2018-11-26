@@ -137,12 +137,16 @@ export default class PageAskPriceN extends React.Component {
             {
                 title: '编号',
                 dataIndex: 'ask_price_id',
-                key: 'ask_price_id'
+                key: 'ask_price_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.ask_price_id > b.ask_price_id?1:-1,
             },
             {
                 title: '创建时间',
                 dataIndex: 'created_at',
                 key: 'created_at',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.created_at > b.created_at?1:-1,
             }, {
                 title: '客户',
                 dataIndex: 'customer_id',
@@ -168,6 +172,8 @@ export default class PageAskPriceN extends React.Component {
                 title: '审批人',
                 dataIndex: 'approve_by_user_name',
                 key: 'approve_by_user_name',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.approve_by_user_name > b.approve_by_user_name?1:-1,
                 render: (text, record) => {
                     let user_full_name;
                     let user = this.state.users[record["approve_by_user_name"]];
@@ -185,6 +191,8 @@ export default class PageAskPriceN extends React.Component {
                 title: '审批状态',
                 dataIndex: 'approve_status',
                 key: 'approve_status',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.approve_status > b.approve_status?1:-1,
                 render: (text) => {
                     if (text === 'waiting') {
                         return (
@@ -210,6 +218,8 @@ export default class PageAskPriceN extends React.Component {
                 title: '最后更新',
                 dataIndex: 'last_update_at',
                 key: 'last_update_at',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.last_update_at > b.last_update_at?1:-1,
             }, {
                 title: '操作',
                 key: 'action',
@@ -336,6 +346,9 @@ export default class PageAskPriceN extends React.Component {
                 siderDefaultMenuKey={['ask_price_page']}
                 siderDefaultOpenKeys={['order_m']}
                 contentHeader={this.func_content_header}
+                _btnTag_Add={true}
+                _btnTag_Delete={true}
+                _btnTag_Update={true}
             />
         )
     }

@@ -246,17 +246,23 @@ export default class PageOrderN extends React.Component {
                 title: '订单号',
                 dataIndex: 'order_id',
                 key: 'order_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.order_id > b.order_id?1:-1,
                 fixed: 'left'
             },
             {
                 title: '合同编号',
                 dataIndex: 'contract_id',
                 key: 'contract_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.contract_id > b.contract_id?1:-1,
             },
             {
                 title: '负责人',
                 dataIndex: 'sign_by_user_name',
                 key: 'sign_by_user_name',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.sign_by_user_name > b.sign_by_user_name?1:-1,
                 render: (text, record) => {
                     let full_name;
                     let contract;
@@ -285,6 +291,8 @@ export default class PageOrderN extends React.Component {
                 title: '客户',
                 dataIndex: 'customer_id',
                 key: 'customer_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.customer_id > b.customer_id?1:-1,
                 render: (text, record) => {
                     let customer, company_name;
                     customer = this.state.customers[record['customer_id']];
@@ -302,6 +310,8 @@ export default class PageOrderN extends React.Component {
                 title: '订单类别',
                 dataIndex: 'order_type',
                 key: 'order_type',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.order_type > b.order_type?1:-1,
                 render: (text) => {
                     return this.func_order_type_tag(text)
                 }
@@ -309,12 +319,16 @@ export default class PageOrderN extends React.Component {
             {
                 title: '创建时间',
                 dataIndex: 'created_at',
-                key: 'created_at'
+                key: 'created_at',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.created_at > b.created_at?1:-1,
             },
             {
                 title: '订单状态',
                 dataIndex: 'order_status',
                 key: 'order_status',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.order_status > b.order_status?1:-1,
                 render: (text) => {
                     return this.func_order_status_tag(text)
                 }
@@ -535,6 +549,9 @@ export default class PageOrderN extends React.Component {
                 siderDefaultMenuKey={['order_page']}
                 siderDefaultOpenKeys={['order_m']}
                 contentHeader={this.func_content_header}
+                _btnTag_Add={true}
+                _btnTag_Delete={true}
+                _btnTag_Update={true}
             />
         )
     }

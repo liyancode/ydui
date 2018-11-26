@@ -136,21 +136,27 @@ export default class PageInventory extends React.Component {
                 title: '编号',
                 dataIndex: 'inventory_id',
                 key: 'inventory_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.inventory_id > b.inventory_id?1:-1,
             },
             {
                 title: '创建时间',
                 dataIndex: 'created_at',
                 key: 'created_at',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.created_at > b.created_at?1:-1,
             },  {
                 title: '名称',
                 dataIndex: 'inventory_name',
                 key: 'inventory_name',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.inventory_name > b.inventory_name?1:-1,
             }, {
                 title: '类别',
                 dataIndex: 'inventory_type_id',
                 key: 'inventory_type_id',
                 defaultSortOrder: 'descend',
-                sorter: (a, b) => a.inventory_type_id - b.inventory_type_id,
+                sorter: (a, b) => a.inventory_type_id > b.inventory_type_id?1:-1,
                 render: (text, record) => {
                     let inventory_type_name=null;
                     const inventory_types=this.state.inventory_types;
@@ -168,13 +174,13 @@ export default class PageInventory extends React.Component {
                 title: '库存数量',
                 dataIndex: 'inventory_count',
                 key: 'inventory_count',
-                sorter: (a, b) => a.inventory_count - b.inventory_count,
+                sorter: (a, b) => a.inventory_count > b.inventory_count?1:-1,
             },{
                 title: '最后更新',
                 dataIndex: 'last_update_at',
                 key: 'last_update_at',
                 defaultSortOrder: 'descend',
-                sorter: (a, b) => a.last_update_at - b.last_update_at,
+                sorter: (a, b) => a.last_update_at > b.last_update_at?1:-1,
             },{
                 title: '描述',
                 dataIndex: 'description',
@@ -278,6 +284,9 @@ export default class PageInventory extends React.Component {
                 siderDefaultMenuKey={['wh_'+this.state.subPage]}
                 siderDefaultOpenKeys={['wh_m']}
                 contentHeader={this.func_content_header}
+                _btnTag_Add={true}
+                _btnTag_Delete={true}
+                _btnTag_Update={true}
             />
         )
     }
