@@ -3,6 +3,7 @@ import {Icon, Divider, Tag,Radio} from 'antd';
 import CompnPageContent from "../../_components/compnPageContent";
 
 import {finService} from "../../_services/fin.service"
+import {commonService} from "../../_services/common.service"
 import WrappedNewInventoryForm from "../../_components/warehouse/_compNewInventoryForm"
 import WrappedEditInventoryForm from "../../_components/warehouse/_compEditInventoryForm"
 
@@ -30,12 +31,19 @@ export default class PageFinApproval extends React.Component {
             items: [],
             one_item: {},
             inventory_types: [],
+            waiting_count:0,
         }
         // subPage: 'rm'
         finService.getFinApprovalsByType(this.state.subPage).then(data => {
             this.setState({
                 loading: false,
                 items: data.fin_approvals,
+            })
+        });
+
+        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+            this.setState({
+                waiting_count: data.count,
             })
         });
 
@@ -69,6 +77,11 @@ export default class PageFinApproval extends React.Component {
                 })
             });
         }
+        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+            this.setState({
+                waiting_count: data.count,
+            })
+        });
     }
 
     func_update_one_item(fin_approval_id) {
@@ -79,6 +92,11 @@ export default class PageFinApproval extends React.Component {
                 one_item: data,
             })
         })
+        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+            this.setState({
+                waiting_count: data.count,
+            })
+        });
     }
 
     func_delete_one_item() {
@@ -88,6 +106,11 @@ export default class PageFinApproval extends React.Component {
                 loading: false,
             })
             this.func_update_items();
+        });
+        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+            this.setState({
+                waiting_count: data.count,
+            })
         });
     }
 
@@ -238,6 +261,11 @@ export default class PageFinApproval extends React.Component {
                 })
             });
         }
+        commonService.getFinApprovalCountByStatus('waiting').then(data=>{
+            this.setState({
+                waiting_count: data.count,
+            })
+        });
     }
     func_content_header() {
 
@@ -270,6 +298,7 @@ export default class PageFinApproval extends React.Component {
                 siderDefaultMenuKey={[this.state.subPage]}
                 siderDefaultOpenKeys={['fin_m']}
                 contentHeader={this.func_content_header}
+                fin_approval_count={this.state.waiting_count}
             />
         )
     }
