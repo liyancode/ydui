@@ -224,18 +224,13 @@ export default class PageFinApproval extends React.Component {
 
     func_content_create_one() {
         return (
-            <WrappedNewInventoryForm
-                inventory_types={this.state.inventory_types}
-            />
+            <h3>通过其他页面添加</h3>
         );
     }
 
     func_content_edit_one() {
         return (
-            <WrappedEditInventoryForm
-                inventory_types={this.state.inventory_types}
-                one_inventory={this.state.one_item}
-            />
+            <h3>改进中。。。</h3>
         );
     }
 
