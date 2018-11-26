@@ -59,46 +59,13 @@ const CompnSider = (props) => {
         )
     }
 
-    //--- order
-    let order_autho = user_authority['order']
-    if (order_autho === 'r') {
-
-    } else if (order_autho === 'rw') {
-        menu_items.push(
-            <SubMenu
-                key="order_m"
-                title={<span><Icon type="table" /><span>订单管理</span></span>}
-            >
-
-                <Menu.Item key="order_page">
-                    <Link to='/order' replace>
-                        <Icon type="shopping-cart"/>
-                        <span>订单</span>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item key="contract_page">
-                    <Link to='/contract' replace>
-                        <Icon type="book"/>
-                        <span>合同</span>
-                    </Link>
-                </Menu.Item>
-                <Menu.Item key="ask_price_page">
-                    <Link to='/ask_price' replace>
-                        <Icon type="calculator"/>
-                        <span>询价</span>
-                    </Link>
-                </Menu.Item>
-            </SubMenu>
-        )
-    }
-
     //--- crm
     let crm_autho = user_authority['crm']
     if (crm_autho === 'r') {
         menu_items.push(
             <SubMenu
                 key="crm"
-                title={<span><Icon type="table" /><span>客户管理</span></span>}
+                title={<span><Icon type="global" /><span>客户关系</span></span>}
             >
                 <Menu.Item key="crm_my">
                     <Link to='/crm_my' replace>
@@ -112,7 +79,7 @@ const CompnSider = (props) => {
         menu_items.push(
             <SubMenu
                 key="crm"
-                title={<span><Icon type="table" /><span>客户管理</span></span>}
+                title={<span><Icon type="global"/><span>客户关系</span></span>}
             >
                 <Menu.Item key="crm_my">
                     <Link to='/crm_my' replace>
@@ -122,8 +89,41 @@ const CompnSider = (props) => {
                 </Menu.Item>
                 <Menu.Item key="crm_all">
                     <Link to='/crm_all' replace>
-                        <Icon type="contacts"/>
+                        <Icon type="table"/>
                         <span>所有客户</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
+        )
+    }
+
+    //--- order
+    let order_autho = user_authority['order']
+    if (order_autho === 'r') {
+
+    } else if (order_autho === 'rw') {
+        menu_items.push(
+            <SubMenu
+                key="order_m"
+                title={<span><Icon type="table" /><span>订单管理</span></span>}
+            >
+
+                <Menu.Item key="order_page">
+                    <Link to='/order' replace>
+                        <Icon type="file-done"/>
+                        <span>订单</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="contract_page">
+                    <Link to='/contract' replace>
+                        <Icon type="file-protect"/>
+                        <span>合同</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="ask_price_page">
+                    <Link to='/ask_price' replace>
+                        <Icon type="file-search"/>
+                        <span>询价</span>
                     </Link>
                 </Menu.Item>
             </SubMenu>
@@ -142,7 +142,7 @@ const CompnSider = (props) => {
         menu_items.push(
             <SubMenu
                 key="fin_m"
-                title={<span><Icon type="table" /><span>财务审批</span>&nbsp;<Badge count={fa_count}/></span>}
+                title={<span><Icon type="audit" /><span>财务审批</span>&nbsp;<Badge count={fa_count}/></span>}
             >
                 <Menu.Item key="fap_ask_price">
                     <Link to='/fap_ask_price' replace>
@@ -166,13 +166,13 @@ const CompnSider = (props) => {
             >
                 <Menu.Item key="product_mianliao_page">
                     <Link to='/product_mianliao' replace>
-                        <Icon type="shopping-cart"/>
+                        <Icon type="fire"/>
                         <span>阻燃类</span>
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="product_fengguan_page">
                     <Link to='/product_fengguan' replace>
-                        <Icon type="book"/>
+                        <Icon type="pic-right"/>
                         <span>风管类</span>
                     </Link>
                 </Menu.Item>
