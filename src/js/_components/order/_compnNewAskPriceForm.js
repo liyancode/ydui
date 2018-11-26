@@ -6,7 +6,7 @@ const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 const RadioGroup = Radio.Group;
 
-import {orderService} from '../_services/order.service';
+import {orderService} from '../../_services/order.service';
 const { TextArea } = Input
 
 class NewAskPriceForm extends React.Component {
@@ -78,6 +78,7 @@ class NewAskPriceForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         const {autoCompleteResult} = this.state;
+        const my_customers=this.props.my_customers;
 
         const formItemLayout = {
             labelCol: {
@@ -101,6 +102,31 @@ class NewAskPriceForm extends React.Component {
                 },
             },
         };
+
+        //=============customerSelect
+        let customerIdCompanynameMap = {}
+        let customerSelectOptions = [];
+        for (let idx in my_customers) {
+            customerSelectOptions.push(
+                <Option key={idx} value={my_customers[idx].customer_id}>{my_customers[idx].company_name}</Option>
+            )
+            customerIdCompanynameMap[my_customers[idx].customer_id] = my_customers[idx].company_name;
+        }
+        const customerSelect = getFieldDecorator('customer_id', {
+            rules: [{
+                required: true, message: '请输入客户名称!',
+            }],
+        })(
+            <Select
+                showSearch
+                placeholder="客户名称"
+                optionFilterProp="children"
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+                {customerSelectOptions}
+            </Select>
+        );
+
         const prefixSelector = getFieldDecorator('prefix', {
             initialValue: '86',
         })(
@@ -127,15 +153,9 @@ class NewAskPriceForm extends React.Component {
                 <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
                     <FormItem
                         {...formItemLayout}
-                        label="客户信息"
+                        label="客户名称"
                     >
-                        {getFieldDecorator('customer_id', {
-                            rules: [{
-                                required: true, message: '清输入客户信息!',
-                            }],
-                        })(
-                            <Input/>
-                        )}
+                        {customerSelect}
                     </FormItem>
                     <FormItem
                         {...formItemLayout}

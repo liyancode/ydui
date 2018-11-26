@@ -6,17 +6,28 @@ import {invenrotyService} from "../../_services/inventory.service"
 import WrappedNewInventoryForm from "../../_components/warehouse/_compNewInventoryForm"
 import WrappedEditInventoryForm from "../../_components/warehouse/_compEditInventoryForm"
 
-export default class PageRawMaterial extends React.Component {
+export default class PageInventory extends React.Component {
     constructor(props) {
         super(props);
+        let subpage='',breadcrumbKeyWord='';
+        if(props.location.pathname.indexOf('_rm')>0){
+            subpage='rm';
+            breadcrumbKeyWord='原料库存';
+        }else if(props.location.pathname.indexOf('_sfp')>0){
+            subpage='sfp';
+            breadcrumbKeyWord='半成品库存';
+        }else if(props.location.pathname.indexOf('_fp')>0){
+            subpage='fp';
+            breadcrumbKeyWord='成品库存';
+        }
         this.state = {
-            subPage: 'rm',
+            subPage: subpage,
+            breadcrumbKeyWord:breadcrumbKeyWord,
             loading: true,
             items: [],
             one_item: {},
             inventory_types: [],
         }
-        console.log(props);
         // subPage: 'rm'
         invenrotyService.getAllSubTypes(this.state.subPage).then(data => {
             // {
@@ -124,7 +135,7 @@ export default class PageRawMaterial extends React.Component {
             {
                 title: '编号',
                 dataIndex: 'inventory_id',
-                key: 'inventory_id'
+                key: 'inventory_id',
             },
             {
                 title: '创建时间',
@@ -138,14 +149,32 @@ export default class PageRawMaterial extends React.Component {
                 title: '类别',
                 dataIndex: 'inventory_type_id',
                 key: 'inventory_type_id',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.created_at - b.created_at,
+                render: (text, record) => {
+                    let inventory_type_name=null;
+                    const inventory_types=this.state.inventory_types;
+                    for(var i=0;i<inventory_types.length;i++){
+                        if(record["inventory_type_id"]===inventory_types[i].inventory_type_id){
+                            inventory_type_name=inventory_types[i].inventory_type_name;
+                        }
+                    }
+                    if(inventory_type_name===null){
+                        inventory_type_name='未知';
+                    }
+                    return (inventory_type_name);
+                }
             }, {
                 title: '库存数量',
                 dataIndex: 'inventory_count',
                 key: 'inventory_count',
+                sorter: (a, b) => a.inventory_count - b.inventory_count,
             },{
                 title: '最后更新',
                 dataIndex: 'last_update_at',
                 key: 'last_update_at',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.created_at - b.created_at,
             },{
                 title: '描述',
                 dataIndex: 'description',
@@ -227,14 +256,14 @@ export default class PageRawMaterial extends React.Component {
 
     func_content_header(){
 
-        return <h4>fdsafafa</h4>
+        return <div></div>
     }
 
     render() {
         return (
             <CompnPageContent
                 loading={this.state.loading}
-                breadcrumbKeyWord="原料记录"
+                breadcrumbKeyWord={this.state.breadcrumbKeyWord}
                 items={this.state.items}
                 one_item={this.state.one_item}
                 update_items={this.func_update_items}
@@ -246,7 +275,7 @@ export default class PageRawMaterial extends React.Component {
                 _compnEditOne={this.func_content_edit_one}
                 item_table_columns={this.func_item_table_columns}
                 subTitle={this.func_sub_title}
-                siderDefaultMenuKey={['wh_rm']}
+                siderDefaultMenuKey={['wh_'+this.state.subPage]}
                 siderDefaultOpenKeys={['wh_m']}
                 contentHeader={this.func_content_header}
             />

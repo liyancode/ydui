@@ -89,6 +89,7 @@ export default class PageContractN extends React.Component {
         this.func_content_view_one = this.func_content_view_one.bind(this);
         this.func_content_create_one = this.func_content_create_one.bind(this);
         this.func_content_edit_one = this.func_content_edit_one.bind(this);
+        this.func_content_header = this.func_content_header.bind(this);
     };
 
     func_update_contracts() {
@@ -309,6 +310,9 @@ export default class PageContractN extends React.Component {
         );
     }
 
+    func_content_header(){
+        return <div></div>
+    }
     render() {
         return (
             <CompnPageContent
@@ -327,6 +331,7 @@ export default class PageContractN extends React.Component {
                 subTitle={this.func_sub_title}
                 siderDefaultMenuKey={['contract_page']}
                 siderDefaultOpenKeys={['order_m']}
+                contentHeader={this.func_content_header}
             />
         )
     }

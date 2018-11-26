@@ -99,6 +99,7 @@ export default class PageOrderN extends React.Component {
         this.func_content_edit_one = this.func_content_edit_one.bind(this);
         this.func_order_status_tag = this.func_order_status_tag.bind(this);
         this.func_order_type_tag = this.func_order_type_tag.bind(this);
+        this.func_content_header = this.func_content_header.bind(this);
 
     };
 
@@ -466,6 +467,10 @@ export default class PageOrderN extends React.Component {
         );
     }
 
+    func_content_header(){
+        return <div></div>
+    }
+
     render() {
         return (
             <CompnPageContent
@@ -484,6 +489,7 @@ export default class PageOrderN extends React.Component {
                 subTitle={this.func_sub_title}
                 siderDefaultMenuKey={['order_page']}
                 siderDefaultOpenKeys={['order_m']}
+                contentHeader={this.func_content_header}
             />
         )
     }

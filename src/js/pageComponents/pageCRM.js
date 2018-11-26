@@ -158,57 +158,6 @@ const PageContent = (props) => {
                                 </tr>
                                 </tbody>
                             </table>
-                            {/*<dl className="dl-horizontal">*/}
-                                {/*<dt>客户编号</dt>*/}
-                                {/*<dd>{customer["customer_id"]}</dd>*/}
-                                {/*<dt>创建者</dt>*/}
-                                {/*<dd>{customer["added_by_user_name"]}</dd>*/}
-                                {/*<dt><span>创建时间</span><Icon type="calendar"/></dt>*/}
-                                {/*<dd>{customer["created_at"]}</dd>*/}
-                                {/*<Divider orientation={"left"}>*/}
-                                    {/*<span>公司详情</span>*/}
-                                    {/*<Icon type="profile"/>*/}
-                                {/*</Divider>*/}
-                                {/*<dt><span>公司名称</span><Icon type="copyright"/></dt>*/}
-                                {/*<dd><h4>{customer["company_name"]}</h4></dd>*/}
-                                {/*<dt>*/}
-                                    {/*<span>公司所在地</span>*/}
-                                    {/*<Icon type="environment-o"/>*/}
-                                {/*</dt>*/}
-                                {/*<dd>{customer["company_location"]}</dd>*/}
-                                {/*<dt>*/}
-                                    {/*<span>公司税号</span>*/}
-                                    {/*<Icon type="safety" style={{color: "#52c41a"}}/>*/}
-                                {/*</dt>*/}
-                                {/*<dd>{customer["company_tax_number"]}</dd>*/}
-                                {/*<dt>*/}
-                                    {/*<span>公司法人</span>*/}
-                                    {/*<Icon type="user"/>*/}
-                                {/*</dt>*/}
-                                {/*<dd>{customer["company_legal_person"]}</dd>*/}
-                                {/*<dt>*/}
-                                    {/*<span>公司主营业务</span><Icon type="global"/>*/}
-                                {/*</dt>*/}
-                                {/*<dd>{customer["company_main_business"]}</dd>*/}
-                                {/*<dt>*/}
-                                    {/*<span>公司网站</span><Icon type="link"/>*/}
-                                {/*</dt>*/}
-                                {/*<dd>*/}
-                                    {/*<a target={"_blank"} href={customer["company_description"]}>*/}
-                                        {/*{customer["company_description"]}*/}
-                                    {/*</a>*/}
-                                {/*</dd>*/}
-                                {/*<dt><span>公司电话</span><Icon type="phone"/></dt>*/}
-                                {/*<dd>{customer["company_tel_number"]}</dd>*/}
-                                {/*<dt><span>公司邮箱</span><Icon type="mail"/></dt>*/}
-                                {/*<dd>{customer["company_email"]}</dd>*/}
-                                {/*<dt>备注</dt>*/}
-                                {/*<dd>{customer["comment"]}</dd>*/}
-                                {/*<dd><Button type="primary" icon="edit" style={btnStyle}*/}
-                                            {/*onClick={props.editCustomerBtnOnclick}>更新</Button>*/}
-                                {/*</dd>*/}
-
-                            {/*</dl>*/}
                             <Divider orientation={"left"}><span>公司联系人</span><Icon type="team"/></Divider>
                             {conatct_info_div}
                             <Divider><Button type="primary" icon="user-add" style={btnStyle}>添加新联系人</Button></Divider>
@@ -299,10 +248,19 @@ export default class PageCRM extends React.Component {
 // #         }
     constructor(props) {
         super(props);
+        let subpage = '', breadcrumbKeyWord = '';
+        if (props.location.pathname.indexOf('_my') > 0) {
+            subpage = 'crm_my';
+            breadcrumbKeyWord = '我的客户';
+        } else if (props.location.pathname.indexOf('_all') > 0) {
+            subpage = 'crm_all';
+            breadcrumbKeyWord = '所有客户';
+        }
         this.state = {
             loading: true,
             page: 'view_all',//view_one/add_new/view_all/edit_customer/edit_contact
-            breadcrumb: '我的客户',
+            breadcrumb: breadcrumbKeyWord,
+            subPage:subpage,
             one_customer: null,
             one_contact: null,
             customers: [],
@@ -366,7 +324,7 @@ export default class PageCRM extends React.Component {
         this.handleEditContactBtnOnclick = this.handleEditContactBtnOnclick.bind(this);
         this.handleBackFromEditCustomerBtnOnclick = this.handleBackFromEditCustomerBtnOnclick.bind(this);
 
-        customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+        customerService.getCustomers(localStorage.getItem('user_name'),subpage).then(data => {
             this.setState({customers: data["customers"], loading: false});
         });
     }
@@ -389,7 +347,7 @@ export default class PageCRM extends React.Component {
 
     handleReloadBtnOnclick() {
         this.setState({loading: true});
-        customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+        customerService.getCustomers(localStorage.getItem('user_name'),this.state.subPage).then(data => {
             this.setState({customers: data["customers"], loading: false});
         });
     };
@@ -429,7 +387,7 @@ export default class PageCRM extends React.Component {
     render() {
         return (
             <Layout style={{height: '100%'}}>
-                <CompnSider defaultMenuKey={['3']}/>
+                <CompnSider defaultMenuKey={[this.state.subPage]} defaultOpenKeys={['crm']}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
@@ -459,7 +417,7 @@ export default class PageCRM extends React.Component {
                             />
                         </div>
                     </Content>
-                    <CompnFooter color={'#333'}/>
+                    {/*<CompnFooter color={'#333'}/>*/}
                 </Layout>
             </Layout>
         )

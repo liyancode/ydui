@@ -95,15 +95,38 @@ const CompnSider = (props) => {
     //--- crm
     let crm_autho = user_authority['crm']
     if (crm_autho === 'r') {
-
+        menu_items.push(
+            <SubMenu
+                key="crm"
+                title={<span><Icon type="table" /><span>客户管理</span></span>}
+            >
+                <Menu.Item key="crm_my">
+                    <Link to='/crm_my' replace>
+                        <Icon type="contacts"/>
+                        <span>我的客户</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
+        )
     } else if (crm_autho === 'rw') {
         menu_items.push(
-            <Menu.Item key="3">
-                <Link to='/crm' replace>
-                    <Icon type="contacts"/>
-                    <span>客户管理</span>
-                </Link>
-            </Menu.Item>
+            <SubMenu
+                key="crm"
+                title={<span><Icon type="table" /><span>客户管理</span></span>}
+            >
+                <Menu.Item key="crm_my">
+                    <Link to='/crm_my' replace>
+                        <Icon type="contacts"/>
+                        <span>我的客户</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="crm_all">
+                    <Link to='/crm_all' replace>
+                        <Icon type="contacts"/>
+                        <span>所有客户</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
         )
     }
 
@@ -113,12 +136,17 @@ const CompnSider = (props) => {
 
     } else if (fin_autho === 'rw') {
         menu_items.push(
-            <Menu.Item key="4">
-                <Link to='/fin' replace>
-                    <Icon type="pay-circle-o"/>
-                    <span>财务审批</span>
-                </Link>
-            </Menu.Item>
+            <SubMenu
+                key="fin_m"
+                title={<span><Icon type="table" /><span>财务审批</span></span>}
+            >
+                <Menu.Item key="fap_ask_price">
+                    <Link to='/fap_ask_price' replace>
+                        <Icon type="contacts"/>
+                        <span>询价审批</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
         )
     }
 

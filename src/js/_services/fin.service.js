@@ -9,14 +9,22 @@ export const finService = {
     deleteOneFinApproval,
     updateOneFinApproval,
 };
-
+function getType(subPage){
+    if(subPage.indexOf('ask_price')>0){
+        return 'ask_price';
+    }else if(subPage.indexOf('contract')>0){
+        return 'contract';
+    }else if(subPage.indexOf('order')>0){
+        return 'order';
+    }
+}
 function getFinApprovalsByType(type){
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(`/api/fin/fin_approvals/type/`+type, requestOptions).then(handleResponse);
+    return fetch(`/api/fin/fin_approvals/type/`+getType(type), requestOptions).then(handleResponse);
 }
 
 /**
@@ -30,7 +38,7 @@ function getFinApprovalsByTypeAndResult(type,result){
         headers: authHeader()
     };
 
-    return fetch(`/api/fin/fin_approvals/type/`+type+`/result/`+result, requestOptions).then(handleResponse);
+    return fetch(`/api/fin/fin_approvals/type/`+getType(type)+`/result/`+result, requestOptions).then(handleResponse);
 }
 
 function getFinApprovalByFinApprovalID(fin_approval_id){

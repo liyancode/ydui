@@ -3,12 +3,31 @@ import { tokenExpired } from '../_helpers/tokenExpired';
 import {message} from 'antd'
 export const customerService = {
     getAllByUsername,
+    getAll,
+    getCustomers,
     getByCustomerId,
     addCustomer,
     updateCustomer,
-    updateContact
+    updateContact,
+    deleteByCustomerId
 };
 
+/**
+ * @param username
+ * @param my_or_all: crm_my or crm_all
+ */
+function getCustomers(username,my_or_all){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    if(my_or_all==='crm_my'){
+        return fetch(`/api/customers/`+username, requestOptions).then(handleResponse);
+    }else{
+        return fetch(`/api/customers/all/`, requestOptions).then(handleResponse);
+    }
+}
 function getAllByUsername(username){
     const requestOptions = {
         method: 'GET',
@@ -17,6 +36,16 @@ function getAllByUsername(username){
 
     return fetch(`/api/customers/`+username, requestOptions).then(handleResponse);
 }
+
+function getAll(){
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`/api/customers/all/`, requestOptions).then(handleResponse);
+}
+
 
 function getByCustomerId(customerId){
     const requestOptions = {
@@ -55,7 +84,12 @@ function updateContact(contactData){
     return fetch(`/api/customers/customer_contact`, requestOptions).then(handleResponse);
 }
 function deleteByCustomerId(customerId){
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
 
+    return fetch(`/api/customers/customer/`+customerId, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
@@ -79,9 +113,7 @@ function handleResponse(response) {
             // const error = (data && data.message) || response.statusText;
             // return Promise.reject(error);
         }else if(response.status === 201){
-            message.success("创建成功！");
-        }else{
-            message.success("刷新成功！");
+            message.success("操作完成！")
         }
         return data;
     });

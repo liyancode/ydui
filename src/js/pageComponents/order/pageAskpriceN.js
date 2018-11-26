@@ -5,6 +5,9 @@ import CompnPageContent from "../../_components/compnPageContent";
 import {askPriceService} from "../../_services/askprice.service"
 import {commonService} from "../../_services/common.service"
 
+import WrappedNewAskPriceForm from "../../_components/order/_compnNewAskPriceForm"
+import {customerService} from "../../_services/customer.service";
+
 export default class PageAskPriceN extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +16,8 @@ export default class PageAskPriceN extends React.Component {
             ask_prices: [],
             one_ask_price: {},
             users: {},
-            customers: {}
+            customers: {},
+            my_customers: [],
         }
 
         askPriceService.getAll().then(data => {
@@ -45,6 +49,12 @@ export default class PageAskPriceN extends React.Component {
 
                 });
             }
+
+            customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+                this.setState({
+                    my_customers: data.customers
+                });
+            });
         });
 
         this.func_update_ask_prices = this.func_update_ask_prices.bind(this);
@@ -55,6 +65,7 @@ export default class PageAskPriceN extends React.Component {
         this.func_content_view_one = this.func_content_view_one.bind(this);
         this.func_content_create_one = this.func_content_create_one.bind(this);
         this.func_content_edit_one = this.func_content_edit_one.bind(this);
+        this.func_content_header = this.func_content_header.bind(this);
     };
 
     func_update_ask_prices() {
@@ -262,7 +273,7 @@ export default class PageAskPriceN extends React.Component {
 
     func_content_create_one() {
         return (
-            <div>创建新询价</div>
+            <WrappedNewAskPriceForm my_customers={this.state.my_customers}/>
         );
     }
 
@@ -272,6 +283,9 @@ export default class PageAskPriceN extends React.Component {
         return (
             <div>编辑询价{one_item.id}</div>
         );
+    }
+    func_content_header(){
+        return <div></div>
     }
 
     render() {
@@ -292,6 +306,7 @@ export default class PageAskPriceN extends React.Component {
                 subTitle={this.func_sub_title}
                 siderDefaultMenuKey={['ask_price_page']}
                 siderDefaultOpenKeys={['order_m']}
+                contentHeader={this.func_content_header}
             />
         )
     }
