@@ -332,21 +332,27 @@ const CompnSider = (props) => {
                 <Menu.Item key="wh_rm">
                     <Link to='/wh_rm' replace>
                         <Icon type="file"/>
-                        <span>原材料</span>
+                        <span>原材料管理</span>
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="wh_sfp">
-                    <Link to='/wh_sfp' replace>
-                        <Icon type="appstore-o" />
-                        <span>半成品</span>
+                <Menu.Item key="wh_inout_history">
+                    <Link to='/wh_inout_history' replace>
+                        <Icon type="file"/>
+                        <span>入/出库管理</span>
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="wh_fp">
-                    <Link to='/wh_fp' replace>
-                        <Icon type="shopping-cart" />
-                        <span>成品</span>
-                    </Link>
-                </Menu.Item>
+                {/*<Menu.Item key="wh_sfp">*/}
+                    {/*<Link to='/wh_sfp' replace>*/}
+                        {/*<Icon type="appstore-o" />*/}
+                        {/*<span>半成品</span>*/}
+                    {/*</Link>*/}
+                {/*</Menu.Item>*/}
+                {/*<Menu.Item key="wh_fp">*/}
+                    {/*<Link to='/wh_fp' replace>*/}
+                        {/*<Icon type="shopping-cart" />*/}
+                        {/*<span>成品</span>*/}
+                    {/*</Link>*/}
+                {/*</Menu.Item>*/}
             </SubMenu>
         )
     }

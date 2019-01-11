@@ -5,230 +5,76 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 import {service_Util_} from "./service._util_";
 
-export const serviceUser = {
-    login,
-    logout,
-    //user_account
-    addUserAccount,
-    deleteUserAccountByUsername,
-    updateUserAccount,
-    getUserAccountByUsername,
-    updateUserAccountPassword,
-    checkUsernameAvailable,
-    //user_authority
-    addUserAuthority,
-    deleteUserAuthorityByAuthority,
-    updateUserAuthority,
-    getUserAccountByAuthority,
-    //user_department
-    addUserDepartment,
-    deleteUserDepartmentByDepartmentId,
-    updateUserDepartment,
-    getUserDepartmentByDepartmentId,
-    getAllUserDepartment,
-    //user_employee_info
-    addUserEmployeeInfo,
-    deleteUserEmployeeInfoByUsername,
-    updateUserEmployeeInfo,
-    getUserEmployeeInfoByUsername,
-    //user_private_info
-    addUserPrivateInfo,
-    deleteUserPrivateInfoByUsername,
-    updateUserPrivateInfo,
-    getUserPrivateInfoByUsername,
+export const serviceWarehouse = {
+    //wh_raw_material
+    addWHRawMaterial,
+    updateWHRawMaterial,
+    getWHRawMaterialById,
+    getWHRawMaterialByWhIdSub,
+    getWHRawMaterialAll,
 
-    //user_application
-    addUserApplication,
-    deleteUserApplicationByApplicationId,
-    updateUserApplication,
-    getUserApplicationByApplicationId,
-    getUserApplicationListByUsername,
-    getUserApplicationListByApproveBy,
-
-    //list
-    getUserListByDepartmentId,
-    getUserListForAdmin,
-
-    addUserAccountEmployeePrivateInfo,
-    updateUserAccountEmployeePrivateInfo,
-    getUserFullInfoByUsername,
+    //wh_raw_material_history
+    addWHRawMaterialHistory,
+    updateWHRawMaterialHistory,
+    getWHRawMaterialHistoryById,
+    getWHRawMaterialHistoryListByWhIdType,
+    getWHRawMaterialHistoryListByRecordType,
+    getWHRawMaterialHistoryListByWhIdSub,
+    getWHRawMaterialHistoryAll,
 
 };
 
 
-const apiPrefix = '/api/service/user';
-
-function login(username, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
-        body: "username=" + username + "&password=" + password
-    };
-    return fetch(`/api/service/auth/login`, requestOptions)
-        .then(handleResponse)
-        .then(user => {
-            // login successful if there's a jwt token in the response
-            try {
-                if (user.token) {
-                    localStorage.setItem('user', JSON.stringify(user));
-                    localStorage.setItem('user_name', username);
-                    window.location.replace('/')
-                }
-                return user;
-            } catch (e) {
-                console.log(e);
-                return null;
-            }
-        });
-}
-
-function logout() {
-    localStorage.removeItem('user');
-    window.location.replace('/#/login')
-}
+const apiPrefix = '/api/service/warehouse';
 
 //user_account
-function addUserAccount(body) {
-    return service_Util_.common_Post_(apiPrefix + '/user_account', body).then(handleResponse);
+function addWHRawMaterial(body) {
+    return service_Util_.common_Post_(apiPrefix + '/wh_raw_material', body).then(handleResponse);
 }
 
-function deleteUserAccountByUsername(key) {
-    return service_Util_.common_Delete_(apiPrefix + `/user_account/`, key).then(handleResponse);
+function updateWHRawMaterial(body) {
+    return service_Util_.common_Put_(apiPrefix + `/wh_raw_material`, body).then(handleResponse);
 }
 
-function updateUserAccount(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_account`, body).then(handleResponse);
+function getWHRawMaterialById(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material/`, key).then(handleResponse);
 }
 
-function getUserAccountByUsername(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_account/`, key).then(handleResponse);
+function getWHRawMaterialByWhIdSub(wh_id_sub) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material/by_wh_id_sub/`, wh_id_sub).then(handleResponse);
 }
 
-function updateUserAccountPassword(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_account/password`, body).then(handleResponse);
+function getWHRawMaterialAll() {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material/list/all/`, '').then(handleResponse);
 }
 
-function checkUsernameAvailable(userName) {
-    return service_Util_.common_Get_(apiPrefix + `/user_account/check_user_name/un/`, userName).then(handleResponse);
+//wh_raw_material_history
+function addWHRawMaterialHistory(body) {
+    return service_Util_.common_Post_(apiPrefix + '/wh_raw_material_history', body).then(handleResponse);
 }
 
-//user_authority
-function addUserAuthority(body) {
-    return service_Util_.common_Post_(apiPrefix + '/user_authority', body).then(handleResponse);
+function updateWHRawMaterialHistory(body) {
+    return service_Util_.common_Put_(apiPrefix + `/wh_raw_material_history`, body).then(handleResponse);
 }
 
-function deleteUserAuthorityByAuthority(key) {
-    return service_Util_.common_Delete_(apiPrefix + `/user_authority/`, key).then(handleResponse);
+function getWHRawMaterialHistoryById(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material_history/`, key).then(handleResponse);
 }
 
-function updateUserAuthority(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_authority`, body).then(handleResponse);
+function getWHRawMaterialHistoryListByWhIdType(wh_id,type) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material_history/list/by_wh_id_and_type/?wh_id=`+wh_id+`&type=`+type, '').then(handleResponse);
 }
 
-function getUserAccountByAuthority(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_authority/`, key).then(handleResponse);
+function getWHRawMaterialHistoryListByWhIdSub(wh_id_sub) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material_history/list/by_wh_id_sub/`, wh_id_sub).then(handleResponse);
 }
 
-//user_department
-function addUserDepartment(body) {
-    return service_Util_.common_Post_(apiPrefix + '/user_department', body).then(handleResponse);
+function getWHRawMaterialHistoryListByRecordType(recordType) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material_history/list/by_record_type/`, recordType).then(handleResponse);
 }
 
-function deleteUserDepartmentByDepartmentId(key) {
-    return service_Util_.common_Delete_(apiPrefix + `/user_department/`, key).then(handleResponse);
-}
-
-function updateUserDepartment(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_department`, body).then(handleResponse);
-}
-
-function getUserDepartmentByDepartmentId(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_department/`, key).then(handleResponse);
-}
-
-function getAllUserDepartment() {
-    return service_Util_.common_Get_(apiPrefix + `/user_department/all/`, '').then(handleResponse);
-}
-
-
-//user_employee_info
-function addUserEmployeeInfo(body) {
-    return service_Util_.common_Post_(apiPrefix + '/user_employee_info', body).then(handleResponse);
-}
-
-function deleteUserEmployeeInfoByUsername(key) {
-    return service_Util_.common_Delete_(apiPrefix + `/user_employee_info/`, key).then(handleResponse);
-}
-
-function updateUserEmployeeInfo(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_employee_info`, body).then(handleResponse);
-}
-
-function getUserEmployeeInfoByUsername(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_employee_info/`, key).then(handleResponse);
-}
-
-//user_private_info
-function addUserPrivateInfo(body) {
-    return service_Util_.common_Post_(apiPrefix + '/user_private_info', body).then(handleResponse);
-}
-
-function deleteUserPrivateInfoByUsername(key) {
-    return service_Util_.common_Delete_(apiPrefix + `/user_private_info/`, key).then(handleResponse);
-}
-
-function updateUserPrivateInfo(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_private_info`, body).then(handleResponse);
-}
-
-function getUserPrivateInfoByUsername(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_private_info/`, key).then(handleResponse);
-}
-
-//user_application
-function addUserApplication(body) {
-    return service_Util_.common_Post_(apiPrefix + '/user_application', body).then(handleResponse);
-}
-
-function deleteUserApplicationByApplicationId(key) {
-    return service_Util_.common_Delete_(apiPrefix + `/user_application/`, key).then(handleResponse);
-}
-
-function updateUserApplication(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_application`, body).then(handleResponse);
-}
-
-function getUserApplicationByApplicationId(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_application/`, key).then(handleResponse);
-}
-
-function getUserApplicationListByUsername(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_application/list/by_user_name/`, key).then(handleResponse);
-}
-
-function getUserApplicationListByApproveBy(key) {
-    return service_Util_.common_Get_(apiPrefix + `/user_application/list/by_approve_by/`, key).then(handleResponse);
-}
-
-//list
-function getUserListByDepartmentId(departmentId) {
-    return service_Util_.common_Get_(apiPrefix + `/list/by_department_id/`, departmentId).then(handleResponse);
-}
-
-function getUserListForAdmin() {
-    return service_Util_.common_Get_(apiPrefix + `/list/for_admin`, '').then(handleResponse);
-}
-
-function addUserAccountEmployeePrivateInfo(body) {
-    return service_Util_.common_Post_(apiPrefix + '/user_account_employee_private_info', body).then(handleResponse);
-}
-
-function updateUserAccountEmployeePrivateInfo(body) {
-    return service_Util_.common_Put_(apiPrefix + `/user_account_employee_private_info`, body).then(handleResponse);
-}
-
-function getUserFullInfoByUsername(userName) {
-    return service_Util_.common_Get_(apiPrefix + `/full_info/`, userName).then(handleResponse);
+function getWHRawMaterialHistoryAll() {
+    return service_Util_.common_Get_(apiPrefix + `/wh_raw_material_history/list/all/`, '').then(handleResponse);
 }
 
 function handleResponse(response) {

@@ -1,15 +1,13 @@
 import React from 'react';
-import {Form, Input, Tooltip, Icon, Radio, Select, Popconfirm, Spin, Divider, Button, AutoComplete} from 'antd';
+import {Form, Input, Select, Popconfirm, Spin, Button,} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
-const RadioGroup = Radio.Group;
 const {TextArea} = Input;
 
-import {serviceCustomer} from '../../../_services/service.customer';
+import {serviceWarehouse} from '../../../_services/service.warehouse';
 
-class _formNewCustomer extends React.Component {
+class _formNewWHRawMaterial extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,73 +17,58 @@ class _formNewCustomer extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
-        this.handleWebsiteChange = this.handleWebsiteChange.bind(this);
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        //     #             "id": 1,
-//     #             "customer_id": "201",
-//     #             "added_by_user_name": "testname104",
-//     #             "company_name": "测试公司名称001",
-//     #             "company_location": "china",
-//     #             "company_tax_number": null,
-//     #             "company_legal_person": null,
-//     #             "company_main_business": null,
-//     #             "company_tel_number": null,
-//     #             "company_email": null,
-//     #             "company_description": null,
-//     #             "comment": null,
-//     #             "status": 1
-
-        // contact
-        // {
-        //     "id": 3,
-        //     "customer_id": "203",
-        //     "added_by_user_name": "tu02",
-        //     "fullname": "tufn02",
-        //     "gender": 1,
-        //     "title": null,
-        //     "email": null,
-        //     "phone_number": null,
-        //     "other_contact_info": null,
+        //{
+        //     "other": null,
+        //     "count": "0.221E3",
+        //     "created_at": "2019-01-11 00:23:24 +0800",
+        //     "specification": "test_21",
+        //     "description": "for test",
+        //     "weight": "0.442E3",
+        //     "unit_price": "0.251E1",
+        //     "created_by": "admin",
+        //     "wh_inner_location": "r1w2",
+        //     "principal": "admin",
+        //     "last_update_by": "admin",
+        //     "wh_id": "WH_RM74ECFB1C6EBBB2BC",
+        //     "weight_unit": "kg",
+        //     "last_update_at": "2019-01-11 00:23:24 +0800",
+        //     "name": "rm test 01",
+        //     "count_unit": "jian",
         //     "comment": null,
-        //     "created_at": "2018-07-08 22:53:53 +0800",
-        //     "last_update_at": "2018-07-08 22:53:53 +0800",
+        //     "wh_location": "shengze",
+        //     "id": 5,
+        //     "wh_id_sub": "WH_RM74ECFB1C6EBBB2BC_2.51_KJ",
         //     "status": 1
-        // },
+        // }
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 this.setState({loading: true});
-                let customer = {
+                let wh_raw_material = {
                     "id": -1,
-                    "added_by_user_name": "",
-                    "company_name": values["company_name"],
-                    "company_location": values["company_location"],
-                    "company_tax_number": values["company_tax_number"],
-                    "company_legal_person": values["company_legal_person"],
-                    "company_main_business": values["company_main_business"],
-                    "company_tel_number": values["company_tel_number"],
-                    "company_email": values["company_email"],
-                    "company_description": values["company_description"],
+                    "other": "",
+                    "count": values["count"],
+                    "specification": values["specification"],
+                    "description": values["description"],
+                    "weight": values["weight"],
+                    "unit_price": values["unit_price"],
+                    "created_by": "",
+                    "wh_inner_location": values["wh_inner_location"],
+                    "principal": values["principal"],
+                    "last_update_by": "",
+                    "wh_id": "",
+                    "weight_unit": values["weight_unit"],
+                    "name": values["name"],
+                    "count_unit": values["count_unit"],
                     "comment": values["comment"],
+                    "wh_location": values["wh_location"],
+                    "wh_id_sub": values["wh_id_sub"],
                     "status": 1,
                 };
-                let contact = {
-                    "id": -1,
-                    "customer_id": null,
-                    "added_by_user_name": null,
-                    "fullname": values["contact_fullname"],
-                    "gender": values["contact_gender"],
-                    "title": values["contact_title"],
-                    "email": values["contact_email"],
-                    "phone_number": values["contact_phone_number"],
-                    "other_contact_info": values["other_contact_info"],
-                    "comment": null,
-                    "status": 1
-                };
-                let customerData = {"customer": customer, "contact": contact}
-                serviceCustomer.addCustomer(customerData).then(data => {
+                serviceWarehouse.addWHRawMaterial(wh_raw_material).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -97,19 +80,8 @@ class _formNewCustomer extends React.Component {
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
     }
 
-    handleWebsiteChange(value) {
-        let autoCompleteResult;
-        if (!value) {
-            autoCompleteResult = [];
-        } else {
-            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        this.setState({autoCompleteResult});
-    }
-
     render() {
         const {getFieldDecorator} = this.props.form;
-        const {autoCompleteResult} = this.state;
 
         const formItemLayout = {
             labelCol: {
@@ -133,37 +105,24 @@ class _formNewCustomer extends React.Component {
                 },
             },
         };
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
+        const whLocationSelector = getFieldDecorator('wh_location', {
+            initialValue: 'shengze',
         })(
-            <Select style={{width: 70}}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
+            <Select>
+                <Option value="shengze">苏州盛泽仓库</Option>
+                <Option value="other">其他</Option>
             </Select>
         );
-
-        const contactGenderRadio = getFieldDecorator('contact_gender', {
-            initialValue: 0,
-        })(
-            <RadioGroup>
-                <Radio value={0}>女士</Radio>
-                <Radio value={1}>先生</Radio>
-            </RadioGroup>
-        );
-
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
         return (
             <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
                     <FormItem
                         {...formItemLayout}
-                        label="公司名称"
+                        label="原料名称"
                     >
-                        {getFieldDecorator('company_name', {
+                        {getFieldDecorator('name', {
                             rules: [{
-                                required: true, message: '请输入公司名!',
+                                required: true, message: '请输入公司名原料名称!',
                             }],
                         })(
                             <Input/>
@@ -171,11 +130,11 @@ class _formNewCustomer extends React.Component {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="公司所在地"
+                        label="规格"
                     >
-                        {getFieldDecorator('company_location', {
+                        {getFieldDecorator('specification', {
                             rules: [{
-                                required: true, message: '请输入公司所在地!',
+                                required: true, message: '请输入规格!',
                             }],
                         })(
                             <Input/>
@@ -183,127 +142,11 @@ class _formNewCustomer extends React.Component {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label={(
-                            <span>
-              公司税号&nbsp;
-                                <Tooltip title="中国的公司有统一税号">
-                <Icon type="question-circle-o"/>
-              </Tooltip>
-            </span>
-                        )}
+                        label="单价"
                     >
-                        {getFieldDecorator('company_tax_number', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="公司法人"
-                    >
-                        {getFieldDecorator('company_legal_person', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="公司主营业务"
-                    >
-                        {getFieldDecorator('company_main_business', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="公司网站"
-                    >
-                        {getFieldDecorator('company_description', {
-                            rules: [],
-                        })(
-                            <AutoComplete
-                                dataSource={websiteOptions}
-                                onChange={this.handleWebsiteChange}
-                                placeholder="网址"
-                            >
-                                <Input/>
-                            </AutoComplete>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="公司电话"
-                    >
-                        {getFieldDecorator('company_tel_number', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="公司邮箱"
-                    >
-                        {getFieldDecorator('company_email', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="公司备注"
-                    >
-                        {getFieldDecorator('comment', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <Divider>公司联系人</Divider>
-                    <FormItem
-                        {...formItemLayout}
-                        label="姓名"
-                    >
-                        {getFieldDecorator('contact_fullname', {
+                        {getFieldDecorator('unit_price', {
                             rules: [{
-                                required: true, message: '请输入联系人姓名!',
-                            }],
-                        })(
-                            <Input addonAfter={contactGenderRadio}/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="职务"
-                    >
-                        {getFieldDecorator('contact_title', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="电话"
-                    >
-                        {getFieldDecorator('contact_phone_number', {
-                            rules: [],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="邮箱"
-                    >
-                        {getFieldDecorator('contact_email', {
-                            rules: [{
-                                required: true, message: '请输入联系人邮箱!',
+                                required: true, message: '请输入单价!',
                             }],
                         })(
                             <Input/>
@@ -311,12 +154,103 @@ class _formNewCustomer extends React.Component {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="其他联系方式"
+                        label="库存数"
                     >
-                        {getFieldDecorator('other_contact_info', {
+                        {getFieldDecorator('count', {
+                            rules: [{
+                                required: true, message: '请输入库存数!',
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="库存数单位"
+                    >
+                        {getFieldDecorator('count_unit', {
+                            rules: [{
+                                required: false,
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="重量"
+                    >
+                        {getFieldDecorator('weight', {
+                            rules: [{
+                                required: true, message: '请输入重量!',
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="重量单位"
+                    >
+                        {getFieldDecorator('weight_unit', {
+                            rules: [{
+                                required: false,
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+
+                    <FormItem
+                        {...formItemLayout}
+                        label="原料描述"
+                    >
+                        {getFieldDecorator('description', {
                             rules: [],
                         })(
                             <TextArea rows={2}/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="负责人"
+                    >
+                        {getFieldDecorator('principal', {
+                            rules: [{
+                                required: false,
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="原料仓库"
+                    >
+                        {whLocationSelector}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="仓库内部位置"
+                    >
+                        {getFieldDecorator('wh_inner_location', {
+                            rules: [{
+                                required: false,
+                            }],
+                        })(
+                            <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="备注说明"
+                    >
+                        {getFieldDecorator('comment', {
+                            rules: [{
+                                required: false,
+                            }],
+                        })(
+                            <Input/>
                         )}
                     </FormItem>
                     <FormItem {...tailFormItemLayout}>
@@ -331,5 +265,5 @@ class _formNewCustomer extends React.Component {
     }
 }
 
-const WrappedFormNewCustomer = Form.create()(_formNewCustomer);
-export default WrappedFormNewCustomer;
+const WrappedFormNewWHRawMaterial = Form.create()(_formNewWHRawMaterial);
+export default WrappedFormNewWHRawMaterial;
