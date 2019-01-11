@@ -168,3 +168,6 @@ div * {
 .ant-layout-sider-zero-width-trigger{
     top: 120px;
 }
+.ant-form-item{
+    margin-bottom: 0;
+}
