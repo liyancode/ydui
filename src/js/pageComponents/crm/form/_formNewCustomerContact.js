@@ -5,10 +5,11 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 const RadioGroup = Radio.Group;
+const {TextArea} = Input;
 
-import {customerService} from '../_services/customer.service';
+import {serviceCustomer} from '../../../_services/service.customer';
 
-class EditContactForm extends React.Component {
+class _formNewCustomerContact extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,19 +24,6 @@ class EditContactForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        //     #             "id": 1,
-//     #             "customer_id": "201",
-//     #             "added_by_user_name": "testname104",
-//     #             "company_name": "测试公司名称001",
-//     #             "company_location": "china",
-//     #             "company_tax_number": null,
-//     #             "company_legal_person": null,
-//     #             "company_main_business": null,
-//     #             "company_tel_number": null,
-//     #             "company_email": null,
-//     #             "company_description": null,
-//     #             "comment": null,
-//     #             "status": 1
 
         // contact
         // {
@@ -56,20 +44,20 @@ class EditContactForm extends React.Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 this.setState({loading: true});
-                let contactData = {
-                    "id": this.props.contact.id,
-                    "customer_id": this.props.customer["customer_id"],
+                let contact = {
+                    "id": -1,
+                    "customer_id": this.props.customer.customer_id,
                     "added_by_user_name": null,
                     "fullname": values["contact_fullname"],
                     "gender": values["contact_gender"],
                     "title": values["contact_title"],
                     "email": values["contact_email"],
                     "phone_number": values["contact_phone_number"],
-                    "other_contact_info": null,
+                    "other_contact_info": values["other_contact_info"],
                     "comment": null,
                     "status": 1
                 };
-                customerService.updateContact(contactData).then(data => {
+                serviceCustomer.addCustomerContact(contact).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -93,6 +81,7 @@ class EditContactForm extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
+        const {autoCompleteResult} = this.state;
 
         const formItemLayout = {
             labelCol: {
@@ -116,19 +105,31 @@ class EditContactForm extends React.Component {
                 },
             },
         };
+        const prefixSelector = getFieldDecorator('prefix', {
+            initialValue: '86',
+        })(
+            <Select style={{width: 70}}>
+                <Option value="86">+86</Option>
+                <Option value="87">+87</Option>
+            </Select>
+        );
 
         const contactGenderRadio = getFieldDecorator('contact_gender', {
-            initialValue: this.props.contact.gender,
+            initialValue: 0,
         })(
             <RadioGroup>
                 <Radio value={0}>女士</Radio>
                 <Radio value={1}>先生</Radio>
             </RadioGroup>
         );
+
+        const websiteOptions = autoCompleteResult.map(website => (
+            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
+        ));
         return (
             <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
-                    <Divider>{this.props.customer.company_name}</Divider>
+                    <Divider>添加联系人 公司:{this.props.customer.company_name}</Divider>
                     <FormItem
                         {...formItemLayout}
                         label="姓名"
@@ -137,7 +138,6 @@ class EditContactForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入联系人姓名!',
                             }],
-                            initialValue:this.props.contact.fullname
                         })(
                             <Input addonAfter={contactGenderRadio}/>
                         )}
@@ -148,7 +148,6 @@ class EditContactForm extends React.Component {
                     >
                         {getFieldDecorator('contact_title', {
                             rules: [],
-                            initialValue:this.props.contact.title
                         })(
                             <Input/>
                         )}
@@ -159,7 +158,6 @@ class EditContactForm extends React.Component {
                     >
                         {getFieldDecorator('contact_phone_number', {
                             rules: [],
-                            initialValue:this.props.contact.phone_number
                         })(
                             <Input/>
                         )}
@@ -172,9 +170,18 @@ class EditContactForm extends React.Component {
                             rules: [{
                                 required: true, message: '请输入联系人邮箱!',
                             }],
-                            initialValue:this.props.contact.email
                         })(
                             <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="其他联系方式"
+                    >
+                        {getFieldDecorator('other_contact_info', {
+                            rules: [],
+                        })(
+                            <TextArea rows={2}/>
                         )}
                     </FormItem>
                     <FormItem {...tailFormItemLayout}>
@@ -189,5 +196,5 @@ class EditContactForm extends React.Component {
     }
 }
 
-const WrappedEditContactForm = Form.create()(EditContactForm);
-export default WrappedEditContactForm;
+const WrappedFormNewCustomerContact = Form.create()(_formNewCustomerContact);
+export default WrappedFormNewCustomerContact;

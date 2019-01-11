@@ -4,8 +4,8 @@ import CompnPageContent from "../../_components/compnPageContent";
 
 import {contractService} from "../../_services/contract.service"
 import {commonService} from "../../_services/common.service"
-import {orderRelatedConstrants} from "../../_helpers/orderRelatedConstrants"
-import {customerService} from "../../_services/customer.service";
+import {orderRelatedConstrants} from "../../_helpers/orderRelatedConstrants";
+import {serviceCustomer} from "../../_services/service.customer";
 
 import WrappedNewContractForm from "../../_components/order/_compnNewContractForm"
 import WrappedEditContractForm from "../../_components/order/_compnEditContractForm"
@@ -68,7 +68,7 @@ export default class PageContractN extends React.Component {
                     })
                 });
             }
-            customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+            serviceCustomer.getAllByUsername(localStorage.getItem('user_name')).then(data => {
                 this.setState({
                     my_customers: data.customers
                 });

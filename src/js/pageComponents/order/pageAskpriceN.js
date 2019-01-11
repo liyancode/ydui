@@ -7,7 +7,7 @@ import {commonService} from "../../_services/common.service"
 
 import WrappedNewAskPriceForm from "../../_components/order/_compnNewAskPriceForm"
 import WrappedEditAskPriceForm from "../../_components/order/_compnEditAskPriceForm"
-import {customerService} from "../../_services/customer.service";
+import {serviceCustomer} from "../../_services/service.customer";
 
 export default class PageAskPriceN extends React.Component {
     constructor(props) {
@@ -51,7 +51,7 @@ export default class PageAskPriceN extends React.Component {
                 });
             }
 
-            customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+            serviceCustomer.getAllByUsername(localStorage.getItem('user_name')).then(data => {
                 this.setState({
                     my_customers: data.customers
                 });

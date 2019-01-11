@@ -15,12 +15,16 @@ const PageContent = (props) => {
         marginBottom: '12px'
     }
     if (props.page) {
-        let page = props.page;
+        let page = props._pageAndBreadcrumb?props._page:props.page;
         let one_item = props.one_item;
         let breadcrumbKeyWord = props.breadcrumbKeyWord;
 
         if (page === childPageConstrants.viewAll) {
             let btn_add='';
+            let _tableColumnRowKey=props._tableColumnRowKey;
+            if(!_tableColumnRowKey||_tableColumnRowKey===""){
+                _tableColumnRowKey="id";
+            }
             if(props._btnTag_Add){
                 btn_add=<Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
                     <Icon type="plus"/>
@@ -37,11 +41,11 @@ const PageContent = (props) => {
                         </Button>
                     </div>
                     {props.contentHeader()}
-                    <Table rowKey="id" columns={props.item_table_columns({
+                    <Table rowKey={_tableColumnRowKey} columns={props.item_table_columns({
                         items: props.items,
                         checkDetailOnclick: props.checkDetailOnclick
                     })}
-                           dataSource={props.items} size="small"/>
+                           dataSource={props.items} size="small" scroll={props._tableScrollX}/>
                 </Spin>
             </div>);
         } else if (page === childPageConstrants.viewOne) {
@@ -137,6 +141,9 @@ export default class CompnPageContent extends React.Component {
 
     handleCheckDetailOnclick(e) {
         this.setState({page: childPageConstrants.viewOne, breadcrumb: this.props.breadcrumbKeyWord + '详细信息',});
+        if(this.props._pageAndBreadcrumb){
+            this.props._pageUpdate(childPageConstrants.viewOne);
+        }
         let id = e.target.attributes.id.value;
         this.props.update_one_item(id);
     }
@@ -145,7 +152,10 @@ export default class CompnPageContent extends React.Component {
         this.setState({
             page: childPageConstrants.viewAll,
             breadcrumb: '全部' + this.props.breadcrumbKeyWord + '信息 共 ' + this.props.items.length + ' 条'
-        });
+        })
+        if(this.props._pageAndBreadcrumb){
+            this.props._pageUpdate(childPageConstrants.viewAll);
+        }
     }
 
     handleEditOneBtnOnclick() {
@@ -205,6 +215,13 @@ export default class CompnPageContent extends React.Component {
                                 _btnTag_Add={this.props._btnTag_Add}
                                 _btnTag_Delete={this.props._btnTag_Delete}
                                 _btnTag_Update={this.props._btnTag_Update}
+                                _tableColumnRowKey={this.props._tableColumnRowKey}
+                                _tableScrollX={this.props._tableScrollX}
+                                _pageAndBreadcrumb={this.props._pageAndBreadcrumb}
+                                _page={this.props._page}
+                                _pageUpdate={this.props._pageUpdate}
+                                _breadcrumb={this.props._breadcrumb}
+                                _breadcrumbUpdate={this.props._breadcrumbUpdate}
                             />
                         </div>
                     </Content>

@@ -6,9 +6,9 @@ const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 const RadioGroup = Radio.Group;
 
-import {customerService} from '../_services/customer.service';
+import {serviceCustomer} from '../../../_services/service.customer';
 
-class EditCustomerForm extends React.Component {
+class _formEditCustomer extends React.Component {
     constructor(props) {
         super(props);
         console.log(props)
@@ -21,7 +21,6 @@ class EditCustomerForm extends React.Component {
         this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
         this.handleWebsiteChange = this.handleWebsiteChange.bind(this);
     }
-
 
     handleSubmit(e) {
         e.preventDefault();
@@ -74,7 +73,7 @@ class EditCustomerForm extends React.Component {
                     "comment": values["comment"],
                     "status": 1,
                 };
-                customerService.updateCustomer(customerData).then(data => {
+                serviceCustomer.updateCustomer(customerData).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -262,5 +261,5 @@ class EditCustomerForm extends React.Component {
     }
 }
 
-const WrappedEditCustomerForm = Form.create()(EditCustomerForm);
-export default WrappedEditCustomerForm;
+const WrappedFormEditCustomer = Form.create()(_formEditCustomer);
+export default WrappedFormEditCustomer;

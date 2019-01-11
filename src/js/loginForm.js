@@ -1,7 +1,7 @@
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox, Spin,Alert} from 'antd';
+import {Form, Icon, Input, Button, Checkbox, Spin} from 'antd';
 
-import {userService} from "./_services/user.service"
+import {serviceUser} from "./_services/service.user"
 
 const FormItem = Form.Item;
 
@@ -26,7 +26,7 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 this.setState({loading: true});
-                userService.login(values["userName"], values["password"]).then(data=>{
+                serviceUser.login(values["userName"], values["password"]).then(data=>{
                     this.setState({loading: false});
                 });
             }

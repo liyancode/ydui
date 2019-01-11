@@ -2,10 +2,10 @@ import React from 'react';
 import {Icon, Steps, Timeline, Divider, Button, Progress} from 'antd';
 import CompnPageContent from "../../_components/compnPageContent";
 
-import {customerService} from "../../_services/customer.service"
+import {serviceCustomer} from "../../_services/service.customer"
 
-import WrappedNewCustomerForm from "../../_components/_compnNewCustomerForm";
-import WrappedEditCustomerForm from "../../_components/_compnEditCustomerForm";
+import WrappedFormNewCustomer from "./form/_formNewCustomer";
+import WrappedFormEditCustomer from "./form/_formEditCustomer";
 
 const Step = Steps.Step;
 export default class PageCRMMy extends React.Component {
@@ -27,7 +27,7 @@ export default class PageCRMMy extends React.Component {
             one_item: {},
         }
 
-        customerService.getCustomers(localStorage.getItem('user_name'), subpage).then(data => {
+        serviceCustomer.getCustomers(localStorage.getItem('user_name'), subpage).then(data => {
             this.setState({
                 items: data["customers"],
                 loading: false
@@ -47,7 +47,7 @@ export default class PageCRMMy extends React.Component {
 
     func_update_items() {
         this.setState({loading: true});
-        customerService.getCustomers(localStorage.getItem('user_name'), this.state.subPage).then(data => {
+        serviceCustomer.getCustomers(localStorage.getItem('user_name'), this.state.subPage).then(data => {
             this.setState({
                 items: data["customers"],
                 loading: false
@@ -57,7 +57,7 @@ export default class PageCRMMy extends React.Component {
 
     func_update_one_item(customer_id) {
         this.setState({loading: true});
-        customerService.getByCustomerId(customer_id).then(data => {
+        serviceCustomer.getByCustomerId(customer_id).then(data => {
             this.setState({
                 loading: false,
                 one_item: data,
@@ -67,7 +67,7 @@ export default class PageCRMMy extends React.Component {
 
     func_delete_one_item() {
         this.setState({loading: true});
-        customerService.deleteByCustomerId(this.state.one_item.customer_id).then(data => {
+        serviceCustomer.deleteByCustomerId(this.state.one_item.customer_id).then(data => {
             this.setState({
                 loading: false,
             })
@@ -279,13 +279,13 @@ export default class PageCRMMy extends React.Component {
 
     func_content_create_one() {
         return (
-            <WrappedNewCustomerForm/>
+            <WrappedFormNewCustomer/>
         );
     }
 
     func_content_edit_one() {
         return (
-            <WrappedEditCustomerForm
+            <WrappedFormEditCustomer
                 customer={this.state.one_item["customer"]}
             />
         );

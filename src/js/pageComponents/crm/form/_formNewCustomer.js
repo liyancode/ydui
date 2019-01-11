@@ -5,10 +5,11 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 const RadioGroup = Radio.Group;
+const {TextArea} = Input;
 
-import {customerService} from '../_services/customer.service';
+import {serviceCustomer} from '../../../_services/service.customer';
 
-class NewCustomerForm extends React.Component {
+class _formNewCustomer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -79,12 +80,12 @@ class NewCustomerForm extends React.Component {
                     "title": values["contact_title"],
                     "email": values["contact_email"],
                     "phone_number": values["contact_phone_number"],
-                    "other_contact_info": null,
+                    "other_contact_info": values["other_contact_info"],
                     "comment": null,
                     "status": 1
                 };
                 let customerData = {"customer": customer, "contact": contact}
-                customerService.addCustomer(customerData).then(data => {
+                serviceCustomer.addCustomer(customerData).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -308,6 +309,16 @@ class NewCustomerForm extends React.Component {
                             <Input/>
                         )}
                     </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="其他联系方式"
+                    >
+                        {getFieldDecorator('other_contact_info', {
+                            rules: [],
+                        })(
+                            <TextArea rows={2}/>
+                        )}
+                    </FormItem>
                     <FormItem {...tailFormItemLayout}>
                         <Popconfirm title="确认提交？" onConfirm={this.handleSubmit}
                                     okText="是" cancelText="否">
@@ -320,5 +331,5 @@ class NewCustomerForm extends React.Component {
     }
 }
 
-const WrappedNewCustomerForm = Form.create()(NewCustomerForm);
-export default WrappedNewCustomerForm;
+const WrappedFormNewCustomer = Form.create()(_formNewCustomer);
+export default WrappedFormNewCustomer;

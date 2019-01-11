@@ -33,58 +33,58 @@ const PageContent = (props) => {
                 {/*</div>*/}
                 {/*</div>*/}
                 <Divider orientation={"left"}><span>消息通知</span><Icon type="bell"/></Divider>
-                <Card>
-                    <p>国务院办公厅关于2018年
+                {/*<Card>*/}
+                    {/*<p>国务院办公厅关于2018年*/}
 
-                    部分节假日安排的通知
+                    {/*部分节假日安排的通知*/}
 
-                        国办发明电〔2017〕12号</p>
-                    <p>各省、自治区、直辖市人民政府，国务院各部委、各直属机构：</p>
+                        {/*国办发明电〔2017〕12号</p>*/}
+                    {/*<p>各省、自治区、直辖市人民政府，国务院各部委、各直属机构：</p>*/}
 
-                    <p>经国务院批准，现将2018年元旦、春节、清明节、劳动节、端午节、中秋节和国庆节放假调休日期的具体安排通知如下。</p>
+                    {/*<p>经国务院批准，现将2018年元旦、春节、清明节、劳动节、端午节、中秋节和国庆节放假调休日期的具体安排通知如下。</p>*/}
 
-                    <p>一、元旦：1月1日放假，与周末连休。</p>
+                    {/*<p>一、元旦：1月1日放假，与周末连休。</p>*/}
 
-                    <p>二、春节：2月15日至21日放假调休，共7天。2月11日（星期日）、2月24日（星期六）上班。</p>
+                    {/*<p>二、春节：2月15日至21日放假调休，共7天。2月11日（星期日）、2月24日（星期六）上班。</p>*/}
 
-                    <p>三、清明节：4月5日至7日放假调休，共3天。4月8日（星期日）上班。</p>
+                    {/*<p>三、清明节：4月5日至7日放假调休，共3天。4月8日（星期日）上班。</p>*/}
 
-                    <p>四、劳动节：4月29日至5月1日放假调休，共3天。4月28日（星期六）上班。</p>
+                    {/*<p>四、劳动节：4月29日至5月1日放假调休，共3天。4月28日（星期六）上班。</p>*/}
 
-                    <p>五、端午节：6月18日放假，与周末连休。</p>
+                    {/*<p>五、端午节：6月18日放假，与周末连休。</p>*/}
 
-                    <p>六、中秋节：9月24日放假，与周末连休。</p>
+                    {/*<p>六、中秋节：9月24日放假，与周末连休。</p>*/}
 
-                    <p>七、国庆节：10月1日至7日放假调休，共7天。9月29日（星期六）、9月30日（星期日）上班。</p>
+                    {/*<p>七、国庆节：10月1日至7日放假调休，共7天。9月29日（星期六）、9月30日（星期日）上班。</p>*/}
 
-                    <p>节假日期间，各地区、各部门要妥善安排好值班和安全、保卫等工作，遇有重大突发事件，要按规定及时报告并妥善处置，确保人民群众祥和平安度过节日假期。</p>
-                    <p>国务院办公厅
+                    {/*<p>节假日期间，各地区、各部门要妥善安排好值班和安全、保卫等工作，遇有重大突发事件，要按规定及时报告并妥善处置，确保人民群众祥和平安度过节日假期。</p>*/}
+                    {/*<p>国务院办公厅*/}
 
-                        2017年11月30日</p>
-                </Card>
+                        {/*2017年11月30日</p>*/}
+                {/*</Card>*/}
             </div>
             <div className="col-sm-12 col-md-offset-1 col-md-3">
                 <Divider orientation={"left"}><span>系统动态</span><Icon type="clock-circle-o"/></Divider>
                 <Divider dashed/>
-                <p>张三 添加了一条新的订单信息 <Tag color="green">2018-07-28 10:15</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>李四 更新了2条客户信息 <Tag color="green">2018-07-28 9:25</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>王五 添加了一条新的订单信息 <Tag color="green">2018-07-27 15:10</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>赵六 添加了一条新的订单信息 <Tag color="green">2018-07-26 12:19</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>钱峰 添加了一条新的订单信息 <Tag color="green">2018-07-26 10:11</Tag><Icon type="notification"/></p>
-                <p>张三 添加了一条新的订单信息 <Tag color="green">2018-07-26 10:15</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>李四 更新了2条客户信息 <Tag color="green">2018-07-25 9:25</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>王五 添加了一条新的订单信息 <Tag color="green">2018-07-24 15:10</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>赵六 添加了一条新的订单信息 <Tag color="green">2018-07-24 12:19</Tag><Icon type="notification"/></p>
-                {/*<Divider dashed />*/}
-                <p>钱峰 添加了一条新的订单信息 <Tag color="green">2018-07-23 10:11</Tag><Icon type="notification"/></p>
-                <p>...更多</p>
+                {/*<p>张三 添加了一条新的订单信息 <Tag color="green">2018-07-28 10:15</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>李四 更新了2条客户信息 <Tag color="green">2018-07-28 9:25</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>王五 添加了一条新的订单信息 <Tag color="green">2018-07-27 15:10</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>赵六 添加了一条新的订单信息 <Tag color="green">2018-07-26 12:19</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>钱峰 添加了一条新的订单信息 <Tag color="green">2018-07-26 10:11</Tag><Icon type="notification"/></p>*/}
+                {/*<p>张三 添加了一条新的订单信息 <Tag color="green">2018-07-26 10:15</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>李四 更新了2条客户信息 <Tag color="green">2018-07-25 9:25</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>王五 添加了一条新的订单信息 <Tag color="green">2018-07-24 15:10</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>赵六 添加了一条新的订单信息 <Tag color="green">2018-07-24 12:19</Tag><Icon type="notification"/></p>*/}
+                {/*/!*<Divider dashed />*!/*/}
+                {/*<p>钱峰 添加了一条新的订单信息 <Tag color="green">2018-07-23 10:11</Tag><Icon type="notification"/></p>*/}
+                {/*<p>...更多</p>*/}
             </div>
         </Spin>
     );

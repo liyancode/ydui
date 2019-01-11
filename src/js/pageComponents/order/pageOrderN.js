@@ -3,7 +3,7 @@ import {Icon, Divider, Tag, Steps} from 'antd';
 import CompnPageContent from "../../_components/compnPageContent";
 
 import {orderService} from "../../_services/order.service"
-import {customerService} from "../../_services/customer.service"
+import {serviceCustomer} from "../../_services/service.customer";
 import {contractService} from "../../_services/contract.service"
 
 import {commonService} from "../../_services/common.service"
@@ -76,7 +76,7 @@ export default class PageOrderN extends React.Component {
 
                 });
             }
-            customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+            serviceCustomer.getAllByUsername(localStorage.getItem('user_name')).then(data => {
                 this.setState({
                     my_customers: data.customers
                 });
@@ -142,7 +142,7 @@ export default class PageOrderN extends React.Component {
 
                 });
             }
-            customerService.getAllByUsername(localStorage.getItem('user_name')).then(data => {
+            serviceCustomer.getAllByUsername(localStorage.getItem('user_name')).then(data => {
                 this.setState({
                     my_customers: data.customers
                 });
@@ -197,16 +197,16 @@ export default class PageOrderN extends React.Component {
         let tg;
         switch (order_status) {
             case 'start':
-                tg = <Tag>未开始生产<Icon type="minus-circle-o"/></Tag>
+                tg = <Tag>原料采购阶段<Icon type="loading"/>...</Tag>
                 break;
             case 'producing':
-                tg = <Tag color="#40a9ff">生产中<Icon type="loading"/>...</Tag>
+                tg = <Tag color="#40a9ff">外发加工阶段<Icon type="loading"/>...</Tag>
                 break;
             case 'produced':
-                tg = <Tag color="blue">生产完成，等待交付<Icon type="check-circle-o"/></Tag>
+                tg = <Tag color="blue">成品入仓阶段<Icon type="check-circle-o"/></Tag>
                 break;
             case 'delivering':
-                tg = <Tag color="#faad14">交付中<Icon type="loading"/>...</Tag>
+                tg = <Tag color="#faad14">收款发货阶段<Icon type="loading"/>...</Tag>
                 break;
             case 'delivered':
                 tg = <Tag color="orange">交付完成<Icon type="check-circle-o"/></Tag>
@@ -547,7 +547,7 @@ export default class PageOrderN extends React.Component {
                 item_table_columns={this.func_item_table_columns}
                 subTitle={this.func_sub_title}
                 siderDefaultMenuKey={['order_page']}
-                siderDefaultOpenKeys={['order_m']}
+                siderDefaultOpenKeys={['sales_m','order_m']}
                 contentHeader={this.func_content_header}
                 _btnTag_Add={true}
                 _btnTag_Delete={true}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
-import {userService} from "./_services/user.service"
+// import {userService} from "./_services/user.service"
+import {serviceUser} from "./_services/service.user"
 
 const FormItem = Form.Item;
 
@@ -24,7 +25,7 @@ class HorizontalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                userService.login(values["userName"],values["password"])
+                serviceUser.login(values["userName"],values["password"])
             }
         });
     }

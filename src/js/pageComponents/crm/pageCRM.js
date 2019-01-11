@@ -1,17 +1,46 @@
 import React from 'react';
-import {Card, Icon, Steps, Table, Layout, Timeline, Divider, Spin, Button, Progress, Breadcrumb} from 'antd';
+import {Popconfirm, Icon, Steps, Table, Layout, Tag, Divider, Spin, Button, Progress, Breadcrumb} from 'antd';
 
-const {Content, } = Layout;
-import CompnSider from "../_components/compnSider";
-import CompnHeader from "../_components/compnHeader";
+const {Content,} = Layout;
+import CompnSider from "../../_components/compnSider";
+import CompnHeader from "../../_components/compnHeader";
 
-import WrappedNewCustomerForm from "../_components/_compnNewCustomerForm";
-import WrappedEditCustomerForm from "../_components/_compnEditCustomerForm";
-import WrappedEditContactForm from "../_components/_compnEditContactForm";
+import WrappedFormNewCustomer from "./form/_formNewCustomer";
+import WrappedFormNewCustomerContact from "./form/_formNewCustomerContact";
+import WrappedFormEditCustomer from "./form/_formEditCustomer";
+import WrappedFormEditContact from "./form/_formEditContact";
+import WrappedFormNewCustomerFollowup from "./form/_formNewCustomerFollowup";
 
-import {customerService} from '../_services/customer.service';
+import {serviceCustomer} from '../../_services/service.customer';
 
 const Step = Steps.Step;
+
+//potential潜在/intentional有意向合作/intentional_order意向订单/formal_order正式订单
+function func_followup_status_tag(followup_status) {
+    let tg;
+    switch (followup_status) {
+        case 'potential':
+            tg = <Tag color="#2db7f5">潜在客户</Tag>
+            break;
+        case 'intentional':
+            tg = <Tag color="#87d068">有合作意向的客户</Tag>
+            break;
+        case 'intentional_order':
+            tg = <Tag color="#87d068">已下意向订单</Tag>
+            break;
+        case 'formal_order':
+            tg = <Tag color="#87d068">已下正式订单</Tag>
+            break;
+        default:
+            tg = <Tag>未知<Icon type="minus-circle-o"/></Tag>
+            break;
+    }
+    return <span>{tg}</span>
+}
+
+function sortFollowupArr(a, b) {
+    return a.last_update_at > b.last_update_at ? 1 : -1
+}
 
 const PageContent = (props) => {
     const btnStyle = {
@@ -25,7 +54,7 @@ const PageContent = (props) => {
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
                         <Icon type="plus"/>
-                        <span>新建客户信息</span>
+                        <span>添加客户信息</span>
                     </Button>
                     <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
                         <Icon type="reload"/>
@@ -44,7 +73,7 @@ const PageContent = (props) => {
             for (let i = 0; i < contacts.length; i++) {
                 let contact_i = contacts[i];
                 conatct_info_div.push(
-                    <table className="table table-bordered" key={i}>
+                    <table className="table" key={i}>
                         <tbody>
                         <tr>
                             <td>姓名</td>
@@ -67,25 +96,52 @@ const PageContent = (props) => {
                             <td>
                                 <Button type="primary" icon="edit" style={btnStyle} contact_id={contact_i["id"]}
                                         onClick={props.editContactBtnOnclick}>更新</Button>
-                                <Button type="danger" icon="delete" style={btnStyle}>删除</Button>
+                                <Button type="danger" icon="delete" style={btnStyle} onClick={props.deleteContactBtnOnclick} id={""+contact_i["id"]+""}>删除</Button>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                    // <dl className="dl-horizontal" key={i}>
-                    //     <dt>姓名</dt>
-                    //     <dd>{contact_i["fullname"] + " " + ((contact_i["gender"] == 1) ? "先生" : "女士")}</dd>
-                    //     <dt><span>职务</span><Icon type="tag-o" /></dt>
-                    //     <dd>{contact_i["title"]}</dd>
-                    //     <dt><span>电话</span><Icon type="mobile" /></dt>
-                    //     <dd>{contact_i["phone_number"]}</dd>
-                    //     <dt><span>邮箱</span><Icon type="mail" /></dt>
-                    //     <dd>{contact_i["email"]}</dd>
-                    //     <dd><Button type="primary" icon="edit" style={btnStyle} contact_id={contact_i["id"]}
-                    //                 onClick={props.editContactBtnOnclick}>更新</Button>
-                    //         <Button type="danger" icon="delete" style={btnStyle}>删除</Button></dd>
-                    // </dl>
                 );
+            }
+
+            let one_customer_followups = props.one_customer_followups.sort(sortFollowupArr).reverse();
+            let followup_logs = [];
+            let followup = '';
+            let followup_status = 'potential';
+            for (let i = 0; i < one_customer_followups.length; i++) {
+                followup = one_customer_followups[i];
+                followup_logs.push(<p
+                    key={followup.id}>{followup.last_update_at.split('+')[0] + followup.followup_method + " " + followup.followup_description}</p>)
+                if (i === 0) {
+                    followup_status = followup.followup_status;
+                }
+            }
+
+            let followup_view = props.followup_view;
+            let followup_view_content = "";
+            if (followup_view === "view") {
+                followup_view_content = <div>
+                    <div className={"text-center"}>
+                        <Button type="primary" icon="edit" style={btnStyle}
+                                onClick={props.followUpAddBtnOnclick}>添加跟进记录</Button>
+                    </div>
+                    <Divider orientation={"left"}><span>客户当前跟进状态</span><Icon type="loading"/></Divider>
+                    {func_followup_status_tag(followup_status)}
+                    <br/>
+                    <Divider orientation={"left"}><span>客户跟进历史记录</span><Icon type="area-chart"/></Divider>
+                    {followup_logs}
+                </div>
+            } else {
+                followup_view_content = <div>
+                    <div>
+                        <Button type="primary" style={btnStyle} onClick={props.backFromAddNewFollowup}>
+                            <Icon type="left"/>
+                            <span>返回</span>
+                        </Button>
+                        <h5>添加客户跟进记录</h5>
+                    </div>
+                    <WrappedFormNewCustomerFollowup one_customer={props.one_customer}/>
+                </div>
             }
             return (<div>
                 <div>
@@ -95,19 +151,19 @@ const PageContent = (props) => {
                     </Button>
                     <Spin spinning={props.loading}>
                         <div className="col-sm-12 col-md-6">
-                            <dl className="dl-horizontal">
-                                <dt>客户编号</dt>
-                                <dd>{customer["customer_id"]}</dd>
-                                <dt>创建者</dt>
-                                <dd>{customer["added_by_user_name"]}</dd>
-                                <dt><span>创建时间</span><Icon type="calendar"/></dt>
-                                <dd>{customer["created_at"]}</dd>
-                            </dl>
+                            {/*<dl className="dl-horizontal">*/}
+                            {/*<dt>客户编号</dt>*/}
+                            {/*<dd>{}</dd>*/}
+                            {/*<dt>创建者</dt>*/}
+                            {/*<dd>{customer["added_by_user_name"]}</dd>*/}
+                            {/*<dt><span>创建时间</span><Icon type="calendar"/></dt>*/}
+                            {/*<dd>{customer["created_at"]}</dd>*/}
+                            {/*</dl>*/}
                             <Divider orientation={"left"}>
-                                <span>公司详情</span>
                                 <Icon type="profile"/>
+                                <span>客户{customer["customer_id"]}详细信息 创建者:{customer["added_by_user_name"]} 创建时间:{customer["created_at"].split('+')[0]}</span>
                             </Divider>
-                            <table className="table table-bordered table-condensed">
+                            <table className="table table-condensed">
                                 <tbody>
                                 <tr>
                                     <td><span>公司名称</span><Icon type="copyright"/></td>
@@ -157,38 +213,13 @@ const PageContent = (props) => {
                                 </tr>
                                 </tbody>
                             </table>
-                            <Divider orientation={"left"}><span>公司联系人</span><Icon type="team"/></Divider>
+                            <Divider orientation={"left"}><Icon type="team"/><span>公司联系人</span></Divider>
                             {conatct_info_div}
-                            <Divider><Button type="primary" icon="user-add" style={btnStyle}>添加新联系人</Button></Divider>
+                            <Divider><Button type="primary" icon="user-add" style={btnStyle}
+                                             onClick={props.addContactBtnOnclick}>添加新联系人</Button></Divider>
                         </div>
                         <div className="col-sm-12 col-md-6">
-                            <div className={"text-center"}><Button type="primary" icon="edit"
-                                                                   style={btnStyle}>添加跟进记录</Button></div>
-                            <Divider orientation={"left"}><span>客户当前跟进状态</span><Icon type="loading"/></Divider>
-                            <Steps current={2} size={"small"}>
-                                <Step title="信息录入" description="前期沟通阶段"/>
-                                <Step title="潜在客户" description="潜在合作可能"/>
-                                <Step title="意向合作" description="已有合作意向" icon={<Icon type="loading"/>}/>
-                                <Step title="意向订单" description="已达成意向订单"/>
-                                <Step title="正式订单" description="已达成正式订单"/>
-                                {/*<Step title="完成合作" description="已经成功合作" />*/}
-                            </Steps>
-                            <br/>
-                            <Divider orientation={"left"}><span>客户跟进历史记录</span><Icon type="area-chart"/></Divider>
-                            <Timeline>
-                                <Timeline.Item color="green">邮件沟通，有初步产品合作意向 2018-06-01</Timeline.Item>
-                                <Timeline.Item color="green">咨询相关产品信息 2018-03-01</Timeline.Item>
-                                <Timeline.Item color="red">
-                                    <p>关于阻燃类产品的咨询</p>
-                                    <p>电话沟通了双方的基本信息</p>
-                                    <p>了解了对方的基本业务场景和需求 2017-09-01</p>
-                                </Timeline.Item>
-                                <Timeline.Item>
-                                    <p>添加信息到系统中</p>
-                                    <p>大致了解公司基本情况</p>
-                                    <p>潜在客户 2017-07-31</p>
-                                </Timeline.Item>
-                            </Timeline>
+                            {followup_view_content}
                         </div>
                     </Spin>
                 </div>
@@ -202,7 +233,7 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
-                <WrappedNewCustomerForm/>
+                <WrappedFormNewCustomer/>
             </div>)
         } else if (page === 'edit_customer') {
             return (<div>
@@ -212,7 +243,7 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
-                <WrappedEditCustomerForm customer={props.one_customer["customer"]}/>
+                <WrappedFormEditCustomer customer={props.one_customer["customer"]}/>
             </div>);
         } else if (page === 'edit_contact') {
             return (<div>
@@ -222,7 +253,17 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
-                <WrappedEditContactForm contact={props.one_contact} customer={props.one_customer["customer"]}/>
+                <WrappedFormEditContact contact={props.one_contact} customer={props.one_customer["customer"]}/>
+            </div>);
+        } else if (page === 'add_new_contact') {
+            return (<div>
+                <div>
+                    <Button type="primary" style={btnStyle} onClick={props.backFromAddContactBtnOnclick}>
+                        <Icon type="left"/>
+                        <span>返回</span>
+                    </Button>
+                </div>
+                <WrappedFormNewCustomerContact customer={props.one_customer["customer"]}/>
             </div>);
         }
     } else {
@@ -261,49 +302,49 @@ export default class PageCRM extends React.Component {
             breadcrumb: breadcrumbKeyWord,
             subPage: subpage,
             one_customer: null,
+            one_customer_followups: [],
             one_contact: null,
             customers: [],
+            followup_view: 'view',
             customer_table_columns: [
                 {
                     title: '客户编号',
                     dataIndex: 'customer_id',
                     key: 'customer_id',
-                    defaultSortOrder: 'descend',
                     sorter: (a, b) => a.customer_id - b.customer_id,
+                },
+                {
+                    title: '客户名称',
+                    dataIndex: 'company_name',
+                    key: 'company_name',
+                    sorter: (a, b) => a.company_name > b.company_name ? 1 : -1,
+                },
+                {
+                    title: '公司所在地',
+                    dataIndex: 'company_location',
+                    key: 'company_location',
+                    sorter: (a, b) => a.company_location > b.company_location ? 1 : -1,
                 },
                 {
                     title: '创建者',
                     dataIndex: 'added_by_user_name',
                     key: 'added_by_user_name',
-                }, {
-                    title: '创建时间',
-                    dataIndex: 'created_at',
-                    key: 'created_at',
-                    defaultSortOrder: 'descend',
-                    sorter: (a, b) => a.created_at > b.created_at?1:-1,
-                }, {
-                    title: '公司名称',
-                    dataIndex: 'company_name',
-                    key: 'company_name',
-                    defaultSortOrder: 'descend',
-                    sorter: (a, b) => a.company_name > b.company_name?1:-1,
-                }, {
-                    title: '公司法人',
-                    dataIndex: 'company_legal_person',
-                    key: 'company_legal_person',
-                }, {
-                    title: '公司所在地',
-                    dataIndex: 'company_location',
-                    key: 'company_location',
-                    defaultSortOrder: 'descend',
-                    sorter: (a, b) => a.company_location > b.company_location?1:-1,
-                }, {
+                },
+                {
                     title: '跟进状态',
-                    key: 'progress',
+                    key: 'followup_status',
+                    sorter: (a, b) => a.followup_status > b.followup_status ? 1 : -1,
                     render: (text, record) => {
-                        return (<span>
-                        <Progress percent={45} size="small" status="active"/>
-                        </span>)
+                        return func_followup_status_tag(record.followup_status)
+                    },
+                }, {
+                    title: '最后更新时间',
+                    dataIndex: 'followup_last_update_at',
+                    key: 'followup_last_update_at',
+                    defaultSortOrder: 'descend',
+                    sorter: (a, b) => a.followup_last_update_at > b.followup_last_update_at ? 1 : -1,
+                    render: (text, record) => {
+                        return (record.followup_last_update_at.split('+')[0])
                     },
                 }, {
                     title: '操作',
@@ -330,8 +371,13 @@ export default class PageCRM extends React.Component {
         this.handleEditCustomerBtnOnclick = this.handleEditCustomerBtnOnclick.bind(this);
         this.handleEditContactBtnOnclick = this.handleEditContactBtnOnclick.bind(this);
         this.handleBackFromEditCustomerBtnOnclick = this.handleBackFromEditCustomerBtnOnclick.bind(this);
+        this.handleFollowUpAddBtnOnclick = this.handleFollowUpAddBtnOnclick.bind(this);
+        this.handleBackFromAddNewFollowup = this.handleBackFromAddNewFollowup.bind(this);
+        this.handleBackFromAddContactBtnOnclick = this.handleBackFromAddContactBtnOnclick.bind(this);
+        this.handleAddContactBtnOnclick = this.handleAddContactBtnOnclick.bind(this);
+        this.handleDeleteContactBtnOnclick = this.handleDeleteContactBtnOnclick.bind(this);
 
-        customerService.getCustomers(localStorage.getItem('user_name'), subpage).then(data => {
+        serviceCustomer.getCustomers(localStorage.getItem('user_name'), subpage).then(data => {
             this.setState({customers: data["customers"], loading: false});
         });
     }
@@ -339,8 +385,16 @@ export default class PageCRM extends React.Component {
     handleCheckDetailOnclick(e) {
         let customer_id = e.target.attributes.customer_id.value;
         // this.setState({page: "view_one",loading:true,breadcrumb:'客户详情: '+customer_id});
-        customerService.getByCustomerId(customer_id).then(data => {
-            this.setState({page: "view_one", breadcrumb: '客户详情: ' + customer_id, one_customer: data, loading: false});
+        serviceCustomer.getByCustomerId(customer_id).then(data => {
+            serviceCustomer.getCustomerFollowupsByCIdUname(customer_id, localStorage.getItem('user_name')).then(data1 => {
+                this.setState({
+                    page: "view_one",
+                    breadcrumb: '客户详情: ' + customer_id,
+                    one_customer: data,
+                    one_customer_followups: data1["customer_followups"],
+                    loading: false
+                });
+            });
         });
     }
 
@@ -354,7 +408,7 @@ export default class PageCRM extends React.Component {
 
     handleReloadBtnOnclick() {
         this.setState({loading: true});
-        customerService.getCustomers(localStorage.getItem('user_name'), this.state.subPage).then(data => {
+        serviceCustomer.getCustomers(localStorage.getItem('user_name'), this.state.subPage).then(data => {
             this.setState({customers: data["customers"], loading: false});
         });
     };
@@ -368,8 +422,16 @@ export default class PageCRM extends React.Component {
 
     handleBackFromEditCustomerBtnOnclick() {
         let customer_id = this.state.one_customer["customer"]["customer_id"];
-        customerService.getByCustomerId(customer_id).then(data => {
-            this.setState({page: "view_one", breadcrumb: '客户详情: ' + customer_id, one_customer: data, loading: false});
+        serviceCustomer.getByCustomerId(customer_id).then(data => {
+            serviceCustomer.getCustomerFollowupsByCIdUname(customer_id, localStorage.getItem('user_name')).then(data1 => {
+                this.setState({
+                    page: "view_one",
+                    breadcrumb: '客户详情: ' + customer_id,
+                    one_customer: data,
+                    one_customer_followups: data1["customer_followups"],
+                    loading: false
+                });
+            });
         });
     }
 
@@ -391,10 +453,75 @@ export default class PageCRM extends React.Component {
         });
     }
 
+    handleFollowUpAddBtnOnclick() {
+        this.setState({
+            followup_view: "add"
+        });
+    }
+
+    handleBackFromAddNewFollowup() {
+        serviceCustomer.getCustomerFollowupsByCIdUname(this.state.one_customer.customer.customer_id, localStorage.getItem('user_name')).then(data1 => {
+            this.setState({
+                one_customer_followups: data1["customer_followups"],
+                followup_view: "view"
+            });
+        });
+    }
+
+    handleBackFromAddContactBtnOnclick() {
+        let customer_id = this.state.one_customer["customer"]["customer_id"];
+        serviceCustomer.getByCustomerId(customer_id).then(data => {
+            serviceCustomer.getCustomerFollowupsByCIdUname(customer_id, localStorage.getItem('user_name')).then(data1 => {
+                this.setState({
+                    page: "view_one",
+                    breadcrumb: '客户详情: ' + customer_id,
+                    one_customer: data,
+                    one_customer_followups: data1["customer_followups"],
+                    loading: false
+                });
+            });
+        });
+    }
+
+    handleAddContactBtnOnclick() {
+        this.setState({
+            page: "add_new_contact",
+            breadcrumb: '添加新的公司联系人: ' + this.state.one_customer["customer"]["customer_id"]
+        });
+    }
+
+    handleDeleteContactBtnOnclick(e) {
+        let id = e.target.getAttribute("id")
+        if(confirm("删除联系人信息？")){
+            this.setState({
+                loading: true
+            });
+            serviceCustomer.deleteCustomerContactById(id).then(data2=>{
+                if(data2!=null){
+                    let customer_id = this.state.one_customer.customer.customer_id;
+                    // this.setState({page: "view_one",loading:true,breadcrumb:'客户详情: '+customer_id});
+                    serviceCustomer.getByCustomerId(customer_id).then(data => {
+                        serviceCustomer.getCustomerFollowupsByCIdUname(customer_id, localStorage.getItem('user_name')).then(data1 => {
+                            this.setState({
+                                one_customer: data,
+                                one_customer_followups: data1["customer_followups"],
+                                loading: false
+                            });
+                        });
+                    });
+                }else{
+                    this.setState({
+                        loading: false
+                    });
+                }
+            });
+        }
+    }
+
     render() {
         return (
             <Layout style={{height: '100%'}}>
-                <CompnSider defaultMenuKey={[this.state.subPage]} defaultOpenKeys={['crm']}/>
+                <CompnSider defaultMenuKey={[this.state.subPage]} defaultOpenKeys={['sales_m', 'crm']}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
@@ -412,6 +539,7 @@ export default class PageCRM extends React.Component {
                             <PageContent page={this.state.page}
                                          one_customer={this.state.one_customer}
                                          one_contact={this.state.one_contact}
+                                         one_customer_followups={this.state.one_customer_followups}
                                          customer_table_columns={this.state.customer_table_columns}
                                          customers={this.state.customers}
                                          loading={this.state.loading}
@@ -421,6 +549,12 @@ export default class PageCRM extends React.Component {
                                          editContactBtnOnclick={this.handleEditContactBtnOnclick}
                                          reloadBtnOnclick={this.handleReloadBtnOnclick}
                                          backFromEditCustomerBtnOnclick={this.handleBackFromEditCustomerBtnOnclick}
+                                         followUpAddBtnOnclick={this.handleFollowUpAddBtnOnclick}
+                                         followup_view={this.state.followup_view}
+                                         backFromAddNewFollowup={this.handleBackFromAddNewFollowup}
+                                         backFromAddContactBtnOnclick={this.handleBackFromAddContactBtnOnclick}
+                                         addContactBtnOnclick={this.handleAddContactBtnOnclick}
+                                         deleteContactBtnOnclick={this.handleDeleteContactBtnOnclick}
                             />
                         </div>
                     </Content>

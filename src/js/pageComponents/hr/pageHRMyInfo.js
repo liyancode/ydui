@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Icon, Tag, Layout, Divider, Breadcrumb, Spin, Avatar, Button} from 'antd';
+import {Card, Icon, Tag, Layout, Divider, Breadcrumb, Spin, Upload, Button} from 'antd';
 
 const {Header, Content, Footer, Sider} = Layout;
 import {userService} from "../../_services/user.service";
@@ -39,6 +39,22 @@ const PageContent = (props) => {
                 <WrappedResetPasswordForm one_user={props.user}/>
             </div>);
         } else if (page === childPageConstrants.viewOne) {
+            const rsm_props = {
+                action: '//jsonplaceholder.typicode.com/posts/',
+                onChange({ file, fileList }) {
+                    if (file.status !== 'uploading') {
+                        console.log(file, fileList);
+                    }
+                },
+                defaultFileList: [{
+                    uid: '1',
+                    name: '我的简历.pdf',
+                    status: 'done',
+                    response: 'Server Error 500', // custom error message to show
+                    url: 'http://file3.data.weipan.cn/62950499/5032ff94579270f1e8de192db7412b51140ef382?ip=1543585425,180.164.238.38&ssig=v%2Fwub0FPy0&Expires=1543586025&KID=sae,l30zoo1wmz&fn=%E4%BC%98%E7%A7%80%E7%AE%80%E5%8E%86%E6%A8%A1%E6%9D%BF.pdf&se_ip_debug=180.164.238.38&from=1221134',
+                }],
+            };
+
             return (<div>
                 <Spin spinning={props.loading} tip="加载中..." size="large">
                     <div className="col-sm-12 col-md-4">
@@ -74,7 +90,11 @@ const PageContent = (props) => {
                             </tr>
                             </tbody>
                         </table>
-
+                        <Upload {...rsm_props}>
+                            <Button>
+                                <Icon type="upload" /> 上传简历
+                            </Button>
+                        </Upload>
                     </div>
                     <div className="col-sm-12 col-md-4">
                         <Divider orientation={"left"}><span>工作信息</span><Icon type="team"/></Divider>

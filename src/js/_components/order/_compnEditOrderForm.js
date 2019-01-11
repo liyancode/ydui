@@ -131,12 +131,12 @@ class EditOrderForm extends React.Component {
             initialValue: one_order.order_status,
         })(
             <Select>
-                <Option value="start"><Tag>未开始生产<Icon type="minus-circle-o" /></Tag></Option>
-                <Option value="producing"><Tag color="#40a9ff">生产中<Icon type="loading"/>...</Tag></Option>
-                <Option value="produced"><Tag color="blue">生产完成，等待交付<Icon type="check-circle-o" /></Tag></Option>
-                <Option value="delivering"><Tag color="#faad14">交付中<Icon type="loading"/>...</Tag></Option>
-                <Option value="delivered"><Tag color="orange">交付完成<Icon type="check-circle-o" /></Tag></Option>
-                <Option value="tail"><Tag color="#f5222d">待支付尾款<Icon type="loading"/>...</Tag></Option>
+                <Option value="start"><Tag>原料采购阶段<Icon type="loading"/>...</Tag></Option>
+                <Option value="producing"><Tag color="#40a9ff">外发加工阶段<Icon type="loading"/>...</Tag></Option>
+                <Option value="produced"><Tag color="blue">成品入仓阶段<Icon type="check-circle-o" /></Tag></Option>
+                <Option value="delivering"><Tag color="#faad14">收款发货阶段<Icon type="loading"/>...</Tag></Option>
+                {/*<Option value="delivered"><Tag color="orange">交付完成<Icon type="check-circle-o" /></Tag></Option>*/}
+                {/*<Option value="tail"><Tag color="#f5222d">待支付尾款<Icon type="loading"/>...</Tag></Option>*/}
                 <Option value="end"><Tag color="#52c41a"><Icon type="like" />订单完结<Icon type="check-circle-o" /></Tag></Option>
             </Select>
         );
