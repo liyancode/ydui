@@ -37,6 +37,9 @@ import PageUserMyApplication  from "./js/pageComponents/user/pageUserMyApplicati
 import PageUserMyDepartment  from "./js/pageComponents/user/pageUserMyDepartment";
 import PageUserAdmin from "./js/pageComponents/user/pageUserAdmin"
 
+import PageWarehouse from "./js/pageComponents/warehouse/pageWarehouse"
+import PageWarehouseInOutHistory from "./js/pageComponents/warehouse/pageWarehouseInOutHistory"
+
 
 class App extends React.Component {
     constructor(props) {
@@ -105,9 +108,9 @@ class App extends React.Component {
         }
         //--- warehouse
         if (user_authority['warehouse'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/wh_rm" component={PageInventory} key='prt_wh_rm'/>)
-            private_routes.push(<PrivateRoute path="/wh_fp" component={PageInventory} key='prt_wh_fp'/>)
-            private_routes.push(<PrivateRoute path="/wh_sfp" component={PageInventory} key='prt_wh_sfp'/>)
+            private_routes.push(<PrivateRoute path="/wh_rm" component={PageWarehouse} key='prt_wh_rm'/>)
+            private_routes.push(<PrivateRoute path="/wh_inout_history" component={PageWarehouseInOutHistory} key='prt_wh_inout_history'/>)
+            // private_routes.push(<PrivateRoute path="/wh_sfp" component={PageInventory} key='prt_wh_sfp'/>)
         }
         return (
             <HashRouter>
