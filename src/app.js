@@ -20,9 +20,7 @@ import {PrivateRoute} from './js/PrivateRoute'
 
 import Login from './js/login'
 import PageHome from "./js/pageComponents/pageHome"
-import PageCRM from "./js/pageComponents/pageCRM";
-import PageHRMyInfo from "./js/pageComponents/hr/pageHRMyInfo";
-import PageHRAllUsers from "./js/pageComponents/hr/pageHRAllUsers";
+import PageCRM from "./js/pageComponents/crm/pageCRM";
 
 import './assets/css/style.css';
 import PageProduct from "./js/pageComponents/product/pageProduct"
@@ -33,6 +31,12 @@ import PageOrderN from "./js/pageComponents/order/pageOrderN";
 import PageInventory from "./js/pageComponents/warehouse/pageInventory";
 
 import PageFinApproval  from "./js/pageComponents/fin/pageFinApproval";
+
+import PageUserMyPage  from "./js/pageComponents/user/pageUserMyPage";
+import PageUserMyApplication  from "./js/pageComponents/user/pageUserMyApplication";
+import PageUserMyDepartment  from "./js/pageComponents/user/pageUserMyDepartment";
+import PageUserAdmin from "./js/pageComponents/user/pageUserAdmin"
+
 
 class App extends React.Component {
     constructor(props) {
@@ -59,9 +63,15 @@ class App extends React.Component {
         const user_authority = authorityHash();
         //--- hr
         if (user_authority['hr'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/hr_myinfo" component={PageHRMyInfo} key='prt_hr_myinfo'/>)
+            // private_routes.push(<PrivateRoute path="/hr_myinfo" component={PageHRMyInfo} key='prt_hr_myinfo'/>)
+            // if(user_authority['hr']==='rw'){
+            //     private_routes.push(<PrivateRoute path="/hr_allusers" component={PageHRAllUsers} key='prt_hr_allusers'/>)
+            // }
+            private_routes.push(<PrivateRoute path="/hr_myinfo" component={PageUserMyPage} key='prt_hr_myinfo'/>)
+            private_routes.push(<PrivateRoute path="/hr_my_application" component={PageUserMyApplication} key='prt_hr_my_application'/>)
+            private_routes.push(<PrivateRoute path="/hr_my_department" component={PageUserMyDepartment} key='prt_hr_my_department'/>)
             if(user_authority['hr']==='rw'){
-                private_routes.push(<PrivateRoute path="/hr_allusers" component={PageHRAllUsers} key='prt_hr_allusers'/>)
+                private_routes.push(<PrivateRoute path="/hr_allusers" component={PageUserAdmin} key='prt_hr_allusers'/>)
             }
         }
         //--- crm
