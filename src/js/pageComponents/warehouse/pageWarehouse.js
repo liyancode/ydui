@@ -9,8 +9,9 @@ import CompnHeader from "../../_components/compnHeader";
 // import WrappedFormNewCustomerContact from "./form/_formNewCustomerContact";
 // import WrappedFormEditCustomer from "./form/_formEditCustomer";
 // import WrappedFormEditContact from "./form/_formEditContact";
-import WrappedFormNewWHRawMaterial from "./form/_formNewWHRawMaterial";
-import WrappedFormEditWHRawMaterial from "./form/_formEditWHRawMaterial";
+import WrappedFormFormNewWHInventory from "./form/_formNewWHInventory";
+import WrappedFormFormEditWHInventory from "./form/_formEditWHInventory";
+import WrappedFormFormNewWHInventoryBatch from "./form/_formNewWHInventoryBatch";
 
 import {serviceWarehouse} from '../../_services/service.warehouse';
 
@@ -24,17 +25,11 @@ function sortFollowupArr(a, b) {
 function whLocationMap(whLocation) {
     let tg;
     switch (whLocation) {
-        case 'shengze':
-            tg = <Tag color="#2db7f5">苏州盛泽仓库</Tag>
+        case 'yaodi':
+            tg = <Tag color="#2db7f5">耀迪仓库</Tag>
             break;
         case 'other':
             tg = <Tag color="#87d068">其他仓库</Tag>
-            break;
-        case 'intentional_order':
-            tg = <Tag color="#87d068">已下意向订单</Tag>
-            break;
-        case 'formal_order':
-            tg = <Tag color="#87d068">已下正式订单</Tag>
             break;
         default:
             tg = <Tag>未知<Icon type="minus-circle-o"/></Tag>
@@ -64,6 +59,9 @@ function recordTypeMap(recordType) {
         case 'update':
             tg = "手动更新库存记录"
             break;
+        case 'add':
+            tg = "新增库存记录"
+            break;
         default:
             tg = "未知"
             break;
@@ -72,10 +70,9 @@ function recordTypeMap(recordType) {
     return tg;
 }
 
-function eNumber(eStr){
+function eNumber(eStr) {
     return new Number(eStr).toString()
 }
-
 
 
 const PageContent = (props) => {
@@ -90,7 +87,7 @@ const PageContent = (props) => {
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
                         <Icon type="plus"/>
-                        <span>添加原料信息</span>
+                        <span>{"添加"+props.pagePrefix+"信息"}</span>
                     </Button>
                     <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
                         <Icon type="reload"/>
@@ -103,15 +100,15 @@ const PageContent = (props) => {
                 </Spin>
             </div>)
         } else if (page === 'view_one') {
-            let limit=10;
-            let wh_raw_material=props.one_item;
+            let limit = 10;
+            let one_item = props.one_item;
             let one_item_history = props.one_item_history.sort(sortFollowupArr).reverse();
-            let hist_logs=[]
+            let hist_logs = []
             let log
-            for (let i = 0; i < one_item_history.length&&limit>0; i++,limit--) {
+            for (let i = 0; i < one_item_history.length && limit > 0; i++, limit--) {
                 log = one_item_history[i];
                 hist_logs.push(<p
-                    key={log.id}>{log.last_update_at.split('+')[0] + " "+log.last_update_by+ " "+recordTypeMap(log.record_type)}</p>)
+                    key={log.id}>{log.last_update_at.split('+')[0] + " " + log.last_update_by + " " + recordTypeMap(log.history_type)}</p>)
             }
             return (<div>
                 <div>
@@ -119,53 +116,61 @@ const PageContent = (props) => {
                         <Icon type="left"/>
                         <span>返回</span>
                     </Button>
+                    <Button type="primary" style={btnStyle} onClick={props.addInOutboundBatchAtOneDetailPage}>
+                        <Icon type="plus"/>
+                        <span>添加入库/出库记录</span>
+                    </Button>
                     <Spin spinning={props.loading}>
                         <div className="col-sm-12 col-md-6">
                             <Divider orientation={"left"}>
                                 <Icon type="profile"/>
-                                <span>原料{wh_raw_material["wh_id_sub"]}详细信息 创建者:{wh_raw_material["created_by"]} 创建时间:{wh_raw_material["created_at"].split('+')[0]}</span>
+                                <span>{props.pagePrefix}{one_item["wh_inventory_id"]}详细信息</span>
                             </Divider>
                             <table className="table table-bordered table-condensed">
                                 <tbody>
                                 <tr>
-                                    <td>原料名称</td>
-                                    <td><h4>{wh_raw_material["name"]}</h4></td>
+                                    <td>名称</td>
+                                    <td><h4>{one_item["name"]}</h4></td>
+                                </tr>
+                                <tr>
+                                    <td>创建时间</td>
+                                    <td><h4>{one_item["created_at"].split('+')[0]}</h4></td>
                                 </tr>
                                 <tr>
                                     <td>规格</td>
-                                    <td>{wh_raw_material["specification"]}</td>
+                                    <td>{one_item["specification"]}</td>
                                 </tr>
                                 <tr>
                                     <td>库存数量</td>
-                                    <td>{eNumber(wh_raw_material["count"])+" "+wh_raw_material["count_unit"]}</td>
+                                    <td>{eNumber(one_item["count"]) + " " + one_item["count_unit"]}</td>
                                 </tr>
                                 <tr>
                                     <td>单价</td>
-                                    <td>{eNumber(wh_raw_material["unit_price"])}元</td>
+                                    <td>{eNumber(one_item["unit_price"])}元</td>
                                 </tr>
                                 <tr>
-                                    <td>重量</td>
-                                    <td>{eNumber(wh_raw_material["weight"])+" "+wh_raw_material["weight_unit"]}</td>
+                                    <td>辅助计数</td>
+                                    <td>{eNumber(one_item["auxiliary_count"]) + " " + one_item["auxiliary_count_unit"]}</td>
                                 </tr>
                                 <tr>
                                     <td>负责人</td>
-                                    <td>{wh_raw_material["principal"]}</td>
+                                    <td>{one_item["principal"]}</td>
                                 </tr>
                                 <tr>
                                     <td>所在仓库</td>
-                                    <td>{whLocationMap(wh_raw_material["wh_location"])}</td>
+                                    <td>{whLocationMap(one_item["wh_location"])}</td>
                                 </tr>
                                 <tr>
-                                    <td>位置</td>
-                                    <td>{wh_raw_material["wh_inner_location"]}</td>
+                                    <td>仓库内部位置</td>
+                                    <td>{one_item["wh_inner_location"]}</td>
                                 </tr>
                                 <tr>
                                     <td>描述</td>
-                                    <td>{wh_raw_material["description"]}</td>
+                                    <td>{one_item["description"]}</td>
                                 </tr>
                                 <tr>
                                     <td>备注</td>
-                                    <td>{wh_raw_material["comment"]}</td>
+                                    <td>{one_item["comment"]}</td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -191,7 +196,17 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
-                <WrappedFormNewWHRawMaterial/>
+                <WrappedFormFormNewWHInventory/>
+            </div>)
+        } else if (page === 'add_new_inountboundbatch') {
+            return (<div>
+                <div>
+                    <Button type="primary" style={btnStyle} onClick={props.backFromEditWHRawMaterialBtnOnclick}>
+                        <Icon type="left"/>
+                        <span>返回</span>
+                    </Button>
+                </div>
+                <WrappedFormFormNewWHInventoryBatch wh_inventory={props.one_item}/>
             </div>)
         } else if (page === 'edit_raw_material') {
             return (<div>
@@ -201,7 +216,7 @@ const PageContent = (props) => {
                         <span>返回</span>
                     </Button>
                 </div>
-                <WrappedFormEditWHRawMaterial one_item={props.one_item}/>
+                <WrappedFormFormEditWHInventory one_item={props.one_item}/>
             </div>);
         } else if (page === 'edit_contact') {
             return (<div>
@@ -231,36 +246,50 @@ const PageContent = (props) => {
 export default class PageWarehouse extends React.Component {
     constructor(props) {
         super(props);
-        let subpage = '', breadcrumbKeyWord = '';
-        // if (props.location.pathname.indexOf('_my') > 0) {
-        //     subpage = 'crm_my';
-        //     breadcrumbKeyWord = '我的客户';
-        // } else if (props.location.pathname.indexOf('_all') > 0) {
-        //     subpage = 'crm_all';
-        //     breadcrumbKeyWord = '所有客户';
-        // }
+        let subpage = 'yuanliao', breadcrumbKeyWord = '', pagePrefix = '原料';
+        if (props.location.pathname.indexOf('_yuanliao') > 0) {
+            subpage = 'yuanliao';
+            pagePrefix = '原料';
+            breadcrumbKeyWord = '原料管理';
+        } else if (props.location.pathname.indexOf('_peibu') > 0) {
+            subpage = 'peibu';
+            pagePrefix = '胚布';
+            breadcrumbKeyWord = '胚布管理';
+        } else if (props.location.pathname.indexOf('_chengpin') > 0) {
+            subpage = 'chengpin';
+            pagePrefix = '成品';
+            breadcrumbKeyWord = '成品管理';
+        } else if (props.location.pathname.indexOf('_zhuji') > 0) {
+            subpage = 'zhuji';
+            pagePrefix = '助剂';
+            breadcrumbKeyWord = '助剂管理';
+        }
         this.state = {
             loading: true,
             page: 'view_all',//view_one/add_new/view_all/edit_customer/edit_contact
             breadcrumb: breadcrumbKeyWord,
             subPage: subpage,
+            pagePrefix: pagePrefix,
             one_customer: null,
             one_customer_followups: [],
             one_contact: null,
             customers: [],
             followup_view: 'view',
-            items:[],
-            one_item:{},
-            one_item_history:[],
-            _raw_material_table_columns:[
+            items: [],
+            one_item: {},
+            one_item_history: [],
+            _wh_inventory_table_columns: [
                 {
                     title: '编号',
-                    dataIndex: 'wh_id_sub',
-                    key: 'wh_id_sub',
-                    sorter: (a, b) => a.wh_id_sub - b.wh_id_sub? 1 : -1,
+                    dataIndex: 'wh_inventory_id',
+                    key: 'wh_inventory_id',
+                    sorter: (a, b) => a.wh_inventory_id - b.wh_inventory_id ? 1 : -1,
+                    render: (text, record) => {
+                        return record.wh_inventory_id.substr(0,8)
+                    },
                 },
                 {
-                    title: '原料名称',
+                    title: '名称',
                     dataIndex: 'name',
                     key: 'name',
                     sorter: (a, b) => a.name > b.name ? 1 : -1,
@@ -271,22 +300,31 @@ export default class PageWarehouse extends React.Component {
                     key: 'specification',
                     sorter: (a, b) => a.specification > b.specification ? 1 : -1,
                 },
-                {
-                    title: '单价',
-                    dataIndex: 'unit_price',
-                    key: 'unit_price',
-                    sorter: (a, b) => a.unit_price > b.unit_price ? 1 : -1,
-                    render: (text, record) => {
-                        return eNumber(record.unit_price)+"元"
-                    },
-                },
+                // {
+                //     title: '单价',
+                //     dataIndex: 'unit_price',
+                //     key: 'unit_price',
+                //     sorter: (a, b) => a.unit_price > b.unit_price ? 1 : -1,
+                //     render: (text, record) => {
+                //         return eNumber(record.unit_price) + "元"
+                //     },
+                // },
                 {
                     title: '库存剩余',
                     dataIndex: 'count',
                     key: 'count',
                     sorter: (a, b) => a.count > b.count ? 1 : -1,
                     render: (text, record) => {
-                        return eNumber(record.count)+record.count_unit
+                        return eNumber(record.count) + record.count_unit
+                    },
+                },
+                {
+                    title: '辅助计数',
+                    dataIndex: 'auxiliary_count',
+                    key: 'auxiliary_count',
+                    sorter: (a, b) => a.auxiliary_count > b.auxiliary_count ? 1 : -1,
+                    render: (text, record) => {
+                        return eNumber(record.auxiliary_count) + record.auxiliary_count_unit
                     },
                 },
                 {
@@ -316,7 +354,7 @@ export default class PageWarehouse extends React.Component {
                     render: (text, record) => {
                         return (<span>
                         <a href="javascript:;" onClick={this.handleCheckDetailOnclick}
-                           wh_id_sub={record.wh_id_sub}>查看详情</a>
+                           wh_inventory_id={record.wh_inventory_id}>查看详情</a>
                         </span>)
                     },
                 }]
@@ -333,23 +371,23 @@ export default class PageWarehouse extends React.Component {
         this.handleBackFromAddNewFollowup = this.handleBackFromAddNewFollowup.bind(this);
         this.handleBackFromAddContactBtnOnclick = this.handleBackFromAddContactBtnOnclick.bind(this);
         this.handleAddContactBtnOnclick = this.handleAddContactBtnOnclick.bind(this);
-        this.handleDeleteContactBtnOnclick = this.handleDeleteContactBtnOnclick.bind(this);
+        this.handleAddInOutboundBatchAtOneDetailPage = this.handleAddInOutboundBatchAtOneDetailPage.bind(this);
 
-        serviceWarehouse.getWHRawMaterialAll().then(data => {
+        serviceWarehouse.getWHInventoryListByInventoryType(subpage).then(data => {
             this.setState({items: data, loading: false});
         });
     }
 
     handleCheckDetailOnclick(e) {
-        let wh_id_sub = e.target.attributes.wh_id_sub.value;
-        this.setState({loading:true});
-        serviceWarehouse.getWHRawMaterialByWhIdSub(wh_id_sub).then(data => {
-            serviceWarehouse.getWHRawMaterialHistoryListByWhIdSub(wh_id_sub).then(data1=>{
+        let wh_inventory_id = e.target.attributes.wh_inventory_id.value;
+        this.setState({loading: true});
+        serviceWarehouse.getWHInventoryByInventoryId(wh_inventory_id).then(data => {
+            serviceWarehouse.getWHInventoryHistoryListByInventoryId(wh_inventory_id).then(data1 => {
                 this.setState({
                     page: "view_one",
-                    breadcrumb: '原料详情: ' + wh_id_sub,
+                    breadcrumb: '详情: ' + wh_inventory_id,
                     one_item: data,
-                    one_item_history:data1,
+                    one_item_history: data1,
                     loading: false
                 });
             })
@@ -366,7 +404,8 @@ export default class PageWarehouse extends React.Component {
 
     handleReloadBtnOnclick() {
         this.setState({loading: true});
-        serviceWarehouse.getWHRawMaterialAll().then(data => {
+
+        serviceWarehouse.getWHInventoryListByInventoryType(this.state.subPage).then(data => {
             this.setState({items: data, loading: false});
         });
     };
@@ -379,15 +418,15 @@ export default class PageWarehouse extends React.Component {
     };
 
     handleBackFromEditWHRawMaterialBtnOnclick() {
-        let wh_id_sub = this.state.one_item.wh_id_sub
-        this.setState({loading:true});
-        serviceWarehouse.getWHRawMaterialByWhIdSub(wh_id_sub).then(data => {
-            serviceWarehouse.getWHRawMaterialHistoryListByWhIdSub(wh_id_sub).then(data1=>{
+        let wh_inventory_id = this.state.one_item.wh_inventory_id
+        this.setState({loading: true});
+        serviceWarehouse.getWHInventoryByInventoryId(wh_inventory_id).then(data => {
+            serviceWarehouse.getWHInventoryHistoryListByInventoryId(wh_inventory_id).then(data1 => {
                 this.setState({
                     page: "view_one",
-                    breadcrumb: '原料详情: ' + wh_id_sub,
+                    breadcrumb: '详情: ' + wh_inventory_id,
                     one_item: data,
-                    one_item_history:data1,
+                    one_item_history: data1,
                     loading: false
                 });
             })
@@ -449,46 +488,22 @@ export default class PageWarehouse extends React.Component {
         });
     }
 
-    handleDeleteContactBtnOnclick(e) {
-        // let id = e.target.getAttribute("id")
-        // if(confirm("删除联系人信息？")){
-        //     this.setState({
-        //         loading: true
-        //     });
-        //     serviceCustomer.deleteCustomerContactById(id).then(data2=>{
-        //         if(data2!=null){
-        //             let customer_id = this.state.one_customer.customer.customer_id;
-        //             // this.setState({page: "view_one",loading:true,breadcrumb:'客户详情: '+customer_id});
-        //             serviceCustomer.getByCustomerId(customer_id).then(data => {
-        //                 serviceCustomer.getCustomerFollowupsByCIdUname(customer_id, localStorage.getItem('user_name')).then(data1 => {
-        //                     this.setState({
-        //                         one_customer: data,
-        //                         one_customer_followups: data1["customer_followups"],
-        //                         loading: false
-        //                     });
-        //                 });
-        //             });
-        //         }else{
-        //             this.setState({
-        //                 loading: false
-        //             });
-        //         }
-        //     });
-        // }
+    handleAddInOutboundBatchAtOneDetailPage(e) {
+        this.setState({page: "add_new_inountboundbatch", breadcrumb: '新建入库/出库记录'});
     }
 
     render() {
         return (
             <Layout style={{height: '100%'}}>
-                <CompnSider defaultMenuKey={['wh_rm']} defaultOpenKeys={['wh_m']}/>
+                <CompnSider defaultMenuKey={['wh_' + this.state.subPage]} defaultOpenKeys={['wh_m']}/>
                 <Layout>
                     <CompnHeader/>
                     <Content>
                         <div style={{padding: 24, background: '#fff', minHeight: 600}}>
                             <div className="page-header">
                                 <h4 style={{display: "inline"}}>
-                                    <Icon type="global"/>
-                                    <span>库存管理</span>
+                                    <Icon type="database"/>
+                                    <span>仓储管理</span>
                                 </h4>
                                 <Breadcrumb style={{display: "inline"}}>
                                     <Breadcrumb.Item> </Breadcrumb.Item>
@@ -499,8 +514,9 @@ export default class PageWarehouse extends React.Component {
                                          one_customer={this.state.one_customer}
                                          one_contact={this.state.one_contact}
                                          one_customer_followups={this.state.one_customer_followups}
-                                         table_columns={this.state._raw_material_table_columns}
+                                         table_columns={this.state._wh_inventory_table_columns}
                                          items={this.state.items}
+                                         pagePrefix={this.state.pagePrefix}
                                          one_item={this.state.one_item}
                                          one_item_history={this.state.one_item_history}
                                          customers={this.state.customers}
@@ -519,6 +535,7 @@ export default class PageWarehouse extends React.Component {
                                          deleteContactBtnOnclick={this.handleDeleteContactBtnOnclick}
                                          editWHRawMaterialBtnOnClick={this.handleEditWHRawMaterialBtnOnclick}
                                          backFromEditWHRawMaterialBtnOnclick={this.handleBackFromEditWHRawMaterialBtnOnclick}
+                                         addInOutboundBatchAtOneDetailPage={this.handleAddInOutboundBatchAtOneDetailPage}
                             />
                         </div>
                     </Content>

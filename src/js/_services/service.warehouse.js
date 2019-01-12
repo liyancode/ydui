@@ -22,6 +22,22 @@ export const serviceWarehouse = {
     getWHRawMaterialHistoryListByWhIdSub,
     getWHRawMaterialHistoryAll,
 
+    //wh_inventory
+    addWHInventory,
+    updateWHInventory,
+    getWHInventoryByInventoryId,
+    getWHInventoryListByInventoryType,
+
+    //wh_inventory_batch
+    addWHInventoryBatch,
+    updateWHInventoryBatch,
+    getWHInventoryBatchByInventoryBatchId,
+    getWHInventoryBatchListByInventoryBatchType,
+    getWHInventoryBatchListByInventoryId,
+    getWHInventoryBatchListByBatchType,
+    //wh_inventory_history
+    getWHInventoryHistoryByHistoryId,
+    getWHInventoryHistoryListByInventoryId,
 };
 
 
@@ -75,6 +91,57 @@ function getWHRawMaterialHistoryListByRecordType(recordType) {
 
 function getWHRawMaterialHistoryAll() {
     return service_Util_.common_Get_(apiPrefix + `/wh_raw_material_history/list/all/`, '').then(handleResponse);
+}
+
+//wh_inventory
+function addWHInventory(body) {
+    return service_Util_.common_Post_(apiPrefix + '/wh_inventory', body).then(handleResponse);
+}
+
+function updateWHInventory(body) {
+    return service_Util_.common_Put_(apiPrefix + `/wh_inventory`, body).then(handleResponse);
+}
+
+function getWHInventoryByInventoryId(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory/`, key).then(handleResponse);
+}
+
+function getWHInventoryListByInventoryType(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory/list/by_wh_inventory_type/`, key).then(handleResponse);
+}
+
+//wh_inventory_batch
+function addWHInventoryBatch(body) {
+    return service_Util_.common_Post_(apiPrefix + '/wh_inventory_batch', body).then(handleResponse);
+}
+
+function updateWHInventoryBatch(body) {
+    return service_Util_.common_Put_(apiPrefix + `/wh_inventory_batch`, body).then(handleResponse);
+}
+
+function getWHInventoryBatchByInventoryBatchId(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory_batch/`, key).then(handleResponse);
+}
+
+function getWHInventoryBatchListByInventoryBatchType(wh_inventory_type,batch_type) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory_batch/list/by_wh_inventory_type_batch_type/?wh_inventory_type=`+wh_inventory_type+`&batch_type=`+batch_type, '').then(handleResponse);
+}
+
+function getWHInventoryBatchListByBatchType(batch_type) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory_batch/list/by_batch_type/`, batch_type).then(handleResponse);
+}
+
+function getWHInventoryBatchListByInventoryId(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory_batch/list/by_wh_inventory_id/`, key).then(handleResponse);
+}
+
+//     //wh_inventory_history
+function getWHInventoryHistoryByHistoryId(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory_history/`, key).then(handleResponse);
+}
+
+function getWHInventoryHistoryListByInventoryId(key) {
+    return service_Util_.common_Get_(apiPrefix + `/wh_inventory_history/list/by_wh_inventory_id/`, key).then(handleResponse);
 }
 
 function handleResponse(response) {

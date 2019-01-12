@@ -6,8 +6,9 @@ const Option = Select.Option;
 const {TextArea} = Input;
 
 import {serviceWarehouse} from '../../../_services/service.warehouse';
+import {invenrotyService} from "../../../_services/inventory.service";
 
-class _formNewWHRawMaterial extends React.Component {
+class _formEditWHInventory extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,54 +22,53 @@ class _formNewWHRawMaterial extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        //{
-        //     "other": null,
-        //     "count": "0.221E3",
-        //     "created_at": "2019-01-11 00:23:24 +0800",
-        //     "specification": "test_21",
-        //     "description": "for test",
-        //     "weight": "0.442E3",
-        //     "unit_price": "0.251E1",
-        //     "created_by": "admin",
-        //     "wh_inner_location": "r1w2",
-        //     "principal": "admin",
-        //     "last_update_by": "admin",
-        //     "wh_id": "WH_RM74ECFB1C6EBBB2BC",
-        //     "weight_unit": "kg",
-        //     "last_update_at": "2019-01-11 00:23:24 +0800",
-        //     "name": "rm test 01",
-        //     "count_unit": "jian",
-        //     "comment": null,
-        //     "wh_location": "shengze",
-        //     "id": 5,
-        //     "wh_id_sub": "WH_RM74ECFB1C6EBBB2BC_2.51_KJ",
-        //     "status": 1
-        // }
+        //#--- common property
+        //             dest_obj.id = meta_hash["id"]
+        //             dest_obj.created_by = meta_hash["created_by"]
+        //             dest_obj.last_update_by = meta_hash["last_update_by"]
+        //             dest_obj.status = meta_hash["status"]
+        //             dest_obj.comment = meta_hash["comment"]
+        //             #--- customized property
+        //             dest_obj.wh_inventory_id = meta_hash["wh_inventory_id"]
+        //             dest_obj.wh_inventory_type = meta_hash["wh_inventory_type"]
+        //             dest_obj.wh_location = meta_hash["wh_location"]
+        //             dest_obj.wh_inner_location = meta_hash["wh_inner_location"]
+        //             dest_obj.principal = meta_hash["principal"]
+        //             dest_obj.name = meta_hash["name"]
+        //             dest_obj.specification = meta_hash["specification"]
+        //             dest_obj.description = meta_hash["description"]
+        //             dest_obj.count = meta_hash["count"]
+        //             dest_obj.count_unit = meta_hash["count_unit"]
+        //             dest_obj.unit_price = meta_hash["unit_price"]
+        //             dest_obj.auxiliary_count = meta_hash["auxiliary_count"]
+        //             dest_obj.auxiliary_count_unit = meta_hash["auxiliary_count_unit"]
+        //             dest_obj.other = meta_hash["other"]
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 this.setState({loading: true});
-                let wh_raw_material = {
-                    "id": -1,
-                    "other": "",
-                    "count": values["count"],
-                    "specification": values["specification"],
-                    "description": values["description"],
-                    "weight": values["weight"],
-                    "unit_price": values["unit_price"],
-                    "created_by": "",
+                let one_item=this.props.one_item
+                let wh_inventory = {
+                    "id": one_item.id,
+                    "created_by": one_item.created_by,
+                    "last_update_by":one_item.last_update_by,
+                    "status": one_item.status,
+                    "comment": values["comment"],
+                    "wh_inventory_id": one_item.wh_inventory_id,
+                    "wh_inventory_type": one_item.wh_inventory_type,
+                    "wh_location": values["wh_location"],
                     "wh_inner_location": values["wh_inner_location"],
                     "principal": values["principal"],
-                    "last_update_by": "",
-                    "wh_id": "",
-                    "weight_unit": values["weight_unit"],
-                    "name": values["name"],
+                    "name": one_item.name,
+                    "specification": one_item.specification,
+                    "description": values["description"],
+                    "count": values["count"],
                     "count_unit": values["count_unit"],
-                    "comment": values["comment"],
-                    "wh_location": values["wh_location"],
-                    "wh_id_sub": values["wh_id_sub"],
-                    "status": 1,
+                    "unit_price": values["unit_price"],
+                    "auxiliary_count": values["auxiliary_count"],
+                    "auxiliary_count_unit": values["auxiliary_count_unit"],
+                    "other": values["other"],
                 };
-                serviceWarehouse.addWHRawMaterial(wh_raw_material).then(data => {
+                serviceWarehouse.updateWHInventory(wh_inventory).then(data => {
                     this.setState({loading: false});
                 });
             }
@@ -82,6 +82,7 @@ class _formNewWHRawMaterial extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
+        const one_item=this.props.one_item
 
         const formItemLayout = {
             labelCol: {
@@ -106,11 +107,46 @@ class _formNewWHRawMaterial extends React.Component {
             },
         };
         const whLocationSelector = getFieldDecorator('wh_location', {
-            initialValue: 'shengze',
+            initialValue: one_item.wh_location,
         })(
             <Select>
-                <Option value="shengze">苏州盛泽仓库</Option>
-                <Option value="other">其他</Option>
+                <Option value="yaodi">耀迪仓库</Option>
+                <Option value="other">其他仓库</Option>
+            </Select>
+        );
+
+        const typeSelector = getFieldDecorator('wh_inventory_type', {
+            initialValue: one_item.wh_inventory_type,
+        })(
+            <Select disabled={true}>
+                <Option value="yuanliao">原料</Option>
+                <Option value="peibu">胚布</Option>
+                <Option value="chengpin">成品</Option>
+                <Option value="zhuji">助剂</Option>
+            </Select>
+        );
+
+        const countUnitSelector = getFieldDecorator('count_unit', {
+            initialValue: one_item.count_unit,
+        })(
+            <Select>
+                <Option value="meter">米</Option>
+                <Option value="sqrm">平方米</Option>
+                <Option value="kg">千克</Option>
+                <Option value="jian">件</Option>
+                <Option value="tiao">条</Option>
+            </Select>
+        );
+
+        const auxiliaryCountUnitSelector = getFieldDecorator('auxiliary_count_unit', {
+            initialValue: one_item.auxiliary_count_unit,
+        })(
+            <Select>
+                <Option value="meter">米</Option>
+                <Option value="sqrm">平方米</Option>
+                <Option value="kg">千克</Option>
+                <Option value="jian">件</Option>
+                <Option value="tiao">条</Option>
             </Select>
         );
         return (
@@ -118,14 +154,21 @@ class _formNewWHRawMaterial extends React.Component {
                 <Form onSubmit={this.handleSubmit} style={{maxWidth: '800px'}}>
                     <FormItem
                         {...formItemLayout}
-                        label="原料名称"
+                        label="类别"
+                    >
+                        {typeSelector}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="名称"
                     >
                         {getFieldDecorator('name', {
+                            initialValue: one_item.name,
                             rules: [{
                                 required: true, message: '请输入公司名原料名称!',
                             }],
                         })(
-                            <Input/>
+                            <Input disabled={true}/>
                         )}
                     </FormItem>
                     <FormItem
@@ -133,20 +176,22 @@ class _formNewWHRawMaterial extends React.Component {
                         label="规格"
                     >
                         {getFieldDecorator('specification', {
+                            initialValue: one_item.specification,
                             rules: [{
                                 required: true, message: '请输入规格!',
                             }],
                         })(
-                            <Input/>
+                            <Input disabled={true}/>
                         )}
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="单价"
+                        label="单价(元)"
                     >
                         {getFieldDecorator('unit_price', {
+                            initialValue: new Number(one_item.unit_price).toString(),
                             rules: [{
-                                required: true, message: '请输入单价!',
+                                required: false, message: '请输入单价!',
                             }],
                         })(
                             <Input/>
@@ -157,6 +202,7 @@ class _formNewWHRawMaterial extends React.Component {
                         label="库存数"
                     >
                         {getFieldDecorator('count', {
+                            initialValue: new Number(one_item.count).toString(),
                             rules: [{
                                 required: true, message: '请输入库存数!',
                             }],
@@ -166,9 +212,16 @@ class _formNewWHRawMaterial extends React.Component {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="库存数单位"
+                        label="库存单位"
                     >
-                        {getFieldDecorator('count_unit', {
+                        {countUnitSelector}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="辅助计数"
+                    >
+                        {getFieldDecorator('auxiliary_count', {
+                            initialValue: new Number(one_item.auxiliary_count).toString(),
                             rules: [{
                                 required: false,
                             }],
@@ -178,37 +231,20 @@ class _formNewWHRawMaterial extends React.Component {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="重量"
+                        label="辅助计数单位"
                     >
-                        {getFieldDecorator('weight', {
-                            rules: [{
-                                required: true, message: '请输入重量!',
-                            }],
-                        })(
-                            <Input/>
-                        )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="重量单位"
-                    >
-                        {getFieldDecorator('weight_unit', {
-                            rules: [{
-                                required: false,
-                            }],
-                        })(
-                            <Input/>
-                        )}
+                        {auxiliaryCountUnitSelector}
                     </FormItem>
 
                     <FormItem
                         {...formItemLayout}
-                        label="原料描述"
+                        label="详细描述"
                     >
                         {getFieldDecorator('description', {
+                            initialValue: one_item.description,
                             rules: [],
                         })(
-                            <TextArea rows={2}/>
+                            <TextArea rows={3}/>
                         )}
                     </FormItem>
                     <FormItem
@@ -216,6 +252,7 @@ class _formNewWHRawMaterial extends React.Component {
                         label="负责人"
                     >
                         {getFieldDecorator('principal', {
+                            initialValue: one_item.principal,
                             rules: [{
                                 required: false,
                             }],
@@ -234,6 +271,7 @@ class _formNewWHRawMaterial extends React.Component {
                         label="仓库内部位置"
                     >
                         {getFieldDecorator('wh_inner_location', {
+                            initialValue: one_item.wh_inner_location,
                             rules: [{
                                 required: false,
                             }],
@@ -246,6 +284,7 @@ class _formNewWHRawMaterial extends React.Component {
                         label="备注说明"
                     >
                         {getFieldDecorator('comment', {
+                            initialValue: one_item.comment,
                             rules: [{
                                 required: false,
                             }],
@@ -265,5 +304,5 @@ class _formNewWHRawMaterial extends React.Component {
     }
 }
 
-const WrappedFormNewWHRawMaterial = Form.create()(_formNewWHRawMaterial);
-export default WrappedFormNewWHRawMaterial;
+const WrappedFormFormEditWHInventory = Form.create()(_formEditWHInventory);
+export default WrappedFormFormEditWHInventory;

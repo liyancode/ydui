@@ -112,7 +112,7 @@ const PageContent = (props) => {
                             <table className="table table-bordered table-condensed">
                                 <tbody>
                                 <tr>
-                                    <td>原料编号</td>
+                                    <td>库存编号</td>
                                     <td><h4>{one_item["wh_id_sub"]}</h4></td>
                                 </tr>
                                 <tr>
@@ -242,62 +242,62 @@ export default class PageWarehouseInOutHistory extends React.Component {
             in_or_out: "outbound",
             _inbound_table_columns: [
                 {
-                    title: '原料编号',
-                    dataIndex: 'wh_id_sub',
-                    key: 'wh_id_sub',
-                    sorter: (a, b) => a.wh_id_sub - b.wh_id_sub ? 1 : -1,
+                    title: '批号',
+                    dataIndex: 'batch_number',
+                    key: 'batch_number',
+                    sorter: (a, b) => a.batch_number - b.batch_number ? 1 : -1,
                 },
                 {
-                    title: '原料名称',
-                    dataIndex: 'name',
-                    key: 'name',
-                    sorter: (a, b) => a.name > b.name ? 1 : -1,
+                    title: '库存类别',
+                    dataIndex: 'wh_inventory_type',
+                    key: 'wh_inventory_type',
+                    sorter: (a, b) => a.wh_inventory_type > b.wh_inventory_type ? 1 : -1,
                 },
                 {
-                    title: '规格',
-                    dataIndex: 'specification',
-                    key: 'specification',
-                    sorter: (a, b) => a.specification > b.specification ? 1 : -1,
+                    title: '入库批号',
+                    dataIndex: 'batch_number',
+                    key: 'batch_number',
+                    sorter: (a, b) => a.batch_number > b.batch_number ? 1 : -1,
                 },
                 {
                     title: '入库数量',
-                    dataIndex: 'inbound_count',
-                    key: 'inbound_count',
+                    dataIndex: 'count',
+                    key: 'count',
                     sorter: (a, b) => a.inbound_count > b.inbound_count ? 1 : -1,
                     render: (text, record) => {
                         return eNumber(record.inbound_count)
                     },
                 },
-                {
-                    title: '入库重量',
-                    dataIndex: 'inbound_weight',
-                    key: 'inbound_weight',
-                    sorter: (a, b) => a.inbound_weight > b.inbound_weight ? 1 : -1,
-                    render: (text, record) => {
-                        return eNumber(record.inbound_weight)
-                    },
-                },
-                {
-                    title: '入库总价',
-                    dataIndex: 'inbound_total_price',
-                    key: 'inbound_total_price',
-                    sorter: (a, b) => a.inbound_total_price > b.inbound_total_price ? 1 : -1,
-                    render: (text, record) => {
-                        return eNumber(record.inbound_total_price)
-                    },
-                },
+                // {
+                //     title: '入库重量',
+                //     dataIndex: 'inbound_weight',
+                //     key: 'inbound_weight',
+                //     sorter: (a, b) => a.inbound_weight > b.inbound_weight ? 1 : -1,
+                //     render: (text, record) => {
+                //         return eNumber(record.inbound_weight)
+                //     },
+                // },
+                // {
+                //     title: '入库总价',
+                //     dataIndex: 'inbound_total_price',
+                //     key: 'inbound_total_price',
+                //     sorter: (a, b) => a.inbound_total_price > b.inbound_total_price ? 1 : -1,
+                //     render: (text, record) => {
+                //         return eNumber(record.inbound_total_price)
+                //     },
+                // },
                 {
                     title: '负责人',
-                    dataIndex: 'inbound_principal',
-                    key: 'inbound_principal',
+                    dataIndex: 'principal',
+                    key: 'principal',
                     sorter: (a, b) => a.inbound_principal > b.inbound_principal ? 1 : -1,
                 },
                 {
                     title: '入库时间',
-                    key: 'inbound_at',
-                    sorter: (a, b) => a.inbound_at > b.inbound_at ? 1 : -1,
+                    key: 'batch_at',
+                    sorter: (a, b) => a.batch_at > b.batch_at ? 1 : -1,
                     render: (text, record) => {
-                        return (record.inbound_at.split('+')[0])
+                        return (record.batch_at.split('+')[0])
                     },
                 }, {
                     title: '操作',
@@ -305,68 +305,68 @@ export default class PageWarehouseInOutHistory extends React.Component {
                     render: (text, record) => {
                         return (<span>
                         <a href="javascript:;" onClick={this.handleCheckDetailOnclick}
-                           id={record.id}>查看详情</a>
+                           wh_inventory_batch_id={record.wh_inventory_batch_id}>查看详情</a>
                         </span>)
                     },
                 }],
             _outbound_table_columns: [
                 {
-                    title: '原料编号',
-                    dataIndex: 'wh_id_sub',
-                    key: 'wh_id_sub',
-                    sorter: (a, b) => a.wh_id_sub - b.wh_id_sub ? 1 : -1,
+                    title: '批号',
+                    dataIndex: 'batch_number',
+                    key: 'batch_number',
+                    sorter: (a, b) => a.batch_number - b.batch_number ? 1 : -1,
                 },
                 {
-                    title: '原料名称',
-                    dataIndex: 'name',
-                    key: 'name',
-                    sorter: (a, b) => a.name > b.name ? 1 : -1,
+                    title: '库存类别',
+                    dataIndex: 'wh_inventory_type',
+                    key: 'wh_inventory_type',
+                    sorter: (a, b) => a.wh_inventory_type > b.wh_inventory_type ? 1 : -1,
                 },
                 {
-                    title: '规格',
-                    dataIndex: 'specification',
-                    key: 'specification',
-                    sorter: (a, b) => a.specification > b.specification ? 1 : -1,
+                    title: '出库批号',
+                    dataIndex: 'batch_number',
+                    key: 'batch_number',
+                    sorter: (a, b) => a.batch_number > b.batch_number ? 1 : -1,
                 },
                 {
                     title: '出库数量',
-                    dataIndex: 'outbound_count',
-                    key: 'outbound_count',
-                    sorter: (a, b) => a.outbound_count > b.outbound_count ? 1 : -1,
+                    dataIndex: 'count',
+                    key: 'count',
+                    sorter: (a, b) => a.inbound_count > b.inbound_count ? 1 : -1,
                     render: (text, record) => {
-                        return eNumber(record.outbound_count)
+                        return eNumber(record.inbound_count)
                     },
                 },
-                {
-                    title: '出库重量',
-                    dataIndex: 'outbound_weight',
-                    key: 'outbound_weight',
-                    sorter: (a, b) => a.outbound_weight > b.outbound_weight ? 1 : -1,
-                    render: (text, record) => {
-                        return eNumber(record.outbound_weight)
-                    },
-                },
-                {
-                    title: '出库总价',
-                    dataIndex: 'outbound_total_price',
-                    key: 'outbound_total_price',
-                    sorter: (a, b) => a.outbound_total_price > b.outbound_total_price ? 1 : -1,
-                    render: (text, record) => {
-                        return eNumber(record.outbound_total_price)
-                    },
-                },
+                // {
+                //     title: '入库重量',
+                //     dataIndex: 'inbound_weight',
+                //     key: 'inbound_weight',
+                //     sorter: (a, b) => a.inbound_weight > b.inbound_weight ? 1 : -1,
+                //     render: (text, record) => {
+                //         return eNumber(record.inbound_weight)
+                //     },
+                // },
+                // {
+                //     title: '入库总价',
+                //     dataIndex: 'inbound_total_price',
+                //     key: 'inbound_total_price',
+                //     sorter: (a, b) => a.inbound_total_price > b.inbound_total_price ? 1 : -1,
+                //     render: (text, record) => {
+                //         return eNumber(record.inbound_total_price)
+                //     },
+                // },
                 {
                     title: '负责人',
-                    dataIndex: 'outbound_principal',
-                    key: 'outbound_principal',
-                    sorter: (a, b) => a.outbound_principal > b.outbound_principal ? 1 : -1,
+                    dataIndex: 'principal',
+                    key: 'principal',
+                    sorter: (a, b) => a.inbound_principal > b.inbound_principal ? 1 : -1,
                 },
                 {
                     title: '出库时间',
-                    key: 'outbound_at',
-                    sorter: (a, b) => a.outbound_at > b.outbound_at ? 1 : -1,
+                    key: 'batch_at',
+                    sorter: (a, b) => a.batch_at > b.batch_at ? 1 : -1,
                     render: (text, record) => {
-                        return (record.outbound_at.split('+')[0])
+                        return (record.batch_at.split('+')[0])
                     },
                 }, {
                     title: '操作',
@@ -374,10 +374,10 @@ export default class PageWarehouseInOutHistory extends React.Component {
                     render: (text, record) => {
                         return (<span>
                         <a href="javascript:;" onClick={this.handleCheckDetailOnclick}
-                           id={record.id}>查看详情</a>
+                           wh_inventory_batch_id={record.wh_inventory_batch_id}>查看详情</a>
                         </span>)
                     },
-                }]
+                }],
         }
 
         this.handleCheckDetailOnclick = this.handleCheckDetailOnclick.bind(this);
@@ -393,15 +393,15 @@ export default class PageWarehouseInOutHistory extends React.Component {
         this.handleAddContactBtnOnclick = this.handleAddContactBtnOnclick.bind(this);
         this.handleOnChangeInOutBoundRadio = this.handleOnChangeInOutBoundRadio.bind(this);
 
-        serviceWarehouse.getWHRawMaterialHistoryListByRecordType("outbound").then(data => {
+        serviceWarehouse.getWHInventoryBatchListByBatchType("outbound").then(data => {
             this.setState({items: data, loading: false});
         });
     }
 
     handleCheckDetailOnclick(e) {
-        let id = e.target.attributes.id.value;
+        let wh_inventory_batch_id = e.target.attributes.wh_inventory_batch_id.value;
         this.setState({loading: true});
-        serviceWarehouse.getWHRawMaterialHistoryById(id).then(data => {
+        serviceWarehouse.getWHInventoryBatchByInventoryBatchId(wh_inventory_batch_id).then(data => {
             this.setState({
                 page: "view_one",
                 breadcrumb: '(入/出)库记录详细',
@@ -421,7 +421,7 @@ export default class PageWarehouseInOutHistory extends React.Component {
 
     handleReloadBtnOnclick() {
         this.setState({loading: true});
-        serviceWarehouse.getWHRawMaterialHistoryListByRecordType(this.state.in_or_out).then(data => {
+        serviceWarehouse.getWHInventoryBatchListByBatchType(this.state.in_or_out).then(data => {
             this.setState({items: data, loading: false});
         });
     };
@@ -507,7 +507,7 @@ export default class PageWarehouseInOutHistory extends React.Component {
             in_or_out: in_or_out,
             loading: true
         });
-        serviceWarehouse.getWHRawMaterialHistoryListByRecordType(in_or_out).then(data => {
+        serviceWarehouse.getWHInventoryBatchListByBatchType(in_or_out).then(data => {
             this.setState({items: data, loading: false});
         });
     }

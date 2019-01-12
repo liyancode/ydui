@@ -329,10 +329,28 @@ const CompnSider = (props) => {
                 key="wh_m"
                 title={<span><Icon type="database" /><span>仓储管理</span></span>}
             >
-                <Menu.Item key="wh_rm">
-                    <Link to='/wh_rm' replace>
+                <Menu.Item key="wh_yuanliao">
+                    <Link to='/wh_yuanliao' replace>
                         <Icon type="file"/>
-                        <span>原材料管理</span>
+                        <span>原料管理</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="wh_peibu">
+                    <Link to='/wh_peibu' replace>
+                        <Icon type="file"/>
+                        <span>胚布管理</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="wh_chengpin">
+                    <Link to='/wh_chengpin' replace>
+                        <Icon type="file"/>
+                        <span>成品管理</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="wh_zhuji">
+                    <Link to='/wh_zhuji' replace>
+                        <Icon type="file"/>
+                        <span>助剂管理</span>
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="wh_inout_history">
