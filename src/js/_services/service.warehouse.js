@@ -4,6 +4,7 @@ import {message} from 'antd'
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 import {service_Util_} from "./service._util_";
+import {tokenExpired} from "../_helpers/tokenExpired";
 
 export const serviceWarehouse = {
     //wh_raw_material
@@ -148,8 +149,8 @@ function handleResponse(response) {
     if (!response.ok) {
         if (response.status === 401) {
             // auto tokenExpired if 401 response returned from api
-            message.error("用户名或密码错误！");
-            logout();
+            // message.error("用户名或密码错误！");
+            tokenExpired();
         } else if (response.status === 500) {
             message.error("错误，请稍后再试！");
         } else if (response.status === 404) {

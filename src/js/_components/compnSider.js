@@ -46,7 +46,6 @@ const CompnSider = (props) => {
                         </Link>
                     </Menu.Item>
                 </SubMenu>
-
             </SubMenu>
         )
     } else if (hr_autho === 'rw') {
@@ -89,10 +88,12 @@ const CompnSider = (props) => {
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="hr_my_application">
-                        <Link to='/hr_alldepartments' replace>
-                            <Icon type="audit"/>
-                            <span>部门信息</span>
-                        </Link>
+                        {/*<Link to='/hr_alldepartments' replace>*/}
+                            {/*<Icon type="audit"/>*/}
+                            {/*<span>部门信息</span>*/}
+                        {/*</Link>*/}
+                        <Icon type="audit"/>
+                        <span>部门信息</span>
                     </Menu.Item>
                 </SubMenu>
             </SubMenu>
@@ -353,24 +354,18 @@ const CompnSider = (props) => {
                         <span>助剂管理</span>
                     </Link>
                 </Menu.Item>
-                <Menu.Item key="wh_inout_history">
-                    <Link to='/wh_inout_history' replace>
+                <Menu.Item key="wh_fuliao">
+                    <Link to='/wh_fuliao' replace>
                         <Icon type="file"/>
-                        <span>入/出库管理</span>
+                        <span>辅料管理</span>
                     </Link>
                 </Menu.Item>
-                {/*<Menu.Item key="wh_sfp">*/}
-                    {/*<Link to='/wh_sfp' replace>*/}
-                        {/*<Icon type="appstore-o" />*/}
-                        {/*<span>半成品</span>*/}
-                    {/*</Link>*/}
-                {/*</Menu.Item>*/}
-                {/*<Menu.Item key="wh_fp">*/}
-                    {/*<Link to='/wh_fp' replace>*/}
-                        {/*<Icon type="shopping-cart" />*/}
-                        {/*<span>成品</span>*/}
-                    {/*</Link>*/}
-                {/*</Menu.Item>*/}
+                <Menu.Item key="wh_inventory_batch">
+                    <Link to='/wh_inventory_batch' replace>
+                        <Icon type="file"/>
+                        <span>出入库管理</span>
+                    </Link>
+                </Menu.Item>
             </SubMenu>
         )
     }

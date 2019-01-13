@@ -6,7 +6,7 @@ const Option = Select.Option;
 const {TextArea} = Input;
 
 import {serviceWarehouse} from '../../../_services/service.warehouse';
-import {invenrotyService} from "../../../_services/inventory.service";
+import {_WH_Config} from '../_wh_config';
 
 class _formNewWHInventory extends React.Component {
     constructor(props) {
@@ -117,10 +117,7 @@ class _formNewWHInventory extends React.Component {
             initialValue: 'yuanliao',
         })(
             <Select>
-                <Option value="yuanliao">原料</Option>
-                <Option value="peibu">胚布</Option>
-                <Option value="chengpin">成品</Option>
-                <Option value="zhuji">助剂</Option>
+                {_WH_Config._inventory_type_options()}
             </Select>
         );
 
@@ -128,11 +125,7 @@ class _formNewWHInventory extends React.Component {
             initialValue: 'meter',
         })(
             <Select>
-                <Option value="meter">米</Option>
-                <Option value="sqrm">平方米</Option>
-                <Option value="kg">千克</Option>
-                <Option value="jian">件</Option>
-                <Option value="tiao">条</Option>
+                {_WH_Config._measure_unit_options()}
             </Select>
         );
 
@@ -140,11 +133,7 @@ class _formNewWHInventory extends React.Component {
             initialValue: 'meter',
         })(
             <Select>
-                <Option value="meter">米</Option>
-                <Option value="sqrm">平方米</Option>
-                <Option value="kg">千克</Option>
-                <Option value="jian">件</Option>
-                <Option value="tiao">条</Option>
+                {_WH_Config._measure_unit_options()}
             </Select>
         );
         return (

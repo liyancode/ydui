@@ -216,7 +216,7 @@ const PageContent = (props) => {
 
     }
 }
-export default class PageWarehouseInOutHistory extends React.Component {
+export default class PageWarehouseBatch extends React.Component {
     constructor(props) {
         super(props);
         let subpage = '', breadcrumbKeyWord = '';

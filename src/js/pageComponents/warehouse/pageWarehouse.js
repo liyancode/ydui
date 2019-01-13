@@ -5,23 +5,19 @@ const {Content,} = Layout;
 import CompnSider from "../../_components/compnSider";
 import CompnHeader from "../../_components/compnHeader";
 
-// import WrappedFormNewCustomer from "./form/_formNewCustomer";
-// import WrappedFormNewCustomerContact from "./form/_formNewCustomerContact";
-// import WrappedFormEditCustomer from "./form/_formEditCustomer";
-// import WrappedFormEditContact from "./form/_formEditContact";
 import WrappedFormFormNewWHInventory from "./form/_formNewWHInventory";
 import WrappedFormFormEditWHInventory from "./form/_formEditWHInventory";
 import WrappedFormFormNewWHInventoryBatch from "./form/_formNewWHInventoryBatch";
 
 import {serviceWarehouse} from '../../_services/service.warehouse';
+import {_WH_Config} from "./_wh_config";
 
 const Step = Steps.Step;
 
-function sortFollowupArr(a, b) {
+function sortListArr(a, b) {
     return a.last_update_at > b.last_update_at ? 1 : -1
 }
 
-//potential潜在/intentional有意向合作/intentional_order意向订单/formal_order正式订单
 function whLocationMap(whLocation) {
     let tg;
     switch (whLocation) {
@@ -41,15 +37,6 @@ function whLocationMap(whLocation) {
 function recordTypeMap(recordType) {
     let tg;
     switch (recordType) {
-        // case 'inbound':
-        //     tg = <Tag color="#2db7f5">入库记录</Tag>
-        //     break;
-        // case 'outbound':
-        //     tg = <Tag color="#87d068">出库记录</Tag>
-        //     break;
-        // case 'update':
-        //     tg = <Tag color="#87d068">手动更新库存记录</Tag>
-        //     break;
         case 'inbound':
             tg = "入库记录"
             break;
@@ -66,7 +53,6 @@ function recordTypeMap(recordType) {
             tg = "未知"
             break;
     }
-    // return <span style={{display:"inline"}}>{tg}</span>
     return tg;
 }
 
@@ -87,7 +73,7 @@ const PageContent = (props) => {
                 <div>
                     <Button type="primary" style={btnStyle} onClick={props.addNewBtnOnclick}>
                         <Icon type="plus"/>
-                        <span>{"添加"+props.pagePrefix+"信息"}</span>
+                        <span>{"添加" + props.pagePrefix + "信息"}</span>
                     </Button>
                     <Button type="primary" style={btnStyle} onClick={props.reloadBtnOnclick}>
                         <Icon type="reload"/>
@@ -102,13 +88,33 @@ const PageContent = (props) => {
         } else if (page === 'view_one') {
             let limit = 10;
             let one_item = props.one_item;
-            let one_item_history = props.one_item_history.sort(sortFollowupArr).reverse();
+            let one_item_batch_list = props.one_item_batch_list.sort(_WH_Config._sort_list_arr_by_batch_at).reverse();
+            let one_item_batch_list_count = one_item_batch_list.length;
+            let batch_list = [], batch
+            for (let i = 0; i < one_item_batch_list_count && limit > 0; i++, limit--) {
+                batch = one_item_batch_list[i]
+                // batch_list.push(
+                //     <tr key={batch.wh_inventory_batch_id}>
+                //         <td>{_WH_Config._format_time_string_by_day(batch.batch_at)}</td>
+                //         <td>{_WH_Config._en_to_cn(batch.batch_type)}</td>
+                //         <td>{batch.batch_number}</td>
+                //         <td>{_WH_Config._format_number(batch.count)}</td>
+                //         <td>{_WH_Config._en_to_cn(batch.count_unit)}</td>
+                //         <td><a href="#">详细</a></td>
+                //     </tr>
+                // )
+
+                batch_list.push(batch)
+            }
+
+            let one_item_history = props.one_item_history.sort(_WH_Config._sort_list_arr_by_last_update_at).reverse();
+
             let hist_logs = []
             let log
             for (let i = 0; i < one_item_history.length && limit > 0; i++, limit--) {
                 log = one_item_history[i];
                 hist_logs.push(<p
-                    key={log.id}>{log.last_update_at.split('+')[0] + " " + log.last_update_by + " " + recordTypeMap(log.history_type)}</p>)
+                    key={log.id}>{_WH_Config._format_time_string_by_minute(log.last_update_at) + " " + log.last_update_by + " " + recordTypeMap(log.history_type)}</p>)
             }
             return (<div>
                 <div>
@@ -124,7 +130,7 @@ const PageContent = (props) => {
                         <div className="col-sm-12 col-md-6">
                             <Divider orientation={"left"}>
                                 <Icon type="profile"/>
-                                <span>{props.pagePrefix}{one_item["wh_inventory_id"]}详细信息</span>
+                                <span>{props.pagePrefix}{one_item["name"]}详细信息</span>
                             </Divider>
                             <table className="table table-bordered table-condensed">
                                 <tbody>
@@ -134,7 +140,7 @@ const PageContent = (props) => {
                                 </tr>
                                 <tr>
                                     <td>创建时间</td>
-                                    <td><h4>{one_item["created_at"].split('+')[0]}</h4></td>
+                                    <td>{one_item["created_at"].split('+')[0]}</td>
                                 </tr>
                                 <tr>
                                     <td>规格</td>
@@ -181,7 +187,24 @@ const PageContent = (props) => {
                             </table>
                         </div>
                         <div className="col-sm-12 col-md-6">
-                            <h5>变更记录</h5>
+                            <Divider orientation={"left"}>
+                                <Icon type="profile"/>
+                                <span>出入库记录</span>
+                            </Divider>
+                            {/*<table className="table table-bordered table-condensed">*/}
+                                {/*{batch_list_thead}*/}
+                                {/*<tbody>*/}
+                                {/*{batch_list}*/}
+                                {/*</tbody>*/}
+                            {/*</table>*/}
+                            <Table rowKey="id" columns={props.table_columns_batch}
+                                   dataSource={batch_list} size="small"/>
+                        </div>
+                        <div className="col-sm-12 col-md-6">
+                            <Divider orientation={"left"}>
+                                <Icon type="profile"/>
+                                <span>更新日志</span>
+                            </Divider>
                             {hist_logs}
                         </div>
                     </Spin>
@@ -263,6 +286,10 @@ export default class PageWarehouse extends React.Component {
             subpage = 'zhuji';
             pagePrefix = '助剂';
             breadcrumbKeyWord = '助剂管理';
+        } else if (props.location.pathname.indexOf('_fuliao') > 0) {
+            subpage = 'fuliao';
+            pagePrefix = '辅料';
+            breadcrumbKeyWord = '辅料管理';
         }
         this.state = {
             loading: true,
@@ -278,14 +305,15 @@ export default class PageWarehouse extends React.Component {
             items: [],
             one_item: {},
             one_item_history: [],
+            one_item_batch_list: [],
             _wh_inventory_table_columns: [
                 {
-                    title: '编号',
-                    dataIndex: 'wh_inventory_id',
-                    key: 'wh_inventory_id',
+                    title: '类别',
+                    // dataIndex: 'wh_inventory_id',
+                    key: 'wh_inventory_type',
                     sorter: (a, b) => a.wh_inventory_id - b.wh_inventory_id ? 1 : -1,
                     render: (text, record) => {
-                        return record.wh_inventory_id.substr(0,8)
+                        return pagePrefix
                     },
                 },
                 {
@@ -340,7 +368,7 @@ export default class PageWarehouse extends React.Component {
                         return whLocationMap(record.wh_location)
                     },
                 }, {
-                    title: '最后更新时间',
+                    title: '最近变更时间',
                     dataIndex: 'last_update_at',
                     key: 'last_update_at',
                     defaultSortOrder: 'descend',
@@ -355,6 +383,57 @@ export default class PageWarehouse extends React.Component {
                         return (<span>
                         <a href="javascript:;" onClick={this.handleCheckDetailOnclick}
                            wh_inventory_id={record.wh_inventory_id}>查看详情</a>
+                        </span>)
+                    },
+                }],
+            _wh_inventory_batch_table_columns: [
+                {
+                    title: "日期",
+                    dataIndex: 'batch_at',
+                    key: 'batch_at',
+                    render: (text, record) => {
+                        return _WH_Config._format_time_string_by_day(record.batch_at)
+                    },
+                },
+                {
+                    title: '出/入',
+                    dataIndex: 'batch_type',
+                    key: 'batch_type',
+                    render: (text, record) => {
+                        return _WH_Config._en_to_cn(record.batch_type)
+                    },
+                },
+                {
+                    title: '批号',
+                    dataIndex: 'batch_number',
+                    key: 'batch_number',
+                    render: (text, record) => {
+                        return record.batch_number
+                    },
+                },
+                {
+                    title: '计数',
+                    dataIndex: 'count',
+                    key: 'count',
+                    render: (text, record) => {
+                        return _WH_Config._format_number(record.count)
+                    },
+                },
+                {
+                    title: '单位',
+                    dataIndex: 'count_unit',
+                    key: 'count_unit',
+                    render: (text, record) => {
+                        return _WH_Config._en_to_cn(record.count_unit)
+                    },
+                },
+                {
+                    title: '查看',
+                    key: 'action',
+                    render: (text, record) => {
+                        return (<span>
+                        <a href="javascript:;"
+                           wh_inventory_batch_id={record.wh_inventory_batch_id}>详细</a>
                         </span>)
                     },
                 }]
@@ -382,14 +461,17 @@ export default class PageWarehouse extends React.Component {
         let wh_inventory_id = e.target.attributes.wh_inventory_id.value;
         this.setState({loading: true});
         serviceWarehouse.getWHInventoryByInventoryId(wh_inventory_id).then(data => {
-            serviceWarehouse.getWHInventoryHistoryListByInventoryId(wh_inventory_id).then(data1 => {
-                this.setState({
-                    page: "view_one",
-                    breadcrumb: '详情: ' + wh_inventory_id,
-                    one_item: data,
-                    one_item_history: data1,
-                    loading: false
-                });
+            serviceWarehouse.getWHInventoryBatchListByInventoryId(wh_inventory_id).then(data_batch => {
+                serviceWarehouse.getWHInventoryHistoryListByInventoryId(wh_inventory_id).then(data1 => {
+                    this.setState({
+                        page: "view_one",
+                        breadcrumb: '详情: ' + wh_inventory_id,
+                        one_item: data,
+                        one_item_history: data1,
+                        one_item_batch_list: data_batch,
+                        loading: false
+                    });
+                })
             })
         });
     }
@@ -515,9 +597,11 @@ export default class PageWarehouse extends React.Component {
                                          one_contact={this.state.one_contact}
                                          one_customer_followups={this.state.one_customer_followups}
                                          table_columns={this.state._wh_inventory_table_columns}
+                                         table_columns_batch={this.state._wh_inventory_batch_table_columns}
                                          items={this.state.items}
                                          pagePrefix={this.state.pagePrefix}
                                          one_item={this.state.one_item}
+                                         one_item_batch_list={this.state.one_item_batch_list}
                                          one_item_history={this.state.one_item_history}
                                          customers={this.state.customers}
                                          loading={this.state.loading}
