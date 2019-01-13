@@ -28,8 +28,6 @@ import PageContractN from "./js/pageComponents/order/pageContractN";
 import PageAskPriceN from "./js/pageComponents/order/pageAskpriceN";
 import PageOrderN from "./js/pageComponents/order/pageOrderN";
 
-import PageInventory from "./js/pageComponents/warehouse/pageInventory";
-
 import PageFinApproval  from "./js/pageComponents/fin/pageFinApproval";
 
 import PageUserMyPage  from "./js/pageComponents/user/pageUserMyPage";
@@ -38,7 +36,7 @@ import PageUserMyDepartment  from "./js/pageComponents/user/pageUserMyDepartment
 import PageUserAdmin from "./js/pageComponents/user/pageUserAdmin"
 
 import PageWarehouse from "./js/pageComponents/warehouse/pageWarehouse"
-import PageWarehouseInOutHistory from "./js/pageComponents/warehouse/pageWarehouseInOutHistory"
+import PageWarehouseBatch from "./js/pageComponents/warehouse/pageWarehouseBatch"
 
 
 class App extends React.Component {
@@ -108,9 +106,12 @@ class App extends React.Component {
         }
         //--- warehouse
         if (user_authority['warehouse'] !== 'n') {
-            private_routes.push(<PrivateRoute path="/wh_rm" component={PageWarehouse} key='prt_wh_rm'/>)
-            private_routes.push(<PrivateRoute path="/wh_inout_history" component={PageWarehouseInOutHistory} key='prt_wh_inout_history'/>)
-            // private_routes.push(<PrivateRoute path="/wh_sfp" component={PageInventory} key='prt_wh_sfp'/>)
+            private_routes.push(<PrivateRoute path="/wh_yuanliao" component={PageWarehouse} key='prt_wh_yuanliao'/>)
+            private_routes.push(<PrivateRoute path="/wh_peibu" component={PageWarehouse} key='prt_wh_peibu'/>)
+            private_routes.push(<PrivateRoute path="/wh_chengpin" component={PageWarehouse} key='prt_wh_chengpin'/>)
+            private_routes.push(<PrivateRoute path="/wh_zhuji" component={PageWarehouse} key='prt_wh_zhuji'/>)
+            private_routes.push(<PrivateRoute path="/wh_fuliao" component={PageWarehouse} key='prt_wh_fuliao'/>)
+            private_routes.push(<PrivateRoute path="/wh_inventory_batch" component={PageWarehouseBatch} key='prt_wh_inventory_batch'/>)
         }
         return (
             <HashRouter>
